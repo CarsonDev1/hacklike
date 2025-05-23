@@ -1,0 +1,49 @@
+<% layout("panel/layout") %>
+
+<div class="card card-body">
+    <div class="row">
+        <div class="col-md-8">
+            <form class="form-json" action="<%= '/tickets/new' %>" data-done="onDone">
+
+                <div class="form-group">
+                    <label>Tiêu đề góp ý</label>
+                    <input name="title" class="form-control" placeholder="Nhập tiêu đề bạn muốn góp ý" required maxlength="120" />
+                </div>
+
+                <!--                  <div class="form-group">-->
+                <!--                    <label>ID/Link bài viết nếu có</label>-->
+                <!--                    <input name="link" class="form-control" placeholder="ID/Link bài viết" maxlength="200" required />-->
+                <!--                  </div>-->
+
+                <div class="form-group">
+                    <label>Mô tả chi tiết</label>
+                    <textarea class="form-control" name="content" rows="7" placeholder="Hãy nhập nội dung tin nhắn vào đây"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Link Ảnh (tuỳ chọn)</label>
+                    <input class="form-control" name="image" type="url" maxlength="100">
+
+                    <div class="alert alert-warning mt-2">
+                        Website hỗ trợ get link ảnh: <a href="https://linkanh.xyz/" target="_blank">Tại Đây</a>
+                    </div>
+                </div>
+
+                <button class="btn btn-success">Hoàn tất</button>
+                <a class="btn btn-warning" href="<%= '/tickets' %>">Trở về</a>
+            </form>
+        </div>
+
+        <div class="col-md-4">
+            <%- include('../components/note.ejs') %>
+        </div>
+    </div>
+</div>
+
+<script>
+    function onDone() {
+        swalSuccess('Thao tác thành công! Chúng tôi sẽ xử lý trong thời gian sớm nhất!').then(function (){
+            window.location.href = '/tickets';
+        });
+    }
+</script>

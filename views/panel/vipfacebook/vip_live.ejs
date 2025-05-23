@@ -1,0 +1,332 @@
+<% layout("panel/layout") %>
+
+<%- include('../widget.ejs') %>
+
+<div class="content-container">
+    <ul class="nav nav-tabs nav-tabs-line nav-tabs-line-danger nav-tabs-line-2x"
+        role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" data-toggle="tab" href="#kt_add" role="tab"
+               aria-selected="true">
+                <i class="fas fa-cart-plus" aria-hidden="true"></i>Mua Dịch Vụ
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#kt_list" role="tab" aria-selected="false">
+                <i class="fas fa-shopping-bag" aria-hidden="true"></i>Danh Sách VIP
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#kt_history" role="tab"
+               aria-selected="false">
+                <i class="fas fa-calendar-alt" aria-hidden="true"></i>Lịch Sử
+            </a>
+        </li>
+    </ul>
+
+    <div class="tab-content">
+        <div class="tab-pane active" id="kt_add" role="tabpanel">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="card form-group">
+
+                        <div class="card-body">
+                            <form id="formUserAction" action="/vipfacebook/<%= site.type %>">
+                                <div class="form-group">
+                                    <label for="link">ID hoặc link tài khoản cần chạy</label>
+                                    <input type="text" class="form-control" id="link" name="uid"
+                                           placeholder="Nhập uid hoăc link Fb" autocomplete="off"
+                                           required>
+
+                                    <%- include('../components/div_uid_error') %>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="name">Tên tài khoản</label>
+                                    <input type="text" class="form-control" id="name" name="name"
+                                           placeholder="Tên tài khoản cần chạy vip"
+                                           autocomplete="off" required>
+                                </div>
+
+                                <div class="row" id="vue">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label>Chọn server</label>
+
+                                            <div class="servers">
+                                                <div class="radio radio-server">
+                                                    <label><input type="radio" name="server"
+                                                                  value="server_1" v-model="server"
+                                                                  @change="onChangeServer">Server 1
+                                                        (Theo tháng)
+                                                    </label>
+                                                </div>
+
+                                                <div class="radio radio-server">
+                                                    <label><input type="radio" name="server"
+                                                                  value="server_2" v-model="server"
+                                                                  @change="onChangeServer">Server 2
+                                                        (Theo bài)
+                                                    </label>
+                                                </div>
+
+                                                <div class="radio radio-server">
+                                                    <label><input type="radio" name="server"
+                                                                  value="server_3" v-model="server"
+                                                                  @change="onChangeServer">Server 3
+                                                        (Theo tháng)
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6 form-group">
+                                        <label>Số lượng mắt <span class="text-success"
+                                                                  v-if="server == 'server_2'"> (50 - 5000)</span></label>
+                                        <select v-if="server != 'server_2'" class="form-control"
+                                                name="vip_package" v-model="vip_package">
+                                            <option value="30" v-if="server == 'server_1'">30</option>
+                                            <% [50, 100, 150, 200, 250, 300].forEach(value => { %>
+                                                <option value="<%= value %>"><%= value %></option>
+                                            <% }) %>
+                                        </select>
+                                        <input v-else
+                                               type="number"
+                                               class="form-control"
+                                               name="vip_package"
+                                               v-model="vip_package"
+                                               v-bind:min="selected_price.min || 50"
+                                               v-bind:max="selected_price.max || 5000"/>
+                                    </div>
+
+                                    <div class="col-md-6 form-group">
+                                        <label for="day">Thời Gian</label>
+                                        <select class="form-control" name="days" v-model="day"
+                                                @change="onChangeDay()">
+                                            <template v-if="server == 'server_1'">
+                                                <option value="7">7 ngày</option>
+                                            </template>
+                                            <template v-if="server == 'server_2'">
+                                                <option value="7">7 ngày</option>
+                                                <option value="15">15 ngày</option>
+                                            </template>
+                                            <template v-if="server == 'server_3'">
+                                                <option value="7">7 ngày</option>
+                                                <option value="10">10 ngày</option>
+                                                <option value="15">15 ngày</option>
+                                            </template>
+                                            <option selected value="30">1 tháng</option>
+                                            <template v-if="server == 'server_1'">
+                                                <option selected value="60">2 tháng</option>
+                                                <option selected value="90">3 tháng</option>
+                                            </template>
+                                        </select>
+                                    </div>
+
+                                    <template v-if="server == 'server_2'">
+                                        <div class="col-md-6 form-group">
+                                            <label>Số phút mắt</label>
+                                            <input type="number" class="form-control" name="minutes"
+                                                   v-model="minutes" min="30" max="600"/>
+                                        </div>
+
+                                        <div class="col-md-6 form-group">
+                                            <label>Số bài mua/1 tháng</label>
+                                            <input type="number" class="form-control" name="order_count"
+                                                   v-model="order_count" v-bind:min="day" max="100"/>
+                                        </div>
+                                    </template>
+
+                                    <template v-if="server == 'server_3'">
+                                        <div class="col-md-6 form-group">
+                                            <label>Giới Hạn Live Trong 1 Ngày:</label>
+
+                                            <select class="form-control" id="live_per_day"
+                                                    name="live_per_day" v-model="live_per_day">
+                                                <option value="1">1 Live / 1 Ngày (Giá x 1)</option>
+                                                <option value="2">2 Live / 1 Ngày (Giá x 1.5)</option>
+                                                <option value="3">3 Live / 1 Ngày (Giá x 2)</option>
+                                                <option value="6">6 Live / 1 Ngày (Giá x 4)</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-md-6 form-group">
+                                            <label>Thời gian tối đa cho 1 livestream:</label>
+
+                                            <select class="form-control" id="live_max_time"
+                                                    name="live_max_time" v-model="live_max_time">
+                                                <option value="1.5">1.5 Giờ (Giá x 1)</option>
+                                                <option value="3">3 Giờ (Giá x 1.5)</option>
+                                                <option value="4">4 Giờ (Giá x 2)</option>
+                                            </select>
+                                        </div>
+                                    </template>
+
+                                    <div class="col-md-12 form-group">
+                                        <label v-if="server != 'server_2'">Giá Tiền Mỗi mắt</label>
+                                        <label v-else>Giá Tiền cho 1 mắt/1 phút</label>
+                                        <input type="number" class="form-control" v-model="single_price"
+                                               disabled/>
+                                    </div>
+
+                                    <div class="col-md-12 form-group">
+                                        <label for="note">Ghi chú</label>
+                                        <textarea class="form-control" name="note" id="note"
+                                                  rows="1"></textarea>
+                                    </div>
+
+                                    <div class="col-md-12 form-group">
+                                        <%- include('../components/discount_widget.ejs') %>
+                                    </div>
+
+                                    <div class="col-md-12">
+                                        <div class="card-summary">
+                                            <div class="text-1"> Tổng: {{ getTotal() }} <i
+                                                        class="fas fa-money-bill-wave"></i></div>
+                                            <div class="text-2">
+                                                <template v-if="server != 'server_2'">
+                                                    Bạn sẽ mua {{ vip_package }} mắt trong thời gian
+                                                    {{ day }} ngày với giá {{ formatMoney(single_price)
+                                                    }}/mắt
+                                                </template>
+                                                <template v-else>
+                                                    Bạn sẽ mua {{ vip_package }} mắt cho {{ order_count
+                                                    }} bài trong {{ day }} ngày với giá {{ single_price
+                                                    }}d/1 mắt/1 phút
+                                                </template>
+                                            </div>
+
+                                            <div v-if="server == 'server_2'" class="small mt-1">(*) Tổng
+                                                Giá = (số mắt) x (số phút 1 bài) x (giá tiền) + 5000đ
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <button id="submit" class="btn btn-success text-bold" type="submit">
+                                        <i class="fas fa-clipboard-list"></i> Mua
+                                    </button>
+                                </div>
+
+                                <div class="form-group">
+                                    <button class="btn btn-danger text-bold btn-view-history"
+                                            type="button"
+                                            data-target="#kt_list">
+                                        <i class="fa fa-calendar" aria-hidden="true"></i> Quản Lý ID
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <%- include('../components/note.ejs') %>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane" id="kt_list" role="tabpanel">
+            <%- include('../components/vip_status_filter.ejs') %>
+
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover" id="datatable-vips"></table>
+            </div>
+        </div>
+        <div class="tab-pane" id="kt_history" role="tabpanel">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover" id="datatable-ajax"></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('../components/modal_posts.ejs') %>
+
+<%- include('../components/modal_add_post.ejs') %>
+
+<script src="/assets/plugins/vue/vue.js"></script>
+<script>
+    var type = "<%= site.type %>";
+
+    var app;
+
+    var v3MultipleMap = {
+        live_per_day: {
+            1: 1,
+            2: 1.5,
+            3: 2,
+            6: 4,
+        },
+        live_max_time: {
+            1.5: 1,
+            3: 1.5,
+            4: 2,
+        }
+    }
+
+    $(document).ready(function () {
+        app = new Vue({
+            el: '#vue',
+            data: {
+                server: 'server_1',
+                vip_package: 50,
+                day: 30,
+                minutes: 30,
+                order_count: 30,
+                prices: {},
+                selected_price: {},
+                single_price: 0,
+
+                // sv3 only
+                live_per_day: 1,
+                live_max_time: 1.5
+            },
+            methods: {
+                setPrice(prices) {
+                    this.prices = prices;
+                    this.selected_price = prices[this.server];
+                    this.single_price = this.selected_price.price;
+
+                    this.server = selectedServer;
+                    this.onChangeServer();
+                },
+                onChangeServer() {
+                    this.day = 30;
+                    this.selected_price = this.prices[this.server];
+                    this.single_price = this.selected_price.price;
+                    this.vip_package = 50;
+                },
+                onChangeDay() {
+                    var {order_count, day} = this;
+                    if (order_count < day) this.order_count = day;
+                },
+                formatMoney(input) {
+                    return formatMoney(input);
+                },
+                getTotal() {
+                    let total;
+                    let {vip_package, single_price, day, order_count, minutes, live_per_day, live_max_time} = this;
+                    if (this.server == 'server_1') {
+                        total = vip_package * day * single_price / 30;
+                    } else if (this.server == 'server_2') {
+                        total = single_price * vip_package * minutes * order_count + 5000;
+                    } else if (this.server == 'server_3') {
+                        total = vip_package * day * single_price / 30;
+
+                        // Multiple with options
+                        total *= v3MultipleMap.live_per_day[live_per_day] || 9999;
+                        total *= v3MultipleMap.live_max_time[live_max_time] || 9999;
+                    }
+
+                    total = applyDiscountAndCurrency(total);
+                    total = getOrderTotal(total);
+
+                    return this.formatMoney(total);
+                }
+            }
+        });
+    });
+</script>

@@ -1,0 +1,4 @@
+{
+  "watch": ["app.js" ,"apps/", "lib/*", "models/*", "views/", ".env"],
+  "ext": "js,ejs"
+}

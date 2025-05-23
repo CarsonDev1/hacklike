@@ -1,0 +1,217 @@
+#kt_content .card.card-body{
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: -6px 7px 28px -2px rgba(238, 79, 79, 0.51);
+    -webkit-box-shadow: -6px 7px 28px -2px rgba(238, 79, 79, 0.51);
+    -moz-box-shadow: -6px 7px 28px -2px rgba(238, 79, 79, 0.51);
+    display:flex;
+    width: 800px;
+    max-width: 100%;
+    margin: 0 auto;
+}
+#kt_content .card-body .main-content{
+    width: 750px;
+    max-width: calc(100% - 40px);
+    margin: 20px;
+    font-size: 115%;
+}
+.el-form-item {
+    margin-bottom: 10px;
+}
+.el-form-item:after, .el-form-item:before {
+    display: table;
+    content: "";
+}
+.el-form-item__label {
+    vertical-align: middle;
+    float: left;
+    line-height: 40px;
+    padding: 0 12px 0 0;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    width: 160px;
+}
+.el-form-item__content{
+    margin-left: 160px;
+}
+.el-form-item__content:after, .el-form-item__content:before {
+    display: table;
+    content: "";
+}
+.el-input {
+    position: relative;
+    font-size: 14px;
+    display: inline-block;
+    width: 100%;
+}
+.el-input__inner {
+    -webkit-appearance: none;
+    background-color: #fff;
+    background-image: none;
+    border-radius: 4px;
+    border: 1px solid #dcdfe6;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    color: #606266;
+    display: inline-block;
+    font-size: inherit;
+    height: 40px;
+    line-height: 40px;
+    outline: 0;
+    padding: 0 15px;
+    -webkit-transition: border-color .2s cubic-bezier(.645,.045,.355,1);
+    transition: border-color .2s cubic-bezier(.645,.045,.355,1);
+    width: 100%;
+}
+.el-form-item__content:after {
+    clear: both;
+}
+.el-form-item__content:after, .el-form-item__content:before {
+    display: table;
+    content: "";
+}
+.el-form-item:after {
+    clear: both;
+}
+.el-form-item:after, .el-form-item:before {
+    display: table;
+    content: "";
+}
+table{
+    font-size: 16px;
+    text-align: start;
+}
+td.text-cl {
+    font-weight: 700;
+}
+.text-cl{
+    color: #fd397a !important;
+}
+.el-text-item{
+    margin-bottom: 18px
+}
+.el-textarea {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    vertical-align: bottom;
+    font-size: 14px
+}
+
+.el-textarea__inner {
+    display: block;
+    resize: vertical;
+    padding: 5px 15px;
+    line-height: 1.5;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    width: 100%;
+    font-size: inherit;
+    color: #606266;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #dcdfe6;
+    border-radius: 4px;
+    -webkit-transition: border-color .2s cubic-bezier(.645,.045,.355,1);
+    transition: border-color .2s cubic-bezier(.645,.045,.355,1)
+}
+.content-desktop{
+    width:100px;
+}
+.form-group.info{
+    display: flex;
+    justify-content: space-evenly;
+    padding-left: 200px;
+}
+.mt-view{
+    margin-bottom: -45px;
+}
+@media only screen and (min-width: 1025px){
+    .mt-view{
+        margin-top: -95px;
+    }
+}
+
+@media only screen and (max-width: 767px) {
+    .content-desktop{
+        display: none;
+    }
+    .el-form-item__label {
+        width: 150px;
+    }
+    .el-form-item__content{
+        margin-left: 150px;
+    }
+    .form-group.info{
+        padding-left: unset;
+    }
+}
+
+.qua-tet-bg-footer {
+    position:fixed;
+    z-index:9999;
+    bottom:-50px;
+    left:0;
+    width:100%;
+    height:104px;
+    background:url(/assets/images/tet_bg1.png) repeat-x bottom left;
+    pointer-events: none;
+}
+.qua-tet-icon-footer {
+    position:fixed;
+    z-index:9999;
+    bottom:10px;
+    left:20px;
+    pointer-events: none;
+}
+.qua-tet-image-left {
+    position:fixed;
+    z-index:9999;
+    top:65px;
+    right:0;
+    pointer-events: none;
+    width: 118px;
+}
+.content-desktop + td {
+    width: 250px;
+}
+.text-gift-rejected {
+    font-size: 21px;
+    font-weight: 600;
+    text-align: center;
+}
+@media (max-width: 600px) {
+    .qua-tet-bg-footer {
+        height: 80px;
+    }
+    .qua-tet-icon-footer {
+        bottom:2px;
+        height: 60px;
+    }
+    .qua-tet-image-left {
+        width: 75px;
+    }
+    .content-desktop + td {
+        width: 165px;
+    }
+    table.el-text-item {
+        margin-left: 0 !important;
+    }
+    .fa-gift.highlight {
+        font-size: 16px;
+    }
+    .form-json .el-form-item:first-child {
+        margin-bottom: 18px;
+    }
+    .el-form-item__label {
+        line-height: 22px;
+    }
+}
+@media (max-width: 500px) {
+    .el-form-item__label {
+        width: 100%;
+    }
+    .el-form-item__content {
+        margin-left: 0;
+    }
+}

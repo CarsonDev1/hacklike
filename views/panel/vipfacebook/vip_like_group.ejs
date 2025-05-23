@@ -1,0 +1,251 @@
+<% layout("panel/layout") %>
+
+<%- include('../widget.ejs') %>
+
+<div class="content-container">
+    <ul class="nav nav-tabs nav-tabs-line nav-tabs-line-danger nav-tabs-line-2x"
+        role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" data-toggle="tab" href="#kt_add" role="tab" aria-selected="true">
+                <i class="fas fa-cart-plus" aria-hidden="true"></i>Mua Dịch Vụ
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#kt_list" role="tab" aria-selected="false">
+                <i class="fas fa-list-alt" aria-hidden="true"></i><span
+                        style="color:red">Danh Sách VIP</span>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#kt_history" role="tab" aria-selected="false">
+                <i class="fas fa-calendar-alt" aria-hidden="true"></i><span style="color:red">Lịch Sử</span>
+            </a>
+        </li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane active" id="kt_add" role="tabpanel">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="card form-group">
+
+                        <div class="card-body">
+                            <form id="formUserAction" action="<%= '/vipfacebook/' + site.type %>">
+                                <div class="form-group">
+                                    <label for="link">ID hoặc link tài khoản cần chạy</label>
+                                    <input type="text" class="form-control" id="link" name="uid"
+                                           placeholder="Id hoặc Link tài khoản cần chạy vip" autocomplete="off"
+                                           required>
+
+                                    <%- include('../components/div_uid_error') %>
+
+                                    <div class="alert alert-danger">
+                                        Chỉ hỗ trợ cho group công khai (nếu cố tình mua cho các id nhóm không công khai
+                                        chúng tôi không hỗ trợ xử lí)!
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="name">Tên tài khoản</label>
+                                    <input type="text" class="form-control" id="name" name="name"
+                                           placeholder="Tên tài khoản cần chạy vip"
+                                           autocomplete="off" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Chọn server</label>
+
+                                    <div class="servers">
+                                        <div class="title">Like Via việt</div>
+
+                                        <div class="radio radio-server">
+                                            <label><input type="radio" name="server" value="server_1">Server 1
+                                            </label>
+                                        </div>
+
+                                        <div class="radio radio-server">
+                                            <label><input type="radio" name="server" value="server_2">Server 2
+                                            </label>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="vip_package">Chọn Gói VIP</label>
+                                            <select class="form-control change-price" name="vip_package"
+                                                    id="vip_package"></select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="days">Thời Gian</label>
+                                            <select class="form-control change-price" name="days" id="days"></select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label style="color: red;">Tùy chọn số bài mỗi ngày</label>
+                                    <select class="form-control change-price" name="max_post" id="max_post">
+                                        <% maxPostVipLikeGroup.forEach(value => {
+                                            let multiple = value / 5;
+                                        %>
+                                        <option value="<%= value %>" data-multiple="<%= multiple %>"><%= value %> bài
+                                            (Giá x<%= multiple %>)
+                                        </option>
+                                        <% }) %>
+                                    </select>
+                                    <small>Tùy mỗi loại sẽ có mức giá khác nhau</small>
+                                </div>
+
+                                <div class="form-group server-section server_1-visible">
+                                    <label class="mr-1">Bộ lọc từ khóa:</label>
+                                    <textarea class="form-control" rows="3" name="list_keyword"
+                                              placeholder="Mỗi từ khóa cách nhau một dấu phẩy"></textarea>
+
+                                    <div class="mt-1 text-danger">
+                                        Chỉ các bài viết có từ khóa trên đây mới tiến hành tăng like, mỗi từ khóa cách
+                                        nhau một dấu phẩy.<br/>
+                                        Nếu không có từ khóa, hệ thống sẽ tăng like tất cả các bài viết mới nhất của
+                                        nhóm
+                                    </div>
+                                </div>
+
+                                <div class="form-group server-section server_1-visible">
+                                    <label class="mr-1">Danh sách ID Facebook:</label>
+                                    <textarea class="form-control" rows="3" name="list_uid"
+                                              placeholder="Mỗi ID Facebook cách nhau một dấu phẩy"></textarea>
+
+                                    <div class="mt-1 text-danger">
+                                        Chỉ các bài viết của tài khoản có trong danh sách ID Facebook trên đây mới tiến
+                                        hành tăng like,
+                                        mỗi ID Facebook cách nhau một dấu phẩy.<br/>
+                                        Nếu không có ID Facebook, hệ thống sẽ tăng like tất cả các bài viết mới nhất của
+                                        nhóm
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="single_price">Giá Tiền Mỗi Tương Tác</label>
+                                    <input type="hidden" class="form-control" name="price" id="price"/>
+                                    <input type="text" class="form-control" id="single_price" disabled/>
+                                </div>
+
+                                <%- include('../components/discount_widget.ejs') %>
+
+                                <div class="form-group">
+                                    <div class="alert alert-danger text-center">
+                                        Tổng tiền của gói vip sẽ = (Số lượng Like tối đa) x (Số ngày đăng ký VIP)
+                                        x (Giá mặc định của hệ thống / 30) x (Tỉ lệ của Số lượng bài viết / 1 ngày)
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="total">Tổng Giá</label>
+                                    <input type="text" class="form-control" name="total" id="total" disabled/>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="note">Ghi chú</label>
+                                    <textarea class="form-control" name="note" id="note" rows="1"></textarea>
+                                </div>
+
+                                <div class="form-group">
+                                    <button id="submit" class="btn btn-success text-bold" type="submit">Mua</button>
+                                    <span style="color:red">Đọc kĩ lưu ý trước khi mua</span>
+                                </div>
+
+                                <div class="form-group">
+                                    <button class="btn btn-danger text-bold btn-view-history" type="button"
+                                            data-target="#kt_list">
+                                        <i class="fa fa-calendar" aria-hidden="true"></i> Quản Lý ID
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <%- include('../components/note.ejs') %>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane" id="kt_list" role="tabpanel">
+            <%- include('../components/server_filter.ejs') %>
+
+            <%- include('../components/vip_status_filter.ejs') %>
+
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover" id="datatable-vips"></table>
+            </div>
+        </div>
+        <div class="tab-pane" id="kt_history" role="tabpanel">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover" id="datatable-ajax"></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--begin::Modal-->
+<div class="modal fade" id="modalUpdate" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <form id="formUpdate" action="<%= `/vipfacebook/${site.type}/update` %>" method="post">
+            <input type="hidden" name="id">
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Sửa</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        <label class="mr-1">Bộ lọc từ khóa:</label>
+                        <textarea class="form-control" rows="3" name="list_keyword"
+                                  placeholder="Mỗi từ khóa cách nhau một dấu phẩy"></textarea>
+
+                        <div class="mt-1 text-danger">
+                            Chỉ các bài viết có từ khóa trên đây mới tiến hành tăng like, mỗi từ khóa cách nhau một dấu
+                            phẩy.<br/>
+                            Nếu không có từ khóa, hệ thống sẽ tăng like tất cả các bài viết mới nhất của nhóm
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="mr-1">Danh sách ID Facebook:</label>
+                        <textarea class="form-control" rows="3" name="list_uid"
+                                  placeholder="Mỗi ID Facebook cách nhau một dấu phẩy"></textarea>
+
+                        <div class="mt-1 text-danger">
+                            Chỉ các bài viết của tài khoản có trong danh sách ID Facebook trên đây mới tiến hành tăng
+                            like,
+                            mỗi ID Facebook cách nhau một dấu phẩy.<br/>
+                            Nếu không có ID Facebook, hệ thống sẽ tăng like tất cả các bài viết mới nhất của nhóm
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                    <button type="submit" class="btn btn-primary">Cập Nhật</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<%- include('../components/modal_posts.ejs') %>
+<%- include('../components/modal_add_post.ejs') %>
+
+<script>
+    var type = "<%= site.type %>";
+</script>
+

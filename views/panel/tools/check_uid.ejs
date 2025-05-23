@@ -1,0 +1,124 @@
+<% layout("panel/layout") %>
+
+<%- include('../widget.ejs') %>
+
+<div class="card card-body">
+    <div class="form-group">
+        <label>UID Facebook</label>
+        <textarea class="form-control" id="uid_list" rows="10"
+                  placeholder="Hãy dán UID vào đây, mỗi hàng 1 UID"></textarea>
+    </div>
+
+    <div class="form-inline">
+        <button class="btn btn-success mr-1" id="btn_start">Tiến hành</button>
+        <button class="btn btn-danger mr-1" id="btn_reset">Reset</button>
+
+        <div id="loading"><span class="fa fa-spinner fa-spin"></span></div>
+    </div>
+
+    <hr/>
+
+    <div class="form-group row" id="area_result">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label>
+                    <span class="badge badge-success p-2">UID Live</span>
+                    <span class="badge badge-success p-2" id="live_count">0</span>
+                </label>
+                <textarea class="form-control" id="live_uid_list" rows="10"></textarea>
+
+                <button class="btn btn-primary mt-1 btn-copy" data-target="#live_uid_list">Copy</button>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-group">
+                <label>
+                    <span class="badge badge-danger p-2">UID Die</span>
+                    <span class="badge badge-danger p-2" id="die_count">0</span>
+                </label>
+                <textarea class="form-control" id="die_uid_list" rows="10"></textarea>
+
+                <button class="btn btn-primary mt-1 btn-copy" data-target="#die_uid_list">Copy</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $('#btn_start').click(function () {
+        resetForm();
+
+        var uid_list = $('#uid_list').val().trim();
+        uid_list = uid_list.split('\n').map(row => row.trim()).filter(row => row.length);
+        if (!uid_list.length) return toastr.error('Vui lòng nhập UID!');
+
+
+        loading(true);
+        toastr.info('Checking...');
+
+        uid_list = uniqueArray(uid_list);
+        checkLives(uid_list).then(function (data) {
+            loading(false);
+
+            var liveIds = data[0];
+            var dieIds = data[1];
+
+            $('#live_count').html(liveIds.length);
+            $('#die_count').html(dieIds.length);
+
+            $('#live_uid_list').val(liveIds.join("\n"));
+            $('#die_uid_list').val(dieIds.join("\n"));
+            toastr.success('Done!');
+        });
+    });
+
+    $('#btn_reset').click(function () {
+        $('#uid_list').val('');
+        resetForm();
+        toastr.success('Done!');
+    });
+
+    function resetForm() {
+        $('#live_uid_list').val('');
+        $('#die_uid_list').val('');
+
+        $('#live_count').html('0');
+        $('#die_count').html('0');
+    }
+
+    function loading(show = false) {
+        $('#loading')[show ? 'show' : 'hide']();
+    }
+
+    async function checkLives(array) {
+        var dieIds = [], liveIds = [];
+
+        await Promise.all(array.map(async (item) => {
+            let live = await checkLive(item, true);
+            if (!live) {
+                dieIds.push(item);
+            } else {
+                liveIds.push(item);
+            }
+            return true;
+        }));
+
+        return [liveIds, dieIds];
+    }
+
+    function checkLive(uid, liveWhenError = false) {
+        return new Promise(resolve => {
+            const xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = () => {
+                if (xhttp.readyState == 4) {
+                    let status = xhttp.status;
+                    if (liveWhenError && status === 0) return resolve(true);
+                    return resolve(xhttp.status !== 200 || xhttp.responseURL.includes('//static') ? 0 : 1);
+                }
+            };
+            xhttp.open("GET", `https://graph.facebook.com/${uid}/picture?type=normal`, true);
+            xhttp.send();
+        })
+    }
+</script>

@@ -1,0 +1,27 @@
+<% layout("panel/layout") %>
+
+<style>
+    #result {
+        font-size: 22px;
+        font-weight: 500;
+    }
+</style>
+
+<%- include('../widget.ejs') %>
+
+<div class="card card-body">
+    <div class="d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Kiểm tra hạn tên miền</h5>
+    </div>
+
+    <form id="form_domain" class="mt-4" action="<%= '/tools/check_domain_expiry' %>" method="POST">
+        <div class="form-group">
+            <label>Nhập tên miền</label>
+            <input class="form-control" name="domain" required placeholder="domain.net ">
+        </div>
+
+        <button type="submit" class="btn btn-primary">Check</button>
+    </form>
+
+    <div class="alert alert-success fade show mt-3 text-center" id="result" style="display: none"></div>
+</div>

@@ -1,0 +1,79 @@
+<% layout("panel/layout") %>
+
+<style>
+    .btn-view-log,
+    .btn-add-post,
+    .btn-edit-vip {
+        display: none !important;
+    }
+</style>
+
+<%- include('../widget.ejs') %>
+
+<div class="content-container">
+    <ul class="nav nav-tabs nav-tabs-line nav-tabs-line-danger nav-tabs-line-2x"
+        role="tablist">
+
+        <li class="nav-item">
+            <a class="nav-link active" data-toggle="tab" href="#kt_list" role="tab" aria-selected="false">
+                <i class="fas fa-shopping-bag" aria-hidden="true"></i>Danh Sách VIP
+            </a>
+        </li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane active" id="kt_list" role="tabpanel">
+
+            <%
+            var services = {
+                vip_like: 'VIP Like Theo Tháng',
+                vip_cmt: 'VIP Comment Theo tháng',
+                vip_live: 'VIP Mắt Theo Tháng',
+                vip_like_instagram: 'Vip Like Instagram',
+                vip_view_video: 'Vip View Video',
+                vip_share: 'Vip Share'
+            };
+            %>
+
+            <div class="form-group">
+                <label class="label-bold">Loại dịch vụ</label>
+                <select class="form-control" id="service_type">
+                    <option value="all">Tất cả</option>
+                    <% Object.keys(services).forEach(service => { %>
+                        <option value="<%= service %>"><%= services[service] %></option>
+                    <% }) %>
+                </select>
+            </div>
+
+            <%- include('../components/server_filter.ejs') %>
+
+            <div>
+                <div class="label-bold">
+                    Lọc theo trạng thái
+                </div>
+                <ul class="nav nav-pills tab-filter tab-status" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" data-toggle="tab" href="#" data-status="expired_soon">
+                      <span class="nav-icon">
+                        <i class="fas fa-stopwatch text-primary"></i>
+                      </span>
+                            <span class="nav-text">Gần hết hạn</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#" data-status="expired">
+                      <span class="nav-icon">
+                        <i class="far fa-clock text-danger"></i>
+                      </span>
+                            <span class="nav-text"> Hết hạn</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover" id="datatable-vips"></table>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,72 @@
+<div>
+    <div class="label-bold">
+        Lọc theo thời hạn
+    </div>
+    <ul class="nav nav-pills tab-filter tab-status" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" data-toggle="tab" href="#" data-status="all">
+        <span class="nav-icon">
+          <i class="fa fa-list text-success"></i>
+        </span>
+                <span class="nav-text">Tất cả</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#" data-status="normal">
+        <span class="nav-icon">
+          <i class="fas fa-check-circle text-primary"></i>
+        </span>
+                <span class="nav-text">Còn hạn</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#" data-status="expired">
+        <span class="nav-icon">
+          <i class="far fa-clock text-danger"></i>
+        </span>
+                <span class="nav-text"> Hết hạn</span>
+            </a>
+        </li>
+    </ul>
+</div>
+
+<div>
+    <div class="label-bold">
+        Lọc theo trạng thái Cookie
+    </div>
+    <ul class="nav nav-pills tab-filter tab-cookie-status" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" data-toggle="tab" href="#" data-live_flg="all">
+        <span class="nav-icon">
+          <i class="fa fa-list text-success"></i>
+        </span>
+                <span class="nav-text">Tất cả</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#" data-live_flg="1">
+        <span class="nav-icon">
+          <i class="fas fa-check-circle text-primary"></i>
+        </span>
+                <span class="nav-text">Live</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#" data-live_flg="0">
+        <span class="nav-icon">
+          <i class="fas fa-procedures text-danger"></i>
+        </span>
+                <span class="nav-text"> Die</span>
+            </a>
+        </li>
+    </ul>
+</div>
+
+<div class="mb-3" id="bot_batch_control">
+    <div class="label-bold">
+        On/Off hàng loạt
+    </div>
+
+    <button class="btn btn-success" onclick="onToggleAllBot(true)">Kích hoạt toàn bộ</button>
+    <button class="btn btn-danger" onclick="onToggleAllBot(false)">Tạm dừng toàn bộ</button>
+</div>

@@ -1,0 +1,145 @@
+<% layout("panel/layout") %>
+
+<%- include('../widget.ejs') %>
+
+<div class="content-container">
+    <ul class="nav nav-tabs nav-tabs-line nav-tabs-line-danger nav-tabs-line-2x"
+        role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" data-toggle="tab" href="#kt_add" role="tab" aria-selected="true">
+                <i class="fas fa-cart-plus" aria-hidden="true"></i>Mua Dịch Vụ
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#kt_history" role="tab" aria-selected="false">
+                <i class="fas fa-calendar-alt" aria-hidden="true"></i>Lịch Sử
+            </a>
+        </li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane active" id="kt_add" role="tabpanel">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="card form-group">
+
+                        <div class="card-body">
+                            <form id="formUserAction" action="/tiktok/<%= site.type %>">
+                                <div class="form-group">
+                                    <label>Link profile</label>
+                                    <input type="text" class="form-control change-price" name="link"
+                                           id="tiktok_post_link"
+                                           placeholder="www.tiktok.com/@user/live" autocomplete="off" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Chọn server</label>
+
+                                    <div class="servers">
+                                        <div class="radio radio-server">
+                                            <label><input type="radio" name="server" value="server_1">Server 1
+                                            </label>
+                                        </div>
+
+                                        <div class="radio radio-server">
+                                            <label><input type="radio" name="server" value="server_2">Server 2
+                                            </label>
+                                        </div>
+
+                                        <div class="radio radio-server">
+                                            <label><input type="radio" name="server" value="server_3">Server 3
+                                            </label>
+                                        </div>
+
+                                        <div class="radio radio-server">
+                                            <label><input type="radio" name="server" value="server_4">Server 4 (theo
+                                                ngày)
+                                            </label>
+                                        </div>
+
+                                        <div class="radio radio-server">
+                                            <label><input type="radio" name="server" value="server_5">Server 5
+                                            </label>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div class="form-group server-section server_1-visible server_2-visible server_3-visible server_5-visible">
+                                    <label>Số phút</label>
+                                    <select name="minute" class="form-control change-price">
+                                        <% [30, 60, 90, 120, 180, 240].forEach(min => { %>
+                                            <option value="<%= min %>"><%= min %> phút</option>
+                                        <% }) %>
+                                    </select>
+                                </div>
+
+                                <div class="form-group server-section server_4-visible">
+                                    <label>Số ngày</label>
+                                    <select name="days" class="form-control change-price">
+                                        <% [1].forEach(value => { %>
+                                            <option value="<%= value %>"><%= value %> ngày</option>
+                                        <% }) %>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Số lượng</label>
+                                    <input type="number" class="form-control" id="count" name="count"/>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="price">Giá Tiền Mỗi Tương Tác</label>
+                                    <input type="number" class="form-control" name="price" id="price" readonly/>
+                                </div>
+
+                                <%- include('../components/discount_widget.ejs') %>
+
+                                <div class="form-group">
+                                    <label for="total">Tổng Giá</label>
+                                    <input type="text" class="form-control" name="total" id="total" disabled/>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="note">Ghi chú</label>
+                                    <textarea class="form-control" name="note" id="note" rows="1"></textarea>
+                                </div>
+
+                                <div class="form-group">
+                                    <button id="submit" class="btn btn-success text-bold" type="submit">Mua</button>
+                                    -<span style="color:red">Đọc kĩ lưu ý Nếu bạn mua lỗi</span>
+                                </div>
+
+                                <div class="form-group">
+                                    <button class="btn btn-danger text-bold btn-view-history" type="button"
+                                            data-target="#kt_history">
+                                        <i class="fa fa-calendar" aria-hidden="true"></i> Quản Lý ID
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <%- include('../components/note.ejs') %>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane" id="kt_history" role="tabpanel">
+            <%- include('../components/status_filter.ejs') %>
+
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover" id="datatable-ajax"></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('../components/modal_live_logs') %>
+
+<script src="/assets/plugins/highchart/highcharts.min.js" type="text/javascript"></script>
+<script src="/assets/js/js-live-logs.js?v=<%= version %>"></script>
+
+<script>
+    var type = "<%= site.type %>";
+</script>
+

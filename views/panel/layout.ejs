@@ -1,0 +1,754 @@
+<% if (!(typeof no_doc_html !== "undefined" && no_doc_html)) { %>
+<!DOCTYPE html>
+<% } %>
+<html lang="vi">
+
+<head>
+    <title>Hacklike17</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+
+    <script>
+        var baseUrl = "";
+    </script>
+
+    <link href="/assets/css/style_common.min.css?v=<%= version %>" rel="stylesheet" type="text/css"/>
+
+    <link href="/assets/css/custom.css?v=<%= version %>" rel="stylesheet" type="text/css"/>
+
+    <% if (theme_noel) { %>
+        <link href="/assets/css/noel.css?v=<%= version %>" rel="stylesheet" type="text/css"/>
+    <% } %>
+
+    <script src="/assets/plugins/jquery/jquery.min.js" type="text/javascript"></script>
+
+    <link rel="shortcut icon" type="image/png" href="/assets/images/logo.png"/>
+    <link rel="icon" type="image/x-icon" href="/assets/images/favicon.ico">
+
+    <script src="/assets/js/preload.js?v=<%= version %>" type="text/javascript"></script>
+</head>
+<!-- end::Head -->
+
+<!-- begin::Body -->
+<%
+let bodyClasses = [];
+if (typeof user !== "undefined") {
+    if (dark_mode) bodyClasses.push('dark_mode');
+    if (user.username == 'testuser') bodyClasses.push('test-mode');
+}
+%>
+<body class="kt-offcanvas-panel--right kt-header--fixed kt-header-mobile--fixed kt-subheader--fixed kt-subheader--enabled
+  kt-subheader--solid kt-aside--enabled kt-aside--fixed kt-page--loading user-page <%= bodyClasses.join(' ') %>">
+
+<%- include('../components/theme.ejs') -%>
+
+<!-- begin:: Page -->
+
+<!-- begin:: Header Mobile -->
+<div id="kt_header_mobile" class="kt-header-mobile kt-header-mobile--fixed">
+    <div class="kt-header-mobile__logo">
+        <div class="toggle-sidebar-mobile">
+            <span class="fa fa-bars fa-2x"></span>
+        </div>
+    </div>
+    <div class="kt-header-mobile__toolbar">
+        <button class="kt-header-mobile__toggler" id="kt_aside_mobile_toggler"><span></span></button>
+        <button class="kt-header-mobile__topbar-toggler" id="kt_header_mobile_topbar_toggler">
+            <i class="fa fa-user fa-2x"></i>
+        </button>
+    </div>
+</div>
+
+<!-- end:: Header Mobile -->
+<div class="kt-grid kt-grid--hor kt-grid--root user-view">
+    <div class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--ver kt-page">
+        <div class="kt-aside  kt-aside--fixed  kt-grid__item kt-grid kt-grid--desktop kt-grid--hor-desktop"
+             id="kt_aside">
+
+            <!-- begin:: Aside -->
+            <div class="kt-aside__brand kt-grid__item " id="kt_aside_brand">
+                <div class="kt-aside__brand-logo">
+                    <a href="/" class="web-logo">HACKLIKE17</a>
+                </div>
+                <div class="kt-aside__brand-tools">
+                    <button class="kt-aside__brand-aside-toggler" id="kt_aside_toggler">
+                        <span class="fa fa-chevron-left"></span>
+                        <span class="fa fa-chevron-right"></span>
+                    </button>
+                </div>
+            </div>
+            <!-- end:: Aside -->
+
+            <!-- begin:: Aside Menu -->
+            <div class="kt-aside-menu-wrapper kt-grid__item kt-grid__item--fluid" id="kt_aside_menu_wrapper">
+                <div id="kt_aside_menu" class="kt-aside-menu side-scrollbar" data-ktmenu-vertical="1"
+                     data-ktmenu-scroll="1"
+                     data-ktmenu-dropdown-timeout="500">
+                    <% let sideLinks = [
+                        {
+                            text: 'Quản Lý Chung',
+                            icon: 'fas fa-tachometer-alt',
+                            name: 'dashboard',
+                            child: [
+                                {type: 'home', link: '/', text: 'Trang Chủ'},
+                                {type: 'profile', link: '/profile', text: 'Cập Nhật thông tin'},
+                                {
+                                    type: 'payment',
+                                    link: '/payment',
+                                    text: 'Nạp Tiền <span class="highlight fa fa-money" style="font-size: 16px"></span>'
+                                },
+                                {
+                                    text: 'Liên Hệ Hỗ Trợ',
+                                    child: [
+                                        {
+                                            text: 'Fanpage Hỗ Trợ',
+                                            icon: 'fa-brands fa-facebook',
+                                            link: 'https://www.facebook.com/Hacklike17com/',
+                                            is_link: true
+                                        },
+                                        {
+                                            text: 'Zalo OA Hỗ Trợ',
+                                            icon: 'fa-solid fa-z',
+                                            link: 'https://zalo.me/3304002102818581128',
+                                            is_link: true
+                                        },
+                                        {
+                                            text: 'Kênh Thông Báo FB',
+                                            icon: 'fa-brands fa-facebook',
+                                            link: 'https://m.me/j/Aba6DYpXyVh8im5U/',
+                                            is_link: true
+                                        },
+                                        {
+                                            text: 'Liên Kết Telegram',
+                                            icon: 'fa-brands fa-telegram',
+                                            link: 'https://t.me/HackLike17Bot',
+                                            is_link: true
+                                        },
+                                        {
+                                            text: 'Hotline: 0928976666',
+                                            icon: 'fa-solid fa-phone-flip',
+                                            link: 'tel:0928976666'
+                                        },
+                                        {
+                                            text: 'Hòm thư góp ý',
+                                            icon: 'fa-solid fa-envelope-open-text',
+                                            link: '/tickets'
+                                        }
+                                    ]
+                                },
+                                {type: 'report', link: '/report', text: 'Nhật Ký Hoạt Động'},
+                                {type: 'referral', link: '/referral', text: 'Kiếm tiền'},
+                                {type: 'site', link: '/site', text: 'Website Đại lý & API'},
+                                {type: 'prices', link: '/prices', text: 'Bảng giá & Cấp bậc'}
+                            ]
+                        },
+                        {
+                            text: 'Danh Sách'
+                        },
+                        {
+                            type: 'lucky_wheel',
+                            link: '/lucky_wheel',
+                            text: 'Vòng quay may mắn',
+                            icon: 'fa-solid fa-arrows-spin fa-spin'
+                        },
+                        // {
+                        //   type: 'qua-tet',
+                        //   link: '/qua-tet',
+                        //   text: 'Sự Kiện Tết 2025',
+                        //   icon: 'fa fa-gift highlight'
+                        // },
+
+                        {
+                            text: 'Dịch vụ khác',
+                            icon: 'fa fa-money',
+                            name: '',
+                            child: [
+                                {link: '/bank_vouchers', text: 'Voucher STK'}
+                            ]
+                        },
+                        {
+                            text: 'Facebook',
+                            icon: 'fab fa-facebook-square',
+                            child: [
+                                {
+                                    text: 'Facebook Buff',
+                                    icon: 'fas fa-hand-point-up',
+                                    name: 'facebook',
+                                    child: [
+                                        {
+                                            type: 's_like',
+                                            link: '/fb_speed/s_like',
+                                            text: '<span class="text-danger pl-0">Like</span> bài viết speed'
+                                        },
+                                        {
+                                            type: 'reactions',
+                                            text: '<span class="text-danger pl-0">Like</span> bài viết chậm'
+                                        },
+
+                                        {
+                                            type: 'follow',
+                                            text: '<span class="text-success pl-0">Sub</span> Cá nhân & <span class="text-success pl-1">Sub</span> Fanpage'
+                                        },
+
+                                        {type: 'like_page', text: 'Like Sub <span class="text-warning">Fanpage</span>'},
+
+                                        {
+                                            type: 's_like_comment',
+                                            link: '/fb_speed/s_like_comment',
+                                            text: 'Like cho Bình Luận'
+                                        },
+                                        {type: 'comment', text: 'Tăng Bình Luận'},
+                                        {type: 'share', text: 'Chia Sẻ Bài Viết'},
+                                        {type: 'buff_group', text: 'Tăng member Group'},
+                                        {type: 'sharegroup', text: 'Share Livestream Group'},
+                                        {type: 'review', text: 'Đánh giá 5* sao Fanpage'},
+                                        {type: 'checkin', text: 'Check In FanPage'},
+                                        {type: 'fb_event', text: 'Sự kiện Facebook'}
+                                    ]
+                                },
+                                {
+                                    text: 'Facebook Vip',
+                                    icon: 'fab fa-vimeo-square',
+                                    name: 'vipfacebook',
+                                    child: [
+                                        {type: 'vip_like', text: 'VIP Like Theo Tháng'},
+                                        {type: 'vip_like_group', text: 'VIP Like Group Tháng'},
+                                        {type: 'vip_cmt', text: 'VIP CMT Theo Tháng'},
+                                        {type: 'vip_live', text: 'VIP Mắt Theo Tháng'},
+                                        {type: 'vip_view_video', text: 'Vip View Video Tháng'},
+                                        {type: 'vip_share', text: 'Vip Share Theo Tháng'},
+                                        {type: 'vip_expired_soon', text: 'UID sắp hết hạn'}
+                                    ]
+                                },
+                                {
+                                    text: 'Facebook Bot',
+                                    icon: 'fas fa-robot',
+                                    name: 'reaction',
+                                    child: [
+                                        {type: 'proxy', text: 'Mua Ip Proxy'},
+                                        {type: 'bot_comment', text: 'BOT cảm xúc và Cmt'},
+                                        {type: 'bot_love_story', text: 'BOT Love và Cmt Story'},
+                                        {
+                                            type: 'get_cookie',
+                                            link: '/other_service/get_cookie',
+                                            text: 'Get Cookie Facebook.'
+                                        }
+                                    ]
+                                },
+                                {
+                                    text: 'Mắt lives-View video',
+                                    icon: 'fas fa-eye',
+                                    name: 'view',
+                                    child: [
+                                        {type: 'livestream_v2', text: 'Buff Mắt-Livestream-V2'},
+                                        {type: 'video', text: 'Tăng View Video'},
+                                        {type: 'view_story', text: 'Tăng View Story'},
+                                        {type: 'view_other', text: 'View 600k phút'},
+                                        {type: 'view_60k_offline', text: 'View 60k Offline'},
+                                        {type: 'view_60k_live', text: 'View 60k Live'},
+                                        {type: 'fb_view_100k_reel', text: 'Tăng view 100k Reels'}
+                                    ]
+                                },
+                                {
+                                    text: 'Lọc bạn bè k tương tác',
+                                    icon: 'fa fa-users',
+                                    link: '/reaction/filter_friend'
+                                }
+
+
+                                // {
+                                //   text: 'Mua Bán FanPage',
+                                //   icon: 'fas fa-scroll',
+                                //   name: 'fb_page',
+                                //   child: [
+                                //     {type: 'buy', link: '/fb_page/buy', text: 'Mua Fanpage'},
+                                //     {type: 'buy', link: 'https://docs.google.com/spreadsheets/d/1tNqA1IDOdXNfnKKg8Ll3Mm-Cg-qjEXm99wT6dEw73bI/edit?usp=sharing', text: 'Mua Fanpage Profile'}
+                                //   ]
+                                // }
+                            ]
+                        },
+                        {
+                            text: 'Instagram',
+                            icon: 'fab fa-instagram-square',
+                            name: 'instagram',
+                            child: [
+                                {type: 'like_instagram', text: 'Like Instagram'},
+                                {type: 'comment_instagram', text: 'Comment Instagram'},
+                                {type: 'follow_instagram', text: 'Follow Instagram'},
+                                {type: 'view_instagram', text: 'View Instagram'},
+                                {type: 'live_instagram', text: 'Mắt Livestream Instagram'},
+                                {type: 'vip_like_instagram', text: 'Vip Like Instagram'},
+                                {type: 'vip_comment_instagram', text: 'Vip Comment Instagram'}
+                            ]
+                        },
+                        {
+                            text: 'Threads',
+                            icon: 'fa fa-t',
+                            name: 'threads',
+                            child: [
+                                {type: 'like_threads', text: 'Like Threads'},
+                                {type: 'follow_threads', text: 'Follow Threads'}
+                            ]
+                        },
+                        {
+                            text: 'TikTok',
+                            icon: 'fab fa-tiktok',
+                            child: [
+                                {
+                                    text: 'Tiktok Buff',
+                                    icon: 'fab fa-tiktok',
+                                    name: 'tiktok',
+                                    child: [
+                                        {type: 'like_tiktok', text: '<span class="pl-0 c-1">Like (Tim)</span> TikTok'},
+                                        {
+                                            type: 'like_comment_tiktok',
+                                            text: '<span class="pl-0 c-1">Like</span> Comment TikTok'
+                                        },
+                                        {type: 'follow_tiktok', text: '<span class="pl-0 c-2">Follow</span> TikTok'},
+                                        {type: 'view_tiktok', text: '<span class="pl-0 c-6">View</span> TikTok'},
+                                        {type: 'comment_tiktok', text: '<span class="pl-0 c-4">Comment</span> TikTok'},
+                                        {type: 'share_tiktok', text: '<span class="pl-0 c-7">Share</span> TikTok'},
+                                        {
+                                            type: 'favorite_tiktok',
+                                            text: '<span class="pl-0 c-1">Yêu thích (Save)</span> Tiktok'
+                                        }
+                                    ]
+                                },
+                                {
+                                    text: 'Tiktok Livestream',
+                                    icon: 'fas fa-eye',
+                                    name: 'tiktok',
+                                    child: [
+                                        {
+                                            type: 'like_live_tiktok',
+                                            text: '<span class="pl-0 c-3">Tim</span> Livestream Tiktok'
+                                        },
+                                        {
+                                            type: 'share_live_tiktok',
+                                            text: '<span class="pl-0 c-7">Share</span> Livestream TikTok'
+                                        },
+                                        {
+                                            type: 'comment_live_tiktok',
+                                            text: '<span class="pl-0 c-4">Comment</span> Livestream TikTok'
+                                        },
+                                        {
+                                            type: 'live_tiktok',
+                                            text: '<span class="pl-0 c-8">Mắt</span> LiveStream TikTok'
+                                        },
+                                        {type: 'pk_tiktok', text: 'Điểm chiến đấu (PK) Tiktok'}
+                                    ]
+                                },
+                                {
+                                    text: 'Tiktok Vip tháng',
+                                    icon: 'fab fa-vimeo-square',
+                                    name: 'tiktok',
+                                    child: [
+                                        {type: 'vip_love_tiktok', text: 'Vip <span class="c-8">Love</span> TikTok'},
+                                        {type: 'vip_view_tiktok', text: 'Vip <span class="c-2">View</span> TikTok'}
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            text: 'Shopee',
+                            icon: 'fa fa-shopping-cart',
+                            name: 'shopee',
+                            child: [
+                                {type: 'follow_shopee', text: 'Follow Shopee'},
+                                {type: 'love_shopee', text: 'Love Shopee'},
+                                {type: 'like_review_shopee', text: 'Like Review Shopee'},
+                                {type: 'live_shopee', text: 'Mắt Livestream Shopee'}
+                            ]
+                        },
+                        {
+                            text: 'Telegram',
+                            icon: 'fab fa-telegram',
+                            name: 'telegram',
+                            child: [
+                                {type: 'member_telegram', text: 'Member & Sub Telegram'},
+                                {type: 'view_telegram', text: 'View Bài Viết Telegram'},
+                                {type: 'reaction_telegram', text: 'Cảm Xúc Bài Viết Telegram'}
+                            ]
+                        },
+                        {
+                            text: 'Youtube',
+                            icon: 'fab fa-youtube',
+                            name: 'youtube',
+                            child: [
+                                {type: 'like_youtube', text: '<span class="text-danger pl-0">Like</span> Youtube'},
+                                {type: 'view_youtube', text: '<span class="text-ocean pl-0">View</span> Youtube'},
+                                {
+                                    type: 'view_youtube_4k',
+                                    text: '<span class="text-ocean pl-0">View</span> Youtube 4000H'
+                                },
+                                {type: 'live_youtube', text: '<span class="text-ocean pl-0">Livestream</span> Youtube'},
+
+                                {
+                                    type: 'comment_youtube',
+                                    text: '<span class="text-success pl-0">Comment</span> Youtube'
+                                },
+                                {
+                                    type: 'like_comment_youtube',
+                                    text: 'Like <span class="text-success">Comment</span> Youtube'
+                                },
+                                {type: 'sub_youtube', text: '<span class="text-warning pl-0">Subscribe</span> Youtube'}
+                                // {type: 'tick_youtube', text: 'Tick Nghệ Sĩ Youtube'}
+                            ]
+                        },
+                        {
+                            text: 'Twitter',
+                            icon: 'fab fa-twitter',
+                            name: 'twitter',
+                            child: [
+                                {type: 'like_twitter', text: 'Like Twitter'},
+                                {type: 'follow_twitter', text: 'Follow Twitter'},
+                                {type: 'view_twitter', text: 'View Twitter'},
+                                {type: 'retweet_twitter', text: 'ReTweet Twitter'},
+                                {type: 'comment_twitter', text: 'Comment Twitter'},
+                                {type: 'live_twitter', text: '<span class="text-ocean pl-0">Livestream</span> Twitter'},
+
+                                {type: 'vip_like_twitter', text: 'Vip Like Twitter'},
+                                {type: 'vip_view_twitter', text: 'Vip View Twitter'}
+                            ]
+                        },
+                        {
+                            text: 'Lazada',
+                            icon: 'fa-solid fa-l',
+                            name: 'lazada',
+                            child: [
+                                {type: 'sub_lazada', text: 'Sub Lazada'}
+                            ]
+                        },
+                        {
+                            text: 'Dịch Vụ Google',
+                            icon: 'fa-brands fa-google',
+                            name: 'google',
+                            child: [
+                                {type: 'google_map', text: 'Google Map'},
+                                {type: 'rip_google_map', text: 'RIP Google Map'},
+                                {type: 'google_map_review', text: 'Review 5* Google Map'}
+                            ]
+                        },
+                        {
+                            text: 'Tiện Ích Miễn Phí',
+                            icon: 'fa-solid fa-award',
+                            name: 'tools',
+                            child: [
+                                {type: 'two_fa', text: 'TwoFA Code'},
+                                {type: 'text', text: 'Tool Edit Text'},
+                                {type: 'check_token', text: 'Check Token'},
+                                {type: 'check_uid', text: 'Check Live UID'},
+                                {type: 'get_link', text: 'Get Link/UID'},
+                                {type: 'check_domain_expiry', text: 'Kiểm tra hạn tên miền'}
+                            ]
+                        },
+                        // {
+                        //   type: 'statistics',
+                        //   link: '/statistics',
+                        //   text: 'Thống kê dịch vụ',
+                        //   icon: 'fa fa-dashboard'
+                        // },
+                        {
+                            type: 'payment',
+                            link: '/payment',
+                            text: 'Nạp tiền <span class="highlight fa fa-money" style="font-size: 16px"></span>',
+                            icon: 'fa fa-money'
+                        },
+                        {
+                            type: 'logout',
+                            link: '/logout',
+                            text: 'Đăng xuất',
+                            icon: 'fas fa-sign-out-alt'
+                        }
+                    ];
+
+                    %>
+
+                    <ul class="kt-menu__nav ">
+                        <% sideLinks.forEach(parent => { %>
+                            <% if (parent.icon && parent.child) { %>
+                                <li class="kt-menu__item  kt-menu__item--submenu" aria-haspopup="true"
+                                    data-ktmenu-submenu-toggle="hover">
+                                    <a href="javascript:" class="kt-menu__link kt-menu__toggle">
+                                        <span class="kt-menu__link-icon"><i class="<%= parent.icon %>"></i></span>
+                                        <span class="kt-menu__link-text"><%- parent.text %></span><i
+                                                class="kt-menu__ver-arrow fas fa-angle-right"></i></a>
+                                    <div class="kt-menu__submenu "><span class="kt-menu__arrow"></span>
+                                        <ul class="kt-menu__subnav">
+                                            <% parent.child.map(item => { %>
+                                                <% if (item.child) { %>
+                                                    <li class="kt-menu__item  kt-menu__item--submenu"
+                                                        aria-haspopup="true"
+                                                        data-ktmenu-submenu-toggle="hover">
+                                                        <a href="javascript:" class="kt-menu__link kt-menu__toggle">
+
+                                                            <% if (item.icon) { %>
+                                                                <span class="kt-menu__link-icon"><i
+                                                                            class="<%= item.icon %>"
+                                                                            aria-hidden="true"></i></span>
+                                                            <% } else { %>
+                                                                <i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
+                                                            <% } %>
+
+                                                            <span class="kt-menu__link-text"><%= item.text %></span><i
+                                                                    class="kt-menu__ver-arrow fas fa-angle-right"></i></a>
+                                                        <div class="kt-menu__submenu "><span
+                                                                    class="kt-menu__arrow"></span>
+                                                            <ul class="kt-menu__subnav">
+                                                                <% item.child.map(item2 => { %>
+                                                                    <li class="kt-menu__item"
+                                                                        aria-haspopup="true">
+                                                                        <a href="<%= item2.link || ('/' + item.name + '/' + item2.type) %>"
+                                                                           class="kt-menu__link"
+                                                                                <%= item2.is_link ? ' target="_blank" ' : '' %>>
+
+                                                                            <% if (item2.icon) { %>
+                                                                                <span class="kt-menu__link-icon"><i
+                                                                                            class="<%= item2.icon %>"
+                                                                                            aria-hidden="true"></i></span>
+                                                                            <% } else { %>
+                                                                                <i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
+                                                                            <% } %>
+
+                                                                            <span class="kt-menu__link-text just-text"><%- item2.text %></span>
+                                                                        </a>
+                                                                    </li>
+                                                                <% }) %>
+                                                            </ul>
+                                                        </div>
+                                                    </li>
+                                                <% } else { %>
+
+
+                                                    <% if (!(account.username === 'testuser' && ['payment', 'site', 'referral', 'profile'].includes(item.type))) { %>
+                                                        <!--Special user-->
+                                                        <li class="kt-menu__item"
+                                                            aria-haspopup="true">
+                                                            <a href="<%= item.link || ('/' + parent.name + '/' + item.type) %>"
+                                                               class="kt-menu__link" <%= item.is_link ? ' target="_blank" ' : '' %>>
+                                                                <% if (item.icon) { %>
+                                                                    <span class="kt-menu__link-icon"><i
+                                                                                class="<%= item.icon %>"
+                                                                                aria-hidden="true"></i></span>
+                                                                <% } else { %>
+                                                                    <i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
+                                                                <% } %>
+                                                                <span class="kt-menu__link-text just-text"><%- item.text %></span>
+                                                            </a>
+                                                        </li>
+                                                    <% } %>
+
+                                                <% } %>
+                                            <% }) %>
+                                        </ul>
+                                    </div>
+                                </li>
+                            <% }
+                            else if (parent.type) { %>
+                                <li class="kt-menu__item menu-item-<%= parent.type %>" aria-haspopup="true">
+                                    <a href="<%= parent.link %>" class="kt-menu__link ">
+                                        <span class="kt-menu__link-icon"><i class="<%= parent.icon %>"></i></span>
+                                        <span class="kt-menu__link-text"><%- parent.text %></span>
+                                    </a>
+                                </li>
+                            <% } else { %>
+                                <li class="kt-menu__section ">
+                                    <h4 class="kt-menu__section-text"><%= parent.text %></h4>
+                                    <i class="kt-menu__section-icon"></i>
+                                </li>
+                            <% } %>
+                        <% }) %>
+
+                    </ul>
+                </div>
+            </div>
+            <!-- end:: Aside Menu -->
+        </div>
+
+        <!-- end:: Aside -->
+        <div class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor kt-wrapper" id="kt_wrapper">
+
+            <!-- begin:: Header -->
+            <div id="kt_header" class="kt-header kt-grid__item  kt-header--fixed ">
+                <div class="kt-header__topbar" id="kt_header_menu">
+                    <ul class="menu-nav">
+                        <% sideLinks.forEach(parent => {
+                            if (!parent.text || !parent.text.match(/Facebook|Instagram|Threads|TikTok|Shopee|Telegram|Youtube|Twitter|Lazada|Google/)) return;
+
+                            if (parent.text.match(/Google/)) parent.text = 'Google';
+                        %>
+                        <li class="menu-item menu-item-submenu menu-item-rel">
+                            <a class="nav-link" href="#"><%= parent.text %></a>
+                            <div class="dropdown-menu">
+                                <% parent.child.forEach(item => { %>
+                                    <div class="dropdown-submenu">
+                                        <% if (item.child) { %>
+                                            <a class="nav-link has-dropdown" href="#"><%= item.text %></a>
+                                            <div class="dropdown-menu">
+                                                <% item.child.forEach(item2 => { %>
+                                                    <a class="dropdown-item"
+                                                       href="<%= item2.link || ('/' + item.name + '/' + item2.type) %>"><%- item2.text %></a>
+                                                <% }) %>
+                                            </div>
+                                        <% } else { %>
+                                            <a class="nav-link"
+                                               href="<%= item.link || ('/' + parent.name + '/' + item.type) %>"><%- item.text %></a>
+                                        <% } %>
+                                    </div>
+                                <% }) %>
+                            </div>
+                        </li>
+                        <% }) %>
+                    </ul>
+                </div>
+
+                <!-- end:: Header Menu -->
+
+                <!-- begin:: Header Topbar -->
+                <div class="kt-header__topbar">
+                    <div class="kt-header__topbar topbar-services">
+                        <!--begin: User Bar -->
+                        <div class="kt-header__topbar-item kt-header__topbar-item--user">
+                            <div class="kt-header__topbar-wrapper">
+                                <div class="service-select-wrapper">
+
+                                    <select id="service-select" class="form-control">
+
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="kt-header__topbar-item kt-header__topbar-item--user">
+                        <div class="kt-header__topbar-wrapper">
+                            <div class="translate-wrapper">
+                                <%- include('../components/switch_dark_mode') -%>
+                            </div>
+
+                            <%- include('./components/google_translate') %>
+                        </div>
+
+                        <div class="kt-header__topbar-wrapper" data-toggle="dropdown" data-offset="0px,0px">
+                            <div class="kt-header__topbar-user">
+                                <span class="kt-header__topbar-welcome kt-hidden-mobile">Xin Chào,</span>
+                                <span class="kt-header__topbar-username kt-hidden-mobile">User</span>
+                                <a href="javascript:void(0)" class="kt-media">
+                                    <img src="/assets/images/avatar.jpg" alt="image">
+                                </a>
+                            </div>
+                        </div>
+
+                        <a class="link-logout" href="<%= '/logout' %>">Đăng Xuất</a>
+                        <div
+                                class="dropdown-menu dropdown-menu-fit dropdown-menu-right dropdown-menu-anim dropdown-menu-top-unround dropdown-menu-xl">
+                            <!--begin: Head -->
+                            <div class="kt-user-card kt-user-card--skin-dark kt-notification-item-padding-x"
+                                 style="background-image: url(<%= '/assets/media/misc/bg-1.jpg' %>)">
+                                <div class="kt-user-card__avatar">
+                                    <a href="<%= '/profile/' %>" class="kt-media">
+                                        <img src="/assets/images/avatar.jpg" alt="image">
+                                    </a>
+                                </div>
+                                <div class="kt-user-card__name">
+                                    User
+                                </div>
+                            </div>
+
+                            <!--end: Head -->
+                            <!--begin: Navigation -->
+                            <div class="kt-notification">
+                                <div class="kt-notification__custom kt-space-between">
+                                    <a href="<%= '/logout/' %>" class="btn btn-label btn-label-brand btn-sm btn-bold">Đăng
+                                        Xuất</a>
+                                </div>
+                            </div>
+                            <!--end: Navigation -->
+                        </div>
+                    </div>
+                    <!--end: User Bar -->
+                </div>
+                <!-- end:: Header Topbar -->
+            </div>
+
+            <div class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor">
+
+                <div class="kt-subheader kt-grid__item" id="kt_subheader">
+                    <div class="kt-subheader__main">
+                        <h3 class="kt-subheader__title">Tiêu đề</h3>
+                    </div>
+                </div>
+
+                <div class="kt-content kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor" id="kt_content">
+                    <%- body %>
+                </div>
+            </div>
+
+            <%- include('./components/right_icons.ejs') %>
+
+            <!-- begin:: Footer -->
+            <div class="kt-footer kt-grid__item kt-grid kt-grid--desktop kt-grid--ver-desktop">
+                <div class="kt-footer__copyright">
+                    2019&nbsp;&copy;&nbsp;<a href="https://www.facebook.com/hoagdtg/" target="_blank" class="kt-link">FB-ADMIN</a>
+                </div>
+            </div>
+
+            <!-- end:: Footer -->
+        </div>
+    </div>
+</div>
+
+<!-- end:: Page -->
+
+<!-- begin::Scrolltop -->
+<div id="kt_scrolltop" class="kt-scrolltop">
+    <i class="fa fa-arrow-up"></i>
+</div>
+<!-- end::Scrolltop -->
+
+
+<!-- begin::Global Config(global config for global JS) -->
+<script>
+    var KTAppOptions = {
+        "colors": {
+            "state": {
+                "brand": "#5d78ff",
+                "dark": "#282a3c",
+                "light": "#ffffff",
+                "primary": "#5867dd",
+                "success": "#34bfa3",
+                "info": "#36a3f7",
+                "warning": "#ffb822",
+                "danger": "#fd3995"
+            },
+            "base": {
+                "label": ["#c5cbe3", "#a1a8c3", "#3d4465", "#3e4466"],
+                "shape": ["#f0f3ff", "#d9dffa", "#afb4d4", "#646c9a"]
+            }
+        }
+    };
+
+    var site_active = '<%= site.active %>';
+    const userBalance = 0;
+    let currency = 'vi';
+</script>
+
+
+<script src="/assets/js/scripts_common.min.js?v=<%= version %>" type="text/javascript"></script>
+
+<script src="/assets/plugins/jquery-cookie/jquery.cookie.min.js" type="text/javascript"></script>
+
+<script src="/assets/js/init.js?v=<%= version %>" type="text/javascript"></script>
+
+<script src="/assets/js/js-user.js?v=<%= version %>" type="text/javascript"></script>
+
+<script src="/assets/push/push_register.js?v=<%= version %>"></script>
+
+<script src="/assets/js/datatable-log-group.js?v=<%= version %>" type="text/javascript"></script>
+
+<script src="/assets/js/group_service.js?v=<%= version %>"></script>
+
+</body>
+
+</html>

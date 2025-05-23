@@ -1,0 +1,49 @@
+<%
+let fastMultiple = 1.5,
+        priorityMultiple = 1.75;
+if (video_key == 'view_video_cheap') {
+    fastMultiple = 3;
+    priorityMultiple = 7;
+}
+%>
+
+<label>Tốc độ</label>
+
+<div>
+    <div class="radio">
+        <label><input type="radio" name="<%= input_name %>" value="0" data-multiple="1" class="change-price" checked>Bình
+            thường
+            <span class="server-status">
+                Còn dư
+                <span class="<%= video_key %>_normal"> <i class="fas fa-spinner fa-spin"></i></span>
+                đơn
+            </span>
+        </label>
+    </div>
+
+    <div class="radio">
+        <label>
+            <input type="radio" name="<%= input_name %>" value="1" data-multiple="<%= fastMultiple %>"
+                   class="change-price">Tốt hơn
+            (Giá x<%= fastMultiple %>)
+            <span class="server-status">
+                Còn dư
+                <span class="<%= video_key %>_fast"> <i class="fas fa-spinner fa-spin"></i></span>
+                đơn
+            </span>
+        </label>
+    </div>
+
+    <div class="radio">
+        <label>
+            <input type="radio" name="<%= input_name %>" value="2" data-multiple="<%= priorityMultiple %>"
+                   class="change-price">Ưu tiên
+            (Giá x<%= priorityMultiple %>)
+            <span class="server-status">
+                Còn dư
+                <span class="<%= video_key %>_priority"> <i class="fas fa-spinner fa-spin"></i></span>
+                đơn
+            </span>
+        </label>
+    </div>
+</div>

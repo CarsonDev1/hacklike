@@ -1,0 +1,68 @@
+<% layout("panel/layout") %>
+
+<style>
+    .btn-copy {
+        cursor: pointer;
+    }
+
+    .referral-box {
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        box-shadow: -6px 7px 28px -2px rgba(0, 0, 0, 0.51);
+        -webkit-box-shadow: -6px 7px 28px -2px rgba(0, 0, 0, 0.51);
+        -moz-box-shadow: -6px 7px 28px -2px rgba(0, 0, 0, 0.51);
+        width: 400px;
+        max-width: 100%;
+        margin: 40px auto 40px auto;
+        padding: 30px 0;
+        text-align: center;
+    }
+
+    .referral-box .title {
+        font-size: 22px;
+        font-weight: 500;
+    }
+
+    .referral-box .referral-code {
+        font-size: 27px;
+        margin-top: 15px;
+        color: #5867dd;
+    }
+
+    .referral-box #referral_id {
+        font-weight: bold;
+        color: tomato;
+    }
+</style>
+
+<div class="card card-body">
+    <div class="area-intro">
+        Bạn có thể kiếm tiền bằng cách giới thiệu người mới vào sử dụng hệ thống và nhập mã giới thiệu của bạn khi đăng
+        ký.<br/>
+        Các ưu đãi sau sẽ được áp dụng mỗi khi người được giới thiệu nạp tiền vào hệ thống:<br/>
+        <span class="fas fa-hand-point-right text-success"></span> Người được giới thiệu: <span
+                class="text-tomato text-bold">5%</span> khuyến mãi / số tiền nạp (Tối đa 50k) cho lần nạp đầu tiên<br/>
+        <span class="fas fa-hand-point-right text-success"></span> Bạn: <span class="text-tomato text-bold">5%</span>
+        hoa hồng / số tiền nạp (Tối đa 50k) cho lần nạp thứ hai<br/>
+
+        <div style="font-size: 110%" class="text-danger">Số lượt giới thiệu thành công: <span
+                    class="text-success text-bold"><%= count %></span></div>
+    </div>
+
+    <div class="form-group">
+        <div class="referral-box box-s">
+            <div class="title">Mã giới thiệu</div>
+            <div class="referral-code" data-toggle="tooltip" title="Copy">
+                <span id="referral_id" class="copy-on-click">HL<%= user.user_id %></span>
+                <span class="btn-copy fas fa-copy" data-target="#referral_id"></span>
+            </div>
+        </div>
+    </div>
+
+    <hr/>
+    <h5 class="text-responsive">Hoa hồng nhận được</h5>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover" id="datatable-commission"></table>
+    </div>
+</div>

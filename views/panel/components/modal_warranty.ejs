@@ -1,0 +1,47 @@
+<div class="modal fade" id="modalWarranty" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Bảo hành dịch vụ</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <form action="<%= '/facebook/warranty' %>" method="post" class="form-json">
+                <div class="modal-body">
+
+                    <div class="alert alert-primary">
+                        Dữ liệu bảo hành bên dưới dựa theo đơn hàng thành công cuối cùng của UID bạn đã chọn.
+                    </div>
+
+                    <%
+                    let fields = {
+                        id: 'STT',
+                        uid: 'UID',
+                        present: 'Số lượng hiện tại',
+                        original: 'Số lượng trước khi mua gói',
+                        count: 'Số lượng đã mua',
+                        warranty_count: 'Số lượng bảo hành dự kiến'
+                    }
+
+                    Object.keys(fields).forEach(key => { %>
+                        <div class="form-group">
+                            <label><%= fields[key] %></label>
+                            <input name="<%= key %>" class="form-control" readonly>
+                        </div>
+                    <% }) %>
+
+                    <div class="alert alert-danger text-center">
+                        Số lượng bảo hành = (Số lượng ban đầu + Số lượng mua) - Hiện tại<br/>
+                        1 UID chỉ được bảo hành 1 lần như quy định.
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Hoàn tất</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,1295 @@
+<% layout("panel/layout") %>
+
+<style>
+    .collapse-container {
+        border: 1px solid rgba(0, 0, 0, .125);
+        border-radius: .25rem;
+        margin-bottom: 10px;
+    }
+
+    .collapse-toggle {
+        cursor: pointer;
+        padding: 12px;
+        background-color: #D8F4DE;
+        font-size: 1.1rem;
+        margin-top: 0;
+        border-radius: 0;
+    }
+
+    .collapse-content {
+        padding: 15px 15px 0 15px;
+    }
+
+    .collapse-content ol,
+    .collapse-content ul {
+        padding-left: 20px;
+    }
+
+    .collapse-content {
+
+    }
+
+    .collapse-content p,
+    .collapse-content li {
+        font-size: 15px;
+        color: #25282a;
+        font-weight: 600;
+    }
+
+    .collapse-content p i {
+        margin-left: 0.5rem;
+        margin-right: 0.5rem;
+        color: #5867dd;
+    }
+
+    .form-group .collapse-toggle {
+        font-size: 17px;
+    }
+
+    .domain-status {
+        margin-right: 3px;
+        margin-bottom: 3px;
+    }
+
+    .fw-bolder {
+        font-weight: 700 !important;
+    }
+
+    .tab-pane h6 {
+        font-weight: 700;
+    }
+
+    .bg-light + h6 {
+        margin-top: 15px;
+    }
+
+    @media (min-width: 768px) {
+        .w-md-200px {
+            width: 200px !important;
+        }
+    }
+</style>
+
+<div class="bg-white">
+    <ul class="nav nav-tabs nav-tabs-line nav-tabs-line-danger nav-tabs-line-2x mb-0" style="margin-left: 20px !important"
+        role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" data-toggle="tab" href="#tab_1" role="tab" aria-selected="true">
+                <i class="far fa-edit" aria-hidden="true"></i> Thêm site mới
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#tab_2" role="tab" aria-selected="false">
+                <i class="fas fa-calendar-alt" aria-hidden="true"></i> Tài liệu API
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#tab_api_smm_v2" role="tab" aria-selected="false">
+                <i class="fas fa-robot" aria-hidden="true"></i> Tài liệu API SMM V2
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#tab_api_smm_v3" role="tab" aria-selected="false">
+                <i class="fas fa-robot" aria-hidden="true"></i> Tài liệu API SMM V3
+            </a>
+        </li>
+    </ul>
+
+    <div class="tab-content">
+        <div class="tab-pane active" id="tab_1" role="tabpanel">
+
+            <div class="card card-body">
+                <div class="card">
+                    <h5 class="card-header text-white bg-primary">API Key</h5>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <input type="text" id="token" name="token" class="form-control"
+                                   value="<%= user.token || '' %>"
+                                   placeholder="Nếu Token API chưa được tạo, hãy nhấn nút Tạo Token API" readonly/>
+                        </div>
+
+                        <div class="form-group">
+                            <button id="btnCopy" class="btn btn-success btn-copy" data-target="#token">Copy Token API
+                            </button>
+                            <button id="btnGetToken" class="btn btn-danger">Làm mới Token API</button>
+                        </div>
+
+                        <div class="alert alert-danger mt-2">
+                            Hệ thống cập nhật cấu trúc Token API mới. Nếu Token API đã được tạo trước đó thì sẽ hiển thị
+                            sẵn bên trên.<br/>
+                            Khi đổi mật khẩu hoặc tạo Token mới, hệ thống sẽ tự đồng bộ token xuống site cấp dưới.<br/>
+                            Lưu ý: Khi tạo mới Token, các token cũ sẽ không dùng được nữa
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mt-4">
+                    <h5 class="card-header text-white bg-primary">Thêm Site mới</h5>
+                    <div class="card-body">
+                        <form class="form-json" method="post" action="<%= '/site/add' %>" data-done="onDomainAdded">
+                            <div class="form-group">
+
+                                <div class="collapse-container">
+                                    <div class="collapse-toggle" data-toggle="collapse" data-target="#collapse_1"
+                                         aria-expanded="true">
+                                        1: Các bước tạo website đơn giản.
+                                        <div class="pull-right card-icon"><i class="fas fa-chevron-right"></i></div>
+                                    </div>
+
+                                    <div class="collapse show" id="collapse_1">
+                                        <div class="collapse-content">
+                                            <ol>
+                                                <li>Mua tên miền</li>
+                                                <li>Nhập tên miền-> Nhập mật khẩu admin -> Hoàn tất và danh sách
+                                                    nameservers sẽ hiện ra khi thao tác thành công.
+                                                </li>
+                                                <li>Đổi Name Server theo Danh sách nameservers bên dưới nút "Hoàn tất"
+                                                </li>
+                                                <li>Chờ admin liên kết domain vào hệ thống</li>
+                                                <li>Admin chỉnh sửa mọi thứ trong quản trị viên ( Set giá tự động, Logo
+                                                    bìa, Giao diện, Ghi chú, Thông báo, Tiền cấp bậc, Ẩn hiện dịch vụ,
+                                                    Auto bank v.v)
+                                                </li>
+                                            </ol>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="collapse-container">
+                                    <div class="collapse-toggle" data-toggle="collapse" data-target="#collapse_2">
+                                        2: Lưu ý về tên miền và quy định được mở website cấp dưới:
+                                        <div class="pull-right card-icon"><i class="fas fa-chevron-right"></i></div>
+                                    </div>
+
+                                    <div class="collapse" id="collapse_2">
+                                        <div class="collapse-content">
+                                            <p class="text-danger">
+                                                Khuyên dùng tên miền .Com .Vn .Net để tăng uy tín. Hệ thống từ chối
+                                                duyệt các tên miền chứa các tên nền tảng MXH như fb, ins, youtube,
+                                                tiktok v,v, và đuôi .online .club .shop .xyz v.v các miền giá trị ít hơn
+                                                50.000 vnđ</p>
+                                            <p class="text-danger">
+                                                Tên miền sẽ bị khóa và xóa khi không còn nối với web mẹ và không hoạt
+                                                động gd nào trong 30 ngày.</p>
+                                            <p class="text-danger">
+                                                Admin cần nạp tối thiểu 500k đầu tháng để được mở chức năng tạo website
+                                                con cấp dưới.</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="collapse-container">
+                                    <div class="collapse-toggle" data-toggle="collapse" data-target="#collapse_3">
+                                        3: Video hướng dẫn mua và quản lý tên miền siêu dễ.
+                                        <div class="pull-right card-icon"><i class="fas fa-chevron-right"></i></div>
+                                    </div>
+
+                                    <div class="collapse" id="collapse_3">
+                                        <div class="collapse-content">
+                                            <p>
+                                                <i class="fa-solid fa-check"></i>
+                                                Video hướng dẫn mua tên miền và tạo website: <a
+                                                        href="https://youtu.be/VgXR1P7gNno?si=gvZg4eieIYbBrV_z"
+                                                        target="_blank">TẠI ĐÂY</a></p>
+                                            <p>
+                                                <i class="fa-solid fa-check"></i>
+                                                Video quản lý cấu hình website: <a href="https://youtu.be/Z5ToDZw8XzA"
+                                                                                   target="_blank">TẠI ĐÂY</a></p>
+                                            <p>
+                                                <i class="fa-solid fa-check"></i>
+                                                Các lý do website chưa hoạt động: <a href="https://youtu.be/iPR1sHVZ7zU"
+                                                                                     target="_blank">TẠI ĐÂY</a></p>
+                                            <p>
+                                                <i class="fa-solid fa-check"></i>
+                                                LƯU Ý: Tên miền cần Xác minh danh tính HDSD: <a
+                                                        href="https://s3.ap-northeast-1.amazonaws.com/h.files/images/1639736996905_76mIEQbfaG.png"
+                                                        target="_blank"> TẠI ĐÂY</a></p>
+                                            <p>
+                                                <i class="fa-solid fa-check"></i>
+                                                Kiểm tra tên miền đổi Nameserver chưa và có hoạt động không: <a
+                                                        href="https://intodns.com/" target="_blank"> Tại Đây</a>
+                                                |
+                                                <a href="https://s3.ap-northeast-1.amazonaws.com/h.files/images/1705479875492_sRKGoqhrjq.png"
+                                                   target="_blank">Ảnh demo tại đây</a>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="collapse-container">
+                                    <div class="collapse-toggle" data-toggle="collapse" data-target="#collapse_4">
+                                        4: Link hỗ trợ ẩn danh (chúng tôi sẽ trả lời giúp bạn khi khách bạn nhắn):
+                                        <div class="pull-right card-icon"><i class="fas fa-chevron-right"></i></div>
+                                    </div>
+
+                                    <div class="collapse" id="collapse_4">
+                                        <div class="collapse-content">
+                                            <p>
+                                                <i class="fa-solid fa-check"></i>
+                                                Bạn có thể ghim link page tại mục hỗ trợ và đặt tên "Nhân viên hỗ trợ"
+                                                (chúng tôi sẽ trả lời giúp bạn khi khách bạn nhắn)
+                                                : link page: <a href="https://facebook.com/nhanvien.support/"
+                                                                target="_blank">tại đây</a>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="domain">Domain</label>
+                                <input type="text" class="form-control" required name="domain" id="domain"
+                                       placeholder="Ví dụ: abc.com (không bao gồm https hoặc www)"/>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="site_username">Tên đăng nhập Admin</label>
+                                <input type="text" class="form-control" required name="username" id="site_username"
+                                       value="<%= user.username %>" disabled/>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="site_email">Email Admin</label>
+                                <input type="text" class="form-control" required name="email" id="site_email"
+                                       value="<%= user.email %>" disabled/>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="site_phone">Zalo liên hệ</label>
+                                <input type="text" class="form-control" required name="phone" id="site_phone"
+                                       value="<%= user.phone %>"/>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="site_password">Mật khẩu admin</label>
+                                <input type="text" class="form-control" required name="password" id="site_password"
+                                       placeholder="Mật khẩu"/>
+
+                                <div class="alert alert-light-yellow mb-1">
+                                    <h6>Mật khẩu phải bao gồm chữ cái + số + kí tự</h6>
+                                </div>
+                            </div>
+
+                            <button class="btn btn-success">Hoàn tất</button>
+                        </form>
+
+                        <hr/>
+
+                        <h5>Danh sách nameservers</h5>
+
+                        <div class="mt-1 mb-1 alert alert-primary">
+                            Danh sách nameservers sẽ xuất hiện ở bên dưới sau khi bạn nhấn nút.<br/>
+                            Vui lòng cập nhật lại nameservers của domain theo 2 nameservers bên dưới
+                        </div>
+
+                        <ol id="list_nameservers" class="mt-1 text-danger"
+                            style="font-size: 17px;padding-top: 20px"></ol>
+                    </div>
+                </div>
+
+                <div class="card mt-4">
+                    <h5 class="card-header text-white bg-primary" id="my_domains">Domain của tôi</h5>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover" id="datatable-domain"></table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="tab-pane" id="tab_2" role="tabpanel">
+            <div class="card">
+                <div class="card-body">
+                    <h5>Vui lòng tham khảo tài liệu bên dưới và cần doc api vui lòng ib qua zalo: <span
+                                class="text-success text-bold">0928976666</span></h5>
+
+                    <h5>Nhấn <a class="text-bold" href="https://youtu.be/SJh6ce1cvjI" target="_blank">xem Video</a>
+                        hướng dẫn sử dụng API postman</h5>
+
+                    <div class="mt-1 mb-1">
+                        <p class="text-success mb-2">
+                            Link tài liệu Postman <a href="https://documenter.getpostman.com/view/7443180/2s9Xy6qphx"
+                                                     target="_blank">Nhấn vào đây</a>
+                        </p>
+                    </div>
+
+                    <hr/>
+
+                    <div class="mb-2">
+                        <i class="far fa-hand-point-right text-success"></i>
+                        <a href="/assets/api_files/hd_php.zip" download="">Code mẫu PHP</a>
+                    </div>
+                    <div>
+                        <i class="far fa-hand-point-right text-success"></i>
+                        <a href="/assets/api_files/hd_nodejs.zip" download="">Code mẫu NodeJS</a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-pane" id="tab_api_smm_v2" role="tabpanel">
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive mb-5">
+                        <table class="table align-middle table-row-bordered table-rounded border rounded">
+                            <tbody>
+                            <tr>
+                                <td class="text-gray-700">API URL</td>
+                                <td class="fw-bolder">https://hacklike17.com/api/v2</td>
+                            </tr>
+                            <tr>
+                                <td class="text-gray-700">HTTP Method</td>
+                                <td class="fw-bolder">POST</td>
+                            </tr>
+                            <tr>
+                                <td class="text-gray-700">API Key</td>
+                                <td class="fw-bolder">API Key (Tab 1)</td>
+                            </tr>
+                            <tr>
+                                <td class="text-gray-700">Content-Type</td>
+                                <td class="fw-bolder">application/x-www-form-urlencoded</td>
+                            </tr>
+                            <tr>
+                                <td class="text-gray-700">Response</td>
+                                <td class="fw-bolder">JSON</td>
+                            </tr>
+                            <tr>
+                                <td class="text-gray-700">Postman</td>
+                                <td class="fw-bolder"><a
+                                            href="https://documenter.getpostman.com/view/7443180/2sAY55bygj"
+                                            target="_blank">https://documenter.getpostman.com/view/7443180/2sAY55bygj</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-gray-700">Mô tả</td>
+                                <td class="fw-bolder">
+                                    API V2 chuẩn như hầu hết các API SMM quốc tế, trả code
+                                    <span class="text-danger">200</span>
+                                    cho cả lỗi và thành công<br />
+                                    Nếu có lỗi thì trong json sẽ có key
+                                    <span class="text-danger">error</span><br />
+                                    Response code sẽ không nằm trong body<br />
+                                    Tham số <span class="text-danger">locale</span> là tuỳ chọn, sẽ quyết định ngôn ngữ khi trả lỗi (Mặc định là
+                                    <span class="text-success">en</span>
+                                    - Tiếng Anh)
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="d-flex flex-column flex-md-row">
+                        <ul class="nav nav-tabs nav-pills border-0 flex-row flex-md-column me-5 mb-3 mb-md-0 fs-6"
+                            role="tablist">
+                            <li class="nav-item w-md-200px me-0" role="presentation">
+                                <a class="nav-link active" data-toggle="tab" href="#v2_services" aria-selected="true"
+                                   role="tab">Services</a>
+                            </li>
+                            <li class="nav-item w-md-200px me-0" role="presentation">
+                                <a class="nav-link" data-toggle="tab" href="#v2_add" aria-selected="false" role="tab"
+                                   tabindex="-1">Add order</a>
+                            </li>
+                            <li class="nav-item w-md-200px me-0" role="presentation">
+                                <a class="nav-link" data-toggle="tab" href="#v2_status" aria-selected="false" role="tab"
+                                   tabindex="-1">Order status</a>
+                            </li>
+                            <li class="nav-item w-md-200px me-0" role="presentation">
+                                <a class="nav-link" data-toggle="tab" href="#v2_refill" aria-selected="false" role="tab"
+                                   tabindex="-1">Refill</a>
+                            </li>
+                            <li class="nav-item w-md-200px me-0" role="presentation">
+                                <a class="nav-link" data-toggle="tab" href="#v2_cancel" aria-selected="false" role="tab"
+                                   tabindex="-1">Cancel</a>
+                            </li>
+                            <li class="nav-item w-md-200px" role="presentation">
+                                <a class="nav-link" data-toggle="tab" href="#v2_balance" aria-selected="false" role="tab"
+                                   tabindex="-1">Balance</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content w-100">
+                            <div class="tab-pane fade active show" id="v2_services" role="tabpanel">
+                                <table class="table align-middle table-row-bordered table-rounded border rounded">
+                                    <tbody>
+                                    <tr class="bg-light">
+                                        <td class="fw-bolder">Parameters</td>
+                                        <td class="fw-bolder">Description</td>
+                                    </tr>
+                                    <tr>
+                                        <td>key</td>
+                                        <td>API Key</td>
+                                    </tr>
+                                    <tr>
+                                        <td>action</td>
+                                        <td>"services"</td>
+                                    </tr>
+                                    <tr>
+                                        <td>locale</td>
+                                        <td>"en" or "vi"</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <h6>Example response</h6>
+                                <div class="bg-light p-3">
+                      <pre class="language-html mb-0">[
+  {
+      "service": 55,
+      "name": "Member group",
+      "type": "Default",
+      "sub_name": "buff_group",
+      "category": "buff_group",
+      "description": "Member beta, Vietnamese [10k-20k/ 24 hours.] ",
+      "rate": "1",
+      "min": 200,
+      "max": 3000000,
+      "refill": false,
+      "refill_days": 0,
+      "cancel": true
+  },
+  {
+      "service": 63,
+      "name": "Share Vietnamese",
+      "sub_name": "share",
+      "type": "Default",
+      "category": "share",
+      "description": "Share Vietnamese, super fast",
+      "rate": "1",
+      "min": 10,
+      "max": 50000,
+      "refill": false,
+      "refill_days": 0,
+      "cancel": true
+  }
+]</pre>
+                                </div>
+
+                                <div class="mt-1">Note: "rate" is price per 1000</div>
+                            </div>
+
+                            <div class="tab-pane fade" id="v2_add" role="tabpanel">
+                                <div class="mb-5">
+                                    <label class="form-label">Type</label>
+                                    <select class="form-control" id="add_order_type">
+                                        <option value="default">Default</option>
+                                        <option value="custom-comments">Custom Comments</option>
+                                        <option value="custom-reviews">Custom Reviews</option>
+                                        <option value="custom-checkin">Custom Checkin</option>
+                                        <option value="reaction">Reaction</option>
+                                        <option value="view-special">View Special</option>
+                                        <option value="view-video">View Video</option>
+                                        <option value="view-telegram-by-posts">View Telegram By Posts</option>
+                                        <option value="livestream">Custom Livestream</option>
+                                        <option value="like-comment-tiktok">Like Comment Tiktok</option>
+                                    </select>
+                                </div>
+                                <table class="table align-middle table-row-bordered table-rounded border rounded"
+                                       id="table-add-order">
+                                    <tbody>
+                                    <tr class="bg-light">
+                                        <td class="fw-bolder">Parameters</td>
+                                        <td class="fw-bolder">Description</td>
+                                    </tr>
+                                    <tr>
+                                        <td>key</td>
+                                        <td>API Key</td>
+                                    </tr>
+                                    <tr>
+                                        <td>action</td>
+                                        <td>"add"</td>
+                                    </tr>
+                                    <tr>
+                                        <td>locale</td>
+                                        <td>"en" or "vi"</td>
+                                    </tr>
+                                    <tr>
+                                        <td>service</td>
+                                        <td>Service ID</td>
+                                    </tr>
+                                    <tr>
+                                        <td>link</td>
+                                        <td>Link (For most cases)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>uid</td>
+                                        <td>Uid (Please provide if link does not provided)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>quantity</td>
+                                        <td>Needed quantity</td>
+                                    </tr>
+
+                                    <tr class="options custom-comments custom-reviews custom-checkin"
+                                        style="display: none;">
+                                        <td>comments</td>
+                                        <td>Comments/Content join by \n</td>
+                                    </tr>
+
+                                    <tr class="options reaction" style="display: none;">
+                                        <td>reaction</td>
+                                        <td>Reaction: like, care, love, haha, wow, sad, angry</td>
+                                    </tr>
+
+                                    <tr class="options view-special" style="display: none;">
+                                        <td>video_length</td>
+                                        <td>Video Length: <br/>
+                                            <ul>
+                                                <li>0: 3 hours (price x1)</li>
+                                                <li>1: 2 hours (price x1.3)</li>
+                                                <li>2: 1 hour (price x1.5)</li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+
+                                    <tr class="options view-video" style="display: none;">
+                                        <td>video_type_id</td>
+                                        <td>
+                                            Video Type id<br/>
+                                            <ul>
+                                                <li>1: Watch 3 seconds (Video length of 6 seconds)</li>
+                                                <li>2: Watch 10 seconds (Video length of 13 seconds)</li>
+                                                <li>7: Watch 15 seconds (Video length of 18 seconds)</li>
+                                                <li>9: Watch 30 seconds (Price x2)</li>
+                                                <li>3: Watch 1 minute (30k green views step 2) (Price x2)</li>
+                                                <li>5: Watch 3 minutes (Price x3)</li>
+                                                <li>8: Watch 6 minutes (Price x4)</li>
+                                                <li>6: Watch 10 minutes (Price x6)</li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+
+                                    <tr class="options view-telegram-by-posts" style="display: none;">
+                                        <td>post_count</td>
+                                        <td>Total posts: 5, 10, 20, 50, 100</td>
+                                    </tr>
+
+                                    <tr class="options livestream" style="display: none;">
+                                        <td>minute</td>
+                                        <td>Livestream minute. Most cases pick one value: 30, 60, 90, 120, 150, 180,
+                                            210, 240, 270, 300
+                                        </td>
+                                    </tr>
+
+                                    <tr class="options like-comment-tiktok" style="display: none;">
+                                        <td>owner_link</td>
+                                        <td>Link of the comment owner</td>
+                                    </tr>
+
+                                    </tbody>
+                                </table>
+                                <h6>Example success response</h6>
+                                <div class="bg-light p-3">
+                      <pre class="language-html mb-0">{
+  "order": 673925,
+  "original": 69,
+  "quantity": 100
+}</pre>
+                                </div>
+
+                                <h6>Example failed response</h6>
+                                <div class="bg-light p-3">
+                      <pre class="language-html mb-0">{
+  "error": "Insufficient account balance"
+}</pre>
+                                </div>
+                            </div>
+
+                            <div class="tab-pane fade" id="v2_status" role="tabpanel">
+                                <table class="table align-middle table-row-bordered table-rounded border rounded">
+                                    <tbody>
+                                    <tr class="bg-light">
+                                        <td class="fw-bolder">Parameters</td>
+                                        <td class="fw-bolder">Description</td>
+                                    </tr>
+                                    <tr>
+                                        <td>key</td>
+                                        <td>API Key</td>
+                                    </tr>
+                                    <tr>
+                                        <td>action</td>
+                                        <td>"status"</td>
+                                    </tr>
+                                    <tr>
+                                        <td>locale</td>
+                                        <td>"en" or "vi"</td>
+                                    </tr>
+                                    <tr>
+                                        <td>order</td>
+                                        <td>Order IDs join by ,</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <h6>Example success response (Single order)</h6>
+                                <div class="bg-light p-3">
+                      <pre class="language-html mb-0">{
+  "charge": "0.05833",
+  "status": "Refunded",
+  "start_count": 0,
+  "remains": 100,
+  "currency": "USD"
+}</pre>
+                                </div>
+
+                                <h6>Example success response (Multi order)</h6>
+                                <div class="bg-light p-3">
+                      <pre class="language-html mb-0">{
+  "672792": {
+      "charge": "0.05833",
+      "status": "Refunded",
+      "start_count": 0,
+      "remains": 100,
+      "currency": "USD"
+  },
+  "672796": {
+      "charge": "0.09583",
+      "status": "Processing",
+      "start_count": 69,
+      "remains": 100,
+      "currency": "USD"
+  },
+}</pre>
+                                </div>
+
+                                <h6>Example failed response</h6>
+                                <div class="bg-light p-3">
+                      <pre class="language-html mb-0">{
+  "error": "Order not found"
+}</pre>
+                                </div>
+
+                                <p class="mt-1"><strong>Status</strong>: <em>Processing, In progress, Completed, Canceled, Refunded,
+                                        Waiting Cancel, Pending</em></p>
+                            </div>
+
+                            <div class="tab-pane fade" id="v2_refill" role="tabpanel">
+                                <table class="table align-middle table-row-bordered table-rounded border rounded">
+                                    <tbody>
+                                    <tr class="bg-light">
+                                        <td class="fw-bolder">Parameters</td>
+                                        <td class="fw-bolder">Description</td>
+                                    </tr>
+                                    <tr>
+                                        <td>key</td>
+                                        <td>API Key</td>
+                                    </tr>
+                                    <tr>
+                                        <td>action</td>
+                                        <td>"refill"</td>
+                                    </tr>
+                                    <tr>
+                                        <td>locale</td>
+                                        <td>"en" or "vi"</td>
+                                    </tr>
+                                    <tr>
+                                        <td>order</td>
+                                        <td>Order ID</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <h6>Example success response</h6>
+                                <div class="bg-light p-3">
+                      <pre class="language-html mb-0">{
+  "success": true,
+  "updated_order_id": "123",
+  "update_obj": {
+    "status": "In Progress"
+  }
+}</pre>
+                                </div>
+
+                                <h6>Example failed response</h6>
+                                <div class="bg-light p-3">
+                      <pre class="language-html mb-0">{
+  "error": "Order not found"
+}</pre>
+                                </div>
+                            </div>
+
+                            <div class="tab-pane fade" id="v2_cancel" role="tabpanel">
+                                <table class="table align-middle table-row-bordered table-rounded border rounded">
+                                    <tbody>
+                                    <tr class="bg-light">
+                                        <td class="fw-bolder">Parameters</td>
+                                        <td class="fw-bolder">Description</td>
+                                    </tr>
+                                    <tr>
+                                        <td>key</td>
+                                        <td>API Key</td>
+                                    </tr>
+                                    <tr>
+                                        <td>action</td>
+                                        <td>"cancel"</td>
+                                    </tr>
+                                    <tr>
+                                        <td>locale</td>
+                                        <td>"en" or "vi"</td>
+                                    </tr>
+                                    <tr>
+                                        <td>order</td>
+                                        <td>Order ID</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <h6>Example success response</h6>
+                                <div class="bg-light p-3">
+                      <pre class="language-html mb-0">{
+  "success": true,
+  "message": "Operation successful",
+  "refund_count": 100,
+  "status": "Refunded"
+}</pre>
+                                </div>
+
+                                <h6>Example failed response</h6>
+                                <div class="bg-light p-3">
+                      <pre class="language-html mb-0">{
+  "error": "Order not found"
+}</pre>
+                                </div>
+                            </div>
+
+                            <div class="tab-pane fade" id="v2_balance" role="tabpanel">
+                                <table class="table align-middle table-row-bordered table-rounded border rounded">
+                                    <tbody>
+                                    <tr class="bg-light">
+                                        <td class="fw-bolder">Parameters</td>
+                                        <td class="fw-bolder">Description</td>
+                                    </tr>
+                                    <tr>
+                                        <td>key</td>
+                                        <td>API Key</td>
+                                    </tr>
+                                    <tr>
+                                        <td>action</td>
+                                        <td>"balance"</td>
+                                    </tr>
+                                    <tr>
+                                        <td>locale</td>
+                                        <td>"en" or "vi"</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <h6>Example success response</h6>
+                                <div class="bg-light p-3">
+                      <pre class="language-html mb-0">{
+  "balance": "863.17804",
+  "currency": "USD"
+}</pre>
+                                </div>
+
+                                <h6>Example failed response</h6>
+                                <div class="bg-light p-3">
+                      <pre class="language-html mb-0">{
+  "error": "Invalid key"
+}</pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-pane" id="tab_api_smm_v3" role="tabpanel">
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive mb-5">
+                        <table class="table align-middle table-row-bordered table-rounded border rounded">
+                            <tbody>
+                            <tr>
+                                <td class="text-gray-700">API URL</td>
+                                <td class="fw-bolder">https://hacklike17.com/api/v3</td>
+                            </tr>
+                            <tr>
+                                <td class="text-gray-700">HTTP Method</td>
+                                <td class="fw-bolder">POST</td>
+                            </tr>
+                            <tr>
+                                <td class="text-gray-700">API Key</td>
+                                <td class="fw-bolder">API Key (Tab 1)</td>
+                            </tr>
+                            <tr>
+                                <td class="text-gray-700">Content-Type</td>
+                                <td class="fw-bolder">application/x-www-form-urlencoded</td>
+                            </tr>
+                            <tr>
+                                <td class="text-gray-700">Response</td>
+                                <td class="fw-bolder">JSON</td>
+                            </tr>
+                            <tr>
+                                <td class="text-gray-700">Postman</td>
+                                <td class="fw-bolder"><a
+                                            href="https://documenter.getpostman.com/view/7443180/2sAYkLmwZm"
+                                            target="_blank">https://documenter.getpostman.com/view/7443180/2sAYkLmwZm</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-gray-700">Mô tả</td>
+                                <td class="fw-bolder">
+
+                                    API V3 dùng cho 1 số đầu nối API SMM tại Việt Nam<br />
+                                    Response code khi thành công là
+                                    <span class="text-success">200</span>,
+                                    khi thất bại sẽ khác
+                                    <span class="text-success">200</span>, thường là
+                                    <span class="text-danger">400</span>: Lỗi chung,
+                                    <span class="text-danger">401</span>: Sai token.<br />
+                                    Khi request trả lỗi thì sẽ kèm
+                                    <span class="text-danger">code</span>
+                                    , và <span class="text-danger">"status": "error"</span><br />
+                                    Response code được trả kèm trong body với field code (chỉ khi bị lỗi)<br />
+                                    Tham số <span class="text-danger">locale</span> là tuỳ chọn, sẽ quyết định ngôn ngữ khi trả lỗi (mặc định là
+                                    <span class="text-success">vi</span> - Tiếng Việt)<br /><br />
+
+                                    Tham số gửi đi giống y hệt v2, chỉ khác body trả về trong các trường hợp lỗi, và ngôn ngữ mặc định
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="d-flex flex-column flex-md-row">
+                        <ul class="nav nav-tabs nav-pills border-0 flex-row flex-md-column me-5 mb-3 mb-md-0 fs-6"
+                            role="tablist">
+                            <li class="nav-item w-md-200px me-0" role="presentation">
+                                <a class="nav-link active" data-toggle="tab" href="#v3_services" aria-selected="true"
+                                   role="tab">Services</a>
+                            </li>
+                            <li class="nav-item w-md-200px me-0" role="presentation">
+                                <a class="nav-link" data-toggle="tab" href="#v3_add" aria-selected="false" role="tab"
+                                   tabindex="-1">Add order</a>
+                            </li>
+                            <li class="nav-item w-md-200px me-0" role="presentation">
+                                <a class="nav-link" data-toggle="tab" href="#v3_status" aria-selected="false" role="tab"
+                                   tabindex="-1">Order status</a>
+                            </li>
+                            <li class="nav-item w-md-200px me-0" role="presentation">
+                                <a class="nav-link" data-toggle="tab" href="#v3_refill" aria-selected="false" role="tab"
+                                   tabindex="-1">Refill</a>
+                            </li>
+                            <li class="nav-item w-md-200px me-0" role="presentation">
+                                <a class="nav-link" data-toggle="tab" href="#v3_cancel" aria-selected="false" role="tab"
+                                   tabindex="-1">Cancel</a>
+                            </li>
+                            <li class="nav-item w-md-200px" role="presentation">
+                                <a class="nav-link" data-toggle="tab" href="#v3_balance" aria-selected="false" role="tab"
+                                   tabindex="-1">Balance</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content w-100">
+                            <div class="tab-pane fade active show" id="v3_services" role="tabpanel">
+                                <table class="table align-middle table-row-bordered table-rounded border rounded">
+                                    <tbody>
+                                    <tr class="bg-light">
+                                        <td class="fw-bolder">Parameters</td>
+                                        <td class="fw-bolder">Description</td>
+                                    </tr>
+                                    <tr>
+                                        <td>key</td>
+                                        <td>API Key</td>
+                                    </tr>
+                                    <tr>
+                                        <td>action</td>
+                                        <td>"services"</td>
+                                    </tr>
+                                    <tr>
+                                        <td>locale</td>
+                                        <td>"en" or "vi"</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+                                <h6>Example success response (Code <span class="text-success">200</span>)</h6>
+                                <div class="bg-light p-3">
+                      <pre class="language-html mb-0">[
+  {
+      "service": 55,
+      "name": "Member group",
+      "type": "Default",
+      "sub_name": "buff_group",
+      "category": "buff_group",
+      "description": "Member beta, Vietnamese [10k-20k/ 24 hours.] ",
+      "rate": "1",
+      "min": 200,
+      "max": 3000000,
+      "refill": false,
+      "refill_days": 0,
+      "cancel": true
+  },
+  {
+      "service": 63,
+      "name": "Share Vietnamese",
+      "sub_name": "share",
+      "type": "Default",
+      "category": "share",
+      "description": "Share Vietnamese, super fast",
+      "rate": "1",
+      "min": 10,
+      "max": 50000,
+      "refill": false,
+      "refill_days": 0,
+      "cancel": true
+  }
+]</pre>
+                                </div>
+
+                                <div class="mt-1">Note: "rate" is price per 1000</div>
+                            </div>
+
+                            <div class="tab-pane fade" id="v3_add" role="tabpanel">
+                                <div class="mb-5">
+                                    <label class="form-label">Type</label>
+                                    <select class="form-control" id="add_order_type">
+                                        <option value="default">Default</option>
+                                        <option value="custom-comments">Custom Comments</option>
+                                        <option value="custom-reviews">Custom Reviews</option>
+                                        <option value="custom-checkin">Custom Checkin</option>
+                                        <option value="reaction">Reaction</option>
+                                        <option value="view-special">View Special</option>
+                                        <option value="view-video">View Video</option>
+                                        <option value="view-telegram-by-posts">View Telegram By Posts</option>
+                                        <option value="livestream">Custom Livestream</option>
+                                        <option value="like-comment-tiktok">Like Comment Tiktok</option>
+                                    </select>
+                                </div>
+                                <table class="table align-middle table-row-bordered table-rounded border rounded"
+                                       id="table-add-order">
+                                    <tbody>
+                                    <tr class="bg-light">
+                                        <td class="fw-bolder">Parameters</td>
+                                        <td class="fw-bolder">Description</td>
+                                    </tr>
+                                    <tr>
+                                        <td>key</td>
+                                        <td>API Key</td>
+                                    </tr>
+                                    <tr>
+                                        <td>action</td>
+                                        <td>"add"</td>
+                                    </tr>
+                                    <tr>
+                                        <td>locale</td>
+                                        <td>"en" or "vi"</td>
+                                    </tr>
+                                    <tr>
+                                        <td>service</td>
+                                        <td>Service ID</td>
+                                    </tr>
+                                    <tr>
+                                        <td>link</td>
+                                        <td>Link (For most cases)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>uid</td>
+                                        <td>Uid (Please provide if link does not provided)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>quantity</td>
+                                        <td>Needed quantity</td>
+                                    </tr>
+
+                                    <tr class="options custom-comments custom-reviews custom-checkin"
+                                        style="display: none;">
+                                        <td>comments</td>
+                                        <td>Comments/Content join by \n</td>
+                                    </tr>
+
+                                    <tr class="options reaction" style="display: none;">
+                                        <td>reaction</td>
+                                        <td>Reaction: like, care, love, haha, wow, sad, angry</td>
+                                    </tr>
+
+                                    <tr class="options view-special" style="display: none;">
+                                        <td>video_length</td>
+                                        <td>Video Length: <br/>
+                                            <ul>
+                                                <li>0: 3 hours (price x1)</li>
+                                                <li>1: 2 hours (price x1.3)</li>
+                                                <li>2: 1 hour (price x1.5)</li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+
+                                    <tr class="options view-video" style="display: none;">
+                                        <td>video_type_id</td>
+                                        <td>
+                                            Video Type id<br/>
+                                            <ul>
+                                                <li>1: Watch 3 seconds (Video length of 6 seconds)</li>
+                                                <li>2: Watch 10 seconds (Video length of 13 seconds)</li>
+                                                <li>7: Watch 15 seconds (Video length of 18 seconds)</li>
+                                                <li>9: Watch 30 seconds (Price x2)</li>
+                                                <li>3: Watch 1 minute (30k green views step 2) (Price x2)</li>
+                                                <li>5: Watch 3 minutes (Price x3)</li>
+                                                <li>8: Watch 6 minutes (Price x4)</li>
+                                                <li>6: Watch 10 minutes (Price x6)</li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+
+                                    <tr class="options view-telegram-by-posts" style="display: none;">
+                                        <td>post_count</td>
+                                        <td>Total posts: 5, 10, 20, 50, 100</td>
+                                    </tr>
+
+                                    <tr class="options livestream" style="display: none;">
+                                        <td>minute</td>
+                                        <td>Livestream minute. Most cases pick one value: 30, 60, 90, 120, 150, 180,
+                                            210, 240, 270, 300
+                                        </td>
+                                    </tr>
+
+                                    <tr class="options like-comment-tiktok" style="display: none;">
+                                        <td>owner_link</td>
+                                        <td>Link of the comment owner</td>
+                                    </tr>
+
+                                    </tbody>
+                                </table>
+                                <h6>Example success response (Code <span class="text-success">200</span>)</h6>
+                                <div class="bg-light p-3">
+                      <pre class="language-html mb-0">{
+  "order": 673925,
+  "original": 69,
+  "quantity": 100
+}</pre>
+                                </div>
+
+                                <h6>Example failed response (Code # <span class="text-success">200</span>)</h6>
+                                <div class="bg-light p-3">
+                      <pre class="language-html mb-0">{
+  "code": "400",
+  "status": "error",
+  "error": "Tài khoản không đủ tiền"
+}</pre>
+                                </div>
+                            </div>
+
+                            <div class="tab-pane fade" id="v3_status" role="tabpanel">
+                                <table class="table align-middle table-row-bordered table-rounded border rounded">
+                                    <tbody>
+                                    <tr class="bg-light">
+                                        <td class="fw-bolder">Parameters</td>
+                                        <td class="fw-bolder">Description</td>
+                                    </tr>
+                                    <tr>
+                                        <td>key</td>
+                                        <td>API Key</td>
+                                    </tr>
+                                    <tr>
+                                        <td>action</td>
+                                        <td>"status"</td>
+                                    </tr>
+                                    <tr>
+                                        <td>locale</td>
+                                        <td>"en" or "vi"</td>
+                                    </tr>
+                                    <tr>
+                                        <td>order</td>
+                                        <td>Order IDs join by ,</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <h6>Example success response (Single order) (Code <span class="text-success">200</span>)</h6>
+                                <div class="bg-light p-3">
+                      <pre class="language-html mb-0">{
+  "charge": "0.05833",
+  "status": "Refunded",
+  "start_count": 0,
+  "remains": 100,
+  "currency": "VND"
+}</pre>
+                                </div>
+
+                                <h6>Example success response (Multi order) (Code <span class="text-success">200</span>)</h6>
+                                <div class="bg-light p-3">
+                      <pre class="language-html mb-0">{
+  "672792": {
+      "charge": "0.05833",
+      "status": "Refunded",
+      "start_count": 0,
+      "remains": 100,
+      "currency": "VND"
+  },
+  "672796": {
+      "charge": "0.09583",
+      "status": "Processing",
+      "start_count": 69,
+      "remains": 100,
+      "currency": "VND"
+  },
+}</pre>
+                                </div>
+
+                                <h6>Example failed response (Code # <span class="text-success">200</span>)</h6>
+                                <div class="bg-light p-3">
+                      <pre class="language-html mb-0">{
+  "code": "400",
+  "status": "error",
+  "error": "Không tìm thấy đơn hàng này"
+}</pre>
+                                </div>
+
+                                <p class="mt-1"><strong>Status</strong>: <em>Processing, In progress, Completed, Canceled, Refunded,
+                                        Waiting Cancel, Pending</em></p>
+                            </div>
+
+                            <div class="tab-pane fade" id="v3_refill" role="tabpanel">
+                                <table class="table align-middle table-row-bordered table-rounded border rounded">
+                                    <tbody>
+                                    <tr class="bg-light">
+                                        <td class="fw-bolder">Parameters</td>
+                                        <td class="fw-bolder">Description</td>
+                                    </tr>
+                                    <tr>
+                                        <td>key</td>
+                                        <td>API Key</td>
+                                    </tr>
+                                    <tr>
+                                        <td>action</td>
+                                        <td>"refill"</td>
+                                    </tr>
+                                    <tr>
+                                        <td>locale</td>
+                                        <td>"en" or "vi"</td>
+                                    </tr>
+                                    <tr>
+                                        <td>order</td>
+                                        <td>Order ID</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <h6>Example success response (Code <span class="text-success">200</span>)</h6>
+                                <div class="bg-light p-3">
+                      <pre class="language-html mb-0">{
+  "success": true,
+  "updated_order_id": "123",
+  "update_obj": {
+    "status": "In Progress"
+  }
+}</pre>
+                                </div>
+
+                                <h6>Example failed response (Code # <span class="text-success">200</span>)</h6>
+                                <div class="bg-light p-3">
+                      <pre class="language-html mb-0">{
+  "code": "400",
+  "status": "error",
+  "error": "Không tìm thấy đơn hàng này"
+}</pre>
+                                </div>
+                            </div>
+
+                            <div class="tab-pane fade" id="v3_cancel" role="tabpanel">
+                                <table class="table align-middle table-row-bordered table-rounded border rounded">
+                                    <tbody>
+                                    <tr class="bg-light">
+                                        <td class="fw-bolder">Parameters</td>
+                                        <td class="fw-bolder">Description</td>
+                                    </tr>
+                                    <tr>
+                                        <td>key</td>
+                                        <td>API Key</td>
+                                    </tr>
+                                    <tr>
+                                        <td>action</td>
+                                        <td>"cancel"</td>
+                                    </tr>
+                                    <tr>
+                                        <td>locale</td>
+                                        <td>"en" or "vi"</td>
+                                    </tr>
+                                    <tr>
+                                        <td>order</td>
+                                        <td>Order ID</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <h6>Example success response (Code <span class="text-success">200</span>)</h6>
+                                <div class="bg-light p-3">
+                      <pre class="language-html mb-0">{
+  "success": true,
+  "message": "Operation successful",
+  "refund_count": 100,
+  "status": "Refunded"
+}</pre>
+                                </div>
+
+                                <h6>Example failed response (Code # <span class="text-success">200</span>)</h6>
+                                <div class="bg-light p-3">
+                      <pre class="language-html mb-0">{
+  "code": "400",
+  "status": "error",
+  "error": "Không tìm thấy đơn hàng này"
+}</pre>
+                                </div>
+                            </div>
+
+                            <div class="tab-pane fade" id="v3_balance" role="tabpanel">
+                                <table class="table align-middle table-row-bordered table-rounded border rounded">
+                                    <tbody>
+                                    <tr class="bg-light">
+                                        <td class="fw-bolder">Parameters</td>
+                                        <td class="fw-bolder">Description</td>
+                                    </tr>
+                                    <tr>
+                                        <td>key</td>
+                                        <td>API Key</td>
+                                    </tr>
+                                    <tr>
+                                        <td>action</td>
+                                        <td>"balance"</td>
+                                    </tr>
+                                    <tr>
+                                        <td>locale</td>
+                                        <td>"en" or "vi"</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <h6>Example success response (Code <span class="text-success">200</span>)</h6>
+                                <div class="bg-light p-3">
+                      <pre class="language-html mb-0">{
+  "balance": "100000",
+  "currency": "VND"
+}</pre>
+                                </div>
+
+                                <h6>Example failed response (Code # <span class="text-success">200</span>)</h6>
+                                <div class="bg-light p-3">
+                      <pre class="language-html mb-0">{
+  "code": "400",
+  "status": "error",
+  "error": "Key không hợp lệ"
+}</pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function onDomainAdded(response) {
+        reloadTable();
+        swalSuccess(response.msg);
+        let {nameservers} = response;
+        $('#list_nameservers').html('');
+
+        nameservers.forEach(line => {
+            $('#list_nameservers').append(`<li>${line}</li>`);
+        });
+    }
+
+    $(document).ready(function () {
+        $('#add_order_type').change(function () {
+            const orderType = $(this).val();
+
+            const _table = $('#table-add-order');
+            _table.find('.options').hide();
+
+            if (orderType !== 'default') _table.find('.options.' + orderType).show();
+        })
+    });
+</script>

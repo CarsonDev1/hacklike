@@ -1,0 +1,168 @@
+<% layout("panel/layout") %>
+
+<%- include('../widget.ejs') %>
+
+<div class="content-container">
+    <ul class="nav nav-tabs nav-tabs-line nav-tabs-line-danger nav-tabs-line-2x"
+        role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" data-toggle="tab" href="#kt_add" role="tab" aria-selected="true">
+                <i class="fas fa-cart-plus" aria-hidden="true"></i>Mua Dịch Vụ
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#kt_history" role="tab" aria-selected="false">
+                <i class="fas fa-calendar-alt" aria-hidden="true"></i>Lịch Sử
+            </a>
+        </li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane active" id="kt_add" role="tabpanel">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="card form-group">
+
+                        <div class="card-body">
+                            <form id="formUserAction" action="/youtube/<%= site.type %>">
+                                <div class="form-group">
+                                    <label>Nhập link video kênh</label>
+                                    <input type="text" class="form-control change-price" name="link"
+                                           placeholder="https://www.youtube.com/watch?v=abc" autocomplete="off"
+                                           data-obj="youtube"
+                                           required>
+                                    <p class="server-section server_5-visible text-danger mt-1">Vui lòng nhập link
+                                        channel với server này</p>
+                                </div>
+
+                                <div class="row form-group mt-3 server-section server_1-visible server_2-visible server_3-visible server_4-visible">
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label>Độ dài video</label>
+                                            <input type="number" class="form-control change-suggest" id="video_minute"
+                                                   placeholder="Thời lượng video (phút)">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-7">
+                                        <div class="form-group">
+                                            <label>Số giờ mong muốn</label>
+                                            <div class="input-group mb-3">
+                                                <input type="number" id="expected_hour"
+                                                       class="form-control change-suggest"
+                                                       placeholder="Số giờ mong muốn">
+                                                <div class="input-group-append">
+                                                    <button class="btn btn-primary font-weight-bold" type="button"
+                                                            id="btn_suggest">Ước lượng
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-12" id="suggest_area" style="display: none">
+                                        <div class="alert alert-success">
+                                            Bạn nên chọn <span id="suggest_server"
+                                                               class="text-primary font-weight-bold">X</span>,
+                                            Số lượng view cần mua: <span id="suggest_count"
+                                                                         class="text-primary font-weight-bold">Y</span><br>
+                                            Bạn có thể tự tính toán và chọn server và số lượng view tùy ý.
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="server-section server_1-visible server_2-visible server_3-visible server_4-visible">Số
+                                        lượng view</label>
+                                    <label class="server-section server_5-visible">Số giờ xem</label>
+                                    <input type="number" class="form-control" name="count" id="count" min="" value=""/>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Chọn server</label>
+
+                                    <div class="servers">
+                                        <div class="radio radio-server">
+                                            <label><input type="radio" name="server" value="server_1">SV1
+                                            </label>
+                                        </div>
+
+                                        <div class="radio radio-server">
+                                            <label><input type="radio" name="server" value="server_2">SV2
+                                            </label>
+                                        </div>
+
+                                        <div class="radio radio-server">
+                                            <label><input type="radio" name="server" value="server_3">SV3
+                                            </label>
+                                        </div>
+
+                                        <div class="radio radio-server">
+                                            <label><input type="radio" name="server" value="server_4">SV4
+                                            </label>
+                                        </div>
+
+                                        <div class="radio radio-server">
+                                            <label><input type="radio" name="server" value="server_5">SV5 (Mua theo giờ
+                                                xem)
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="price">Giá Tiền Mỗi Tương Tác</label>
+                                    <input type="number" class="form-control" name="price" id="price" readonly/>
+                                </div>
+
+                                <%- include('../components/discount_widget.ejs') %>
+
+                                <div class="form-group">
+                                    <label for="total">Tổng Giá</label>
+                                    <input type="text" class="form-control" name="total" id="total" disabled/>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="note">Ghi chú</label>
+                                    <textarea class="form-control" name="note" id="note" rows="1"></textarea>
+                                </div>
+
+                                <div class="form-group">
+                                    <button id="submit" class="btn btn-success text-bold" type="submit">Mua</button>
+                                </div>
+                                <small class="form-text text-danger font-weight-bold">Cảnh báo quan trọng: View sẽ đếm
+                                    từ view
+                                    gốc.
+                                    Tuyệt đối k được mua view nơi khác trong quá trình chạy<br><br>
+                                    Bạn có thể để chế độ " Không công khai " chạy view xong rồi hiện " công khai" để
+                                    hiển thị giờ
+                                    xem. tránh view rác làm giảm số lượng giờ xem</small>
+                                <hr>
+                                <br>
+                                <div class="form-group">
+                                    <button class="btn btn-danger text-bold btn-view-history" type="button"
+                                            data-target="#kt_history">
+                                        <i class="fa fa-calendar" aria-hidden="true"></i> Quản Lý ID
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <%- include('../components/note.ejs') %>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane" id="kt_history" role="tabpanel">
+            <%- include('../components/status_filter.ejs') %>
+
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover" id="datatable-ajax"></table>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var type = "<%= site.type %>";
+</script>
+

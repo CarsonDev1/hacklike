@@ -1,0 +1,28 @@
+<div>
+    <div class="label-bold">
+        Lọc theo server
+    </div>
+    <ul class="nav nav-pills tab-servers" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" data-toggle="tab" href="#" data-server="all">
+        <span class="nav-icon">
+          <i class="fa fa-list text-success"></i>
+        </span>
+                <span class="nav-text">Tất cả</span>
+            </a>
+        </li>
+        <%
+        var classes = ['success', 'primary', 'warning', 'danger'];
+        %>
+        <% for (let i = 1; i <= 18; i++) { %>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#" data-server="server_<%= i %>">
+          <span class="nav-icon">
+            <i class="fa-solid fa-atom text-<%= classes[i % 3] %>"></i>
+          </span>
+                    <span class="nav-text">Server <%= i %></span>
+                </a>
+            </li>
+        <% } %>
+    </ul>
+</div>

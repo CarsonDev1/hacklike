@@ -1,0 +1,36 @@
+<div class="icon-middle">
+    <a class="icon" href="https://zalo.me/3304002102818581128" target="_blank"
+       data-toggle="tooltip" data-placement="left" title="Chat Zalo">
+        <img src="/assets/images/icons/icon_zalo.png" alt=""/>
+    </a>
+
+    <a class="icon" href="https://www.facebook.com/Hacklike17com/" target="_blank"
+       data-toggle="tooltip" data-placement="left" title="Chat Messenger">
+        <img src="/assets/images/icons/icon_mess.png" alt=""/>
+    </a>
+
+    <a class="icon" href="tel:0928976666" data-toggle="tooltip"
+       data-placement="left" title="Liên Hệ">
+        <img src="/assets/images/icon_phone.svg" alt="" class="icon-svg"/>
+    </a>
+</div>
+
+<div id="middle-control" data-toggle="tooltip" data-placement="left" title="Bạn cần hỗ trợ?">
+    <img src="/assets/images/icon_comment.svg" alt="" class="icon-svg" style="vertical-align: top"/>
+</div>
+
+<script>
+    var miniIcon = !!localStorage.getItem('miniIcon');
+
+    $('#middle-control').click(function () {
+        miniIcon = !miniIcon;
+        localStorage.setItem('miniIcon', miniIcon ? 'true' : '');
+        $('body')[miniIcon ? 'addClass' : 'removeClass']('mini-icons');
+    });
+
+    // Mini icon if selected or mobile
+    if (localStorage.getItem('miniIcon') || $(window).width() < 768) {
+        $('body').addClass('mini-icons');
+        miniIcon = true;
+    }
+</script>

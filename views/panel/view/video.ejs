@@ -1,0 +1,211 @@
+<% layout("panel/layout") %>
+
+<%- include('../widget.ejs') %>
+
+<div class="content-container">
+    <ul class="nav nav-tabs nav-tabs-line nav-tabs-line-danger nav-tabs-line-2x"
+        role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" data-toggle="tab" href="#kt_add" role="tab" aria-selected="true">
+                <i class="fas fa-cart-plus" aria-hidden="true"></i>Mua Dịch Vụ
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#kt_history" role="tab" aria-selected="false">
+                <i class="fas fa-calendar-alt" aria-hidden="true"></i>Lịch Sử
+            </a>
+        </li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane active" id="kt_add" role="tabpanel">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="card form-group">
+
+                        <div class="card-body">
+                            <form id="formUserAction" action="/view/<%= site.type %>">
+                                <div class="form-group">
+                                    <label for="video">Link video</label>
+                                    <input type="url" class="form-control" id="url" name="url"
+                                           placeholder="Link video cần chạy"
+                                           required autocomplete="off">
+
+                                    <div class="mt-1">
+                                        vd: https://www.facebook.com/123/videos/456/<br/>
+                                        https://www.facebook.com/reel/1163863061018835
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Chọn server</label>
+
+                                    <div class="servers">
+
+                                        <div class="radio radio-server">
+                                            <label><input type="radio" name="server" value="server_1">Server 1
+                                            </label>
+                                        </div>
+
+                                        <div class="radio radio-server">
+                                            <label><input type="radio" name="server" value="server_2">Server 2
+                                            </label>
+                                        </div>
+
+                                        <div class="server-info form-group server-section server_2-visible">
+                                            <%- include('../components/view_speed', {
+                                            input_name: 'speed_server_2',
+                                            video_key: 'view_video_cheap'
+                                            }) %>
+                                        </div>
+
+                                        <div class="radio radio-server">
+                                            <label><input type="radio" name="server" value="server_3">Server 3
+                                            </label>
+                                        </div>
+
+                                        <div class="server-info form-group server-section server_3-visible">
+                                            <%- include('../components/view_speed', {
+                                            input_name: 'speed_server_3',
+                                            video_key: 'view_video'
+                                            }) %>
+                                        </div>
+
+                                        <div class="radio radio-server">
+                                            <label><input type="radio" name="server" value="server_4">Server 4
+                                            </label>
+                                        </div>
+
+                                        <div class="radio radio-server">
+                                            <label><input type="radio" name="server" value="server_5">Server 5
+                                            </label>
+                                        </div>
+
+                                        <div class="radio radio-server">
+                                            <label><input type="radio" name="server" value="server_6">Server 6
+                                            </label>
+                                        </div>
+
+                                        <div class="radio radio-server">
+                                            <label><input type="radio" name="server" value="server_7">Server 7
+                                            </label>
+                                        </div>
+
+                                        <div class="server-info form-group server-section server_7-visible">
+                                            <%- include('../components/view_speed', {
+                                            input_name: 'speed_server_7',
+                                            video_key: 'view_video_vip'
+                                            }) %>
+                                        </div>
+
+                                        <div class="radio radio-server">
+                                            <label><input type="radio" name="server" value="server_8">Server 8
+                                            </label>
+                                        </div>
+
+                                        <div class="radio radio-server">
+                                            <label><input type="radio" name="server" value="server_9">Server 9
+                                            </label>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div class="form-group server-section server_2-visible server_3-visible server_7-visible">
+                                    <label>Loại video (độ dài video phải lớn hơn gói video)</label>
+                                    <select class="form-control change-price" name="services_server_3">
+                                        <option value="1" selected="">Xem 3 giây ( Độ dài video từ 6 giây )</option>
+                                        <option value="2">Xem 10 giây ( Độ dài video từ 13 giây )</option>
+                                        <option value="7">Xem 15 giây ( Độ dài video từ 18 giây )</option>
+                                        <option value="9" data-multiple="2">Xem 30 giây (Giá x2)</option>
+                                        <option value="3" data-multiple="2">Xem 1 phút (30k views xanh bước 2) (Giá
+                                            x2)
+                                        </option>
+                                        <option value="5" data-multiple="3">Xem 3 phút (Giá x3)</option>
+                                        <option value="8" data-multiple="4">Xem 6 phút (Giá x4)</option>
+                                        <option value="6" data-multiple="6">Xem 10 phút (Giá x6)</option>
+                                        <!-- <option value="4" data-multiple="2">Xem 30 phút (Giá x2)</option>
+                                        <option value="10" data-multiple="4">Xem 1 giờ (Giá x4)</option>
+                                        <option value="11" data-multiple="10">Xem 2 giờ (Giá x10)</option> -->
+                                        <!-- <option value="12" data-multiple="8">Xem 3 giờ (Giá x8)</option>
+                                        <option value="13" data-multiple="8">Xem 4 giờ (Giá x8)</option>
+                                        <option value="14" data-multiple="10">Xem 5 giờ (Giá x10)</option>
+                                        <option value="15" data-multiple="10">Xem 6 giờ (Giá x10)</option> -->
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="count">Số lượng</label>
+                                    <input type="number" class="form-control" name="count" id="count" min="" value=""/>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="price">Giá Tiền Mỗi Tương Tác</label>
+                                    <input type="number" class="form-control" name="price" id="price" disabled/>
+                                </div>
+
+                                <%- include('../components/discount_widget.ejs') %>
+
+                                <div class="form-group">
+                                    <label for="total">Tổng Giá</label>
+                                    <input type="text" class="form-control" name="total" id="total" disabled/>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="note">Ghi chú</label>
+                                    <textarea class="form-control" name="note" id="note" rows="1"></textarea>
+                                </div>
+
+                                <div class="form-group">
+                                    <button id="submit" class="btn btn-success text-bold" type="submit">Mua</button>
+                                </div>
+
+                                <div class="form-group">
+                                    <button class="btn btn-danger text-bold btn-view-history" type="button"
+                                            data-target="#kt_history">
+                                        <i class="fa fa-calendar" aria-hidden="true"></i> Quản Lý ID
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <%- include('../components/note.ejs') %>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane" id="kt_history" role="tabpanel">
+            <%- include('../components/status_filter.ejs') %>
+
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover" id="datatable-ajax"></table>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var type = "<%= site.type %>";
+
+    function selfCalculatorPrice() {
+        var singlePrice = allPrices[selectedServer].price;
+        if (['server_2', 'server_3', 'server_7'].includes(selectedServer)) {
+            singlePrice *= $(`select[name="services_server_3"] option:selected`).first().data('multiple') || 1;
+            singlePrice *= Number($(`[name="speed_${selectedServer}"]:checked`).data('multiple'));
+        }
+
+        let temp = round(singlePrice, 2);
+        $('#price').val(temp)
+            .attr('data-price', temp);
+
+        var total = Math.round(singlePrice * $('#count').val());
+
+        total = applyDiscountAndCurrency(total);
+        total = getOrderTotal(total);
+
+        $('#total').val(formatMoney(total, ' VND'));
+    }
+
+    $('.change-price').change(function () {
+        selfCalculatorPrice();
+    });
+</script>

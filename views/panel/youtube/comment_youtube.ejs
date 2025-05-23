@@ -1,0 +1,142 @@
+<% layout("panel/layout") %>
+
+<%- include('../widget.ejs') %>
+
+<div class="content-container">
+    <ul class="nav nav-tabs nav-tabs-line nav-tabs-line-danger nav-tabs-line-2x"
+        role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" data-toggle="tab" href="#kt_add" role="tab" aria-selected="true">
+                <i class="fas fa-cart-plus" aria-hidden="true"></i>Mua Dịch Vụ
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#kt_history" role="tab" aria-selected="false">
+                <i class="fas fa-calendar-alt" aria-hidden="true"></i>Lịch Sử
+            </a>
+        </li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane active" id="kt_add" role="tabpanel">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="card form-group">
+
+                        <div class="card-body">
+                            <form id="formUserAction" action="/youtube/<%= site.type %>">
+                                <div class="form-group">
+                                    <label>Link Youtube</label>
+                                    <input type="text" class="form-control change-price" name="link"
+                                           placeholder="https://www.youtube.com/watch?v=abc" autocomplete="off"
+                                           data-obj="youtube"
+                                           required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Chọn server</label>
+
+                                    <div class="servers">
+                                        <%
+                                        let serverMap = {
+                                            server_1: 'Server 1',
+                                            server_2: 'Server 2',
+                                            server_3: 'Server 3',
+                                            server_4: 'Server 4',
+                                            server_5: 'Server 5',
+                                            server_6: 'Server 6'
+                                        };
+                                        %>
+
+                                        <% Object.keys(serverMap).forEach(server => { %>
+                                            <div class="radio radio-server">
+                                                <label><input type="radio" name="server" value="<%= server %>">
+                                                    <%= serverMap[server] %>
+                                                </label>
+                                            </div>
+                                        <% }); %>
+
+                                        <div class="title">Tăng trả lời bình luận</div>
+
+                                        <%
+                                        serverMap = {
+                                            server_10: 'Server 10',
+                                            server_11: 'Server 11'
+                                        };
+                                        %>
+
+                                        <% Object.keys(serverMap).forEach(server => { %>
+                                            <div class="radio radio-server">
+                                                <label><input type="radio" name="server" value="<%= server %>">
+                                                    <%= serverMap[server] %>
+                                                </label>
+                                            </div>
+                                        <% }); %>
+                                    </div>
+                                </div>
+
+                                <div class="form-group" data-sv="2,3,5,6,10,11">
+                                    <label>Số lượng</label>
+                                    <input type="number" class="form-control" name="count" id="count"/>
+
+                                    <small class="text-danger text-bold" data-sv="5,6,10,11">
+                                        Hệ thống sẽ tự tạo nội dung bình luận dựa theo nội dung
+                                    </small>
+                                </div>
+
+                                <div class="form-group" data-sv="1,2,3,4">
+                                    <label>Nhập nội dung Comment - Mỗi dòng tương đương với 1 Comment (<span
+                                                class="comment_count">0</span>)</label>
+                                    <textarea class="form-control has_count" rows="10" id="comments" name="comments"
+                                              placeholder="Nhập nội dung Comment"
+                                              data-counter=".comment_count"></textarea>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="price">Giá Tiền Mỗi Tương Tác</label>
+                                    <input type="number" class="form-control" name="price" id="price" readonly/>
+                                </div>
+
+                                <%- include('../components/discount_widget.ejs') %>
+
+                                <div class="form-group">
+                                    <label for="total">Tổng Giá</label>
+                                    <input type="text" class="form-control" name="total" id="total" disabled/>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="note">Ghi chú</label>
+                                    <textarea class="form-control" name="note" id="note" rows="1"></textarea>
+                                </div>
+
+                                <div class="form-group">
+                                    <button id="submit" class="btn btn-success text-bold" type="submit">Mua</button>
+                                    -<span style="color:red">Đọc kĩ lưu ý Nếu bạn mua lỗi</span>
+                                </div>
+
+                                <div class="form-group">
+                                    <button class="btn btn-danger text-bold btn-view-history" type="button"
+                                            data-target="#kt_history">
+                                        <i class="fa fa-calendar" aria-hidden="true"></i> Quản Lý ID
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <%- include('../components/note.ejs') %>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane" id="kt_history" role="tabpanel">
+            <%- include('../components/status_filter.ejs') %>
+
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover" id="datatable-ajax"></table>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var type = "<%= site.type %>";
+</script>

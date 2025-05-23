@@ -1,0 +1,26 @@
+<table class="table table-payment-info">
+    <tbody>
+    <tr>
+        <td>Tên TK</td>
+        <td>
+            <span><%= account_name %></span>
+        </td>
+    </tr>
+
+    <tr>
+        <td>Số TK</td>
+        <td>
+            <span id="<%= key %>_account"><%= account_number %></span>
+            <span class="btn-copy fa fa-copy" data-target="#<%= key %>_account"></span>
+        </td>
+    </tr>
+
+    <tr>
+        <td>Nội Dung</td>
+        <td>
+            <span id="<%= key %>_content"><%= 'hacklike17 username' %></span>
+            <span class="btn-copy fa fa-copy" data-target="#<%= key %>_content"></span>
+        </td>
+    </tr>
+    </tbody>
+</table>

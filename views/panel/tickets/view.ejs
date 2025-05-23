@@ -1,0 +1,205 @@
+<% layout("panel/layout") %>
+
+<style>
+    #vue_app .btn {
+        font-weight: 700;
+    }
+</style>
+
+<div class="card card-body">
+    <div id="vue_app" style="display: none">
+        <div class="row mb-2">
+            <div class="col-auto">
+                <img src="/assets/images/admin.png"  width="80" alt="user"
+                     class="active avatar-home">
+            </div>
+            <div class="col pl-0">
+                <h5 class="bold mb-0 text-uppercase font-18"> {{ ticket.title }} </h5>
+            </div>
+            <div class="col-auto text-right pl-0">
+                <h6 class="mb-1 font-14 cl-green">
+                    <i class="far fa-comment-dots pr-1 font-light font-24 ml-2"></i> {{ messages.length }} </h6>
+                <h6 class="font-13 cl-green"> {{ getTimePasses(ticket.createdAt) }} </h6>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <!--                  <div class="form-group row">-->
+                <!--                    <div class="col-auto pr-2 font-bold pt-sm-1">-->
+                <!--                      <i class="fas fa-circle mr-2 cl-green" style="font-size: 5px; vertical-align: middle;">-->
+                <!--                      </i>Loại góp ý:-->
+                <!--                    </div>-->
+                <!--                    <div class="col pl-0">-->
+                <!--                      <span class="badge text-white px-3 badge-success" v-if="serviceMap && serviceMap.follow">-->
+                <!--                        {{ serviceMap[ticket.type] || 'Chung' }}-->
+                <!--                      </span>-->
+                <!--                    </div>-->
+                <!--                  </div>-->
+                <!--                  <div class="form-group row">-->
+                <!--                    <div class="col-auto pr-2 font-bold pt-sm-1">-->
+                <!--                      <i class="fas fa-circle mr-2 cl-green" style="font-size: 5px; vertical-align: middle;">-->
+                <!--                      </i>Link/UID:-->
+                <!--                    </div>-->
+                <!--                    <div class="col pl-0">-->
+                <!--                      <span class="cl-red px-3 ml-2 bg-red-2">-->
+                <!--                        <template v-if="ticket.link">-->
+                <!--                          <a href="" v-bind:href="ticket.link" target="_blank" id="link" style="font-size: 15px">{{ ticket.link }}</a>-->
+                <!--                          <span class="badge text-white hand ml-2 badge-info btn-copy c-pointer" data-target="#link">Copy</span>-->
+                <!--                        </template>-->
+                <!--                        <template v-else>Không có</template>-->
+                <!--                      </span>-->
+
+                <!--                    </div>-->
+                <!--                  </div>-->
+
+                <div class="form-group row">
+                    <div class="col-auto pr-2 font-bold pt-sm-1">
+                        <i class="fas fa-circle mr-2 cl-green" style="font-size: 5px; vertical-align: middle;">
+                        </i>
+                        <span class="font-bold mr-md-3 mr-0">Mô tả:</span>
+                    </div>
+                    <div class="col pl-0 ml-md-1">
+                        <div class="card card-gray ml-md-3">
+                            <div class="card-body px-2 py-1 content-support">
+                                <div class="cl-gray mb-0 chat-content">{{ ticket.content }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="input-group">
+            <input id="support_link" type="text" disabled="disabled" class="form-control">
+            <div class="input-group-prepend c-pointer">
+                <span class="input-group-text bg-green border-0 text-white btn-copy" data-target="#support_link"> Copy Link Góp Ý </span>
+            </div>
+        </div>
+
+        <div>
+            <hr class="my-2">
+            <template v-for="message in messages">
+                <div>
+                    <div class="card mt-2" v-bind:class="{'card-support': message.from_user, 'card-info-support': !message.from_user}">
+                        <div class="card-body py-2">
+                            <div class="row">
+                                <div class="col-auto px-1">
+                                    <img v-if="message.from_user" src="/assets/images/admin.png" width="70" alt="user" class="active avatar-home">
+                                    <img v-else src="/assets/images/admin.png" width="70" alt="user" class="active avatar-home">
+                                </div>
+                                <div class="col pl-2 text-left">
+                                    <h5 class="bold cl-green block-text mb-1">
+                                        <template v-if="message.from_user">Bạn</template>
+                                        <template v-else>Quản trị viên</template>
+                                    </h5>
+                                    <h6 class="font-14 cl-black chat-time">{{ getTimePasses(message.createdAt) }}</h6>
+
+                                    <div class="cl-black chat-content">{{ message.content }}</div>
+                                    <div class="chat-image mt-2" v-if="message.image">
+                                        <img class="post-attached-image" src="" v-bind:src="message.image" alt="">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </template>
+        </div>
+
+        <div>
+            <hr class="hr-comment-support my-2" v-if="messages.length">
+            <div class="row mt-2" v-bind:class="{hidden: ticket.status == 2}">
+                <div class="col">
+
+                    <div class="form-group">
+                        <label>Nội dung tin nhắn</label>
+                        <textarea class="form-control" name="content" v-model="content" rows="7" placeholder="Hãy nhập nội dung tin nhắn vào đây"></textarea>
+                    </div>
+
+                    <div class="form-group mt-2 mb-0">
+                        <label>Link Ảnh (tuỳ chọn)</label>
+                        <input class="form-control" name="image" type="url" maxlength="100" v-model="image">
+
+                        <div class="alert alert-warning mt-2">
+                            Website hỗ trợ get link ảnh: <a href="https://linkanh.xyz/" target="_blank">Tại Đây</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="row align-items-center mt-2">
+
+                <template v-if="ticket.status != 2">
+                    <div class="col-12 col-md-4 mb-3 mb-md-0">
+                        <button type="submit" class="btn font-14 btn-rounded bg-warning bold bt-green w-100" @click="onGoBack()"> Trở về
+                        </button>
+                    </div>
+                    <div class="col-12 col-md-4 mb-3 mb-md-0">
+                        <button type="submit" class="btn font-14 btn-rounded btn-md bg-green text-white btn-block font-bold" @click="sendMessage()">Trả lời
+                        </button>
+                    </div>
+                    <div class="col-12 col-md-4 mb-3 mb-md-0">
+                        <button class="btn font-14 btn-rounded bold bg-red text-white float-right w-100" @click="onChangeStatus(2)"> Đóng yêu cầu</button>
+                    </div>
+                </template>
+                <template v-else>
+                    <div class="col-12 col-md-6 mb-3 mb-md-0">
+                        <button type="submit" class="btn font-14 btn-rounded bg-warning bold bt-green w-100" @click="onGoBack()"> Trở về
+                        </button>
+                    </div>
+                    <div class="col-12 col-md-6 mb-3 mb-md-0">
+                        <button class="btn font-14 btn-rounded bold bg-red text-white float-right w-100" @click="onChangeStatus(0)"> Mở yêu cầu</button>
+                    </div>
+                </template>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/assets/plugins/vue/vue.js"></script>
+<script>
+    var tApi = '/tickets';
+    var ticketId = Number('<%= ticket.id %>');
+
+    $(document).ready(function () {
+        $('#vue_app').show();
+        app = new Vue({
+            el: '#vue_app',
+            data: {
+                ticket: {id: ticketId},
+                messages: [],
+                // serviceMap: {},
+                loading: false,
+                content: '',
+                image: ''
+            },
+            methods: {
+                getMessages: function() {
+                    this.toggleLoading(true);
+                },
+                sendMessage: function () {
+                    var content = this.content.trim();
+                    if (!content) return swalError('Vui lòng nhập nội dung tin nhắn!');
+                },
+                onChangeStatus: function (status) {
+                    swalConfirm().then(function(confirm) {
+                        if (!confirm) return;
+
+                        swalLoading();
+                    })
+                },
+                onGoBack: function() {
+                    window.location.href = '/tickets?from=detail';
+                },
+                toggleLoading: function(value) {
+                    this.loading = value;
+                },
+                getTimePasses: getTimePasses
+            },
+            mounted() {
+
+            }
+        });
+    });
+</script>

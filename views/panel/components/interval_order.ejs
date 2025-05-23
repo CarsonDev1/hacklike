@@ -1,0 +1,52 @@
+<div class="area-interval-order">
+    <div class="form-group">
+        <div class="custom-control custom-switch">
+            <input type="checkbox" class="custom-control-input" id="switch_interval_order" name="interval_order">
+            <label class="custom-control-label" for="switch_interval_order"></label>
+            <label for="switch_interval_order">
+                Hẹn giờ mua đơn nhiều lần
+            </label>
+            <span class="fa fa-question question-badge" data-toggle="collapse"
+                  data-target="#switch_interval_order_explain"></span>
+        </div>
+
+        <div class="collapse" id="switch_interval_order_explain">
+            <div class="alert alert-primary alert-dismissible fade show mt-2" role="alert">
+                Bạn có thể hẹn giờ để mua lại đơn với tham số y hệt. (Tính năng này chỉ hỗ trợ với 1 số server nhất
+                định)<br/>
+                Tổng tiền: Số lượng x Tổng số lần mua x đơn giá<br/>
+                Cách hoạt động: Nếu mua 20k tương tác 5 lần và cách 1 giờ. Lúc này nó sẽ mua 20k, sau 1 giờ lại mua 20k
+                tương tác tiếp tục cho tới hết 5 lần.
+            </div>
+        </div>
+    </div>
+
+    <div id="section_interval_order" style="display: none">
+        <div class="p-3 has-border mb-3">
+            <div class="form-group">
+                <label>Tổng số lần mua
+                    <span id="interval_order_total" class="text-primary"></span>
+                </label>
+                <input type="number" class="form-control change-price" value="1" min="1" name="total_order"/>
+            </div>
+
+            <div>
+                <label>Thời gian mỗi đơn cách nhau</label>
+                <select type="number" class="form-control" name="order_delay">
+                    <option value="5">5 phút</option>
+                    <option value="10">10 phút</option>
+                    <option value="15">15 phút</option>
+                    <option value="30">30 phút</option>
+                    <option value="60">1 giờ</option>
+                    <option value="120">2 giờ</option>
+                    <option value="240">4 giờ</option>
+                    <option value="480">8 giờ</option>
+                    <option value="720">12 giờ</option>
+                    <option value="1440">1 ngày</option>
+                    <option value="2880">2 ngày</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+</div>

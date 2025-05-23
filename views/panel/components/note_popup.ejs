@@ -1,0 +1,24 @@
+<!--Show popup if exist-->
+<% if (typeof note !== "undefined" && note && note.show_popup && note.popup_content) { %>
+    <div class="modal fade" id="modalNotifyByType" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Thông báo</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="notify-content"><%- note.popup_content %></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary btn-hide-type-popup" data-dismiss="modal">Không hiện
+                        nữa
+                    </button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+<% } %>

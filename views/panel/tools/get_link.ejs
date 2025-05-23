@@ -1,0 +1,111 @@
+<% layout("panel/layout") %>
+
+<%- include('../widget.ejs') %>
+
+<style>
+    #loading {
+        display: none;
+        font-size: 22px;
+        color: brown;
+    }
+</style>
+
+<div class="card card-body">
+
+    <div class="card has-shadow mb-3">
+        <div class="card-header bg-primary">
+            <h5 class="text-white text-bold mb-0">Get Link/UID Facebook</h5>
+        </div>
+        <div class="card-body">
+            <div class="form-group">
+                <h5 class="text-success text-bold">Get UID bài viết</h5>
+
+                <label>Link FB cần lấy UID</label>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" id="uid"
+                           placeholder="vd: https://www.facebook.com/TuoiTreCuoi/posts/5202647163146579">
+                    <div class="input-group-append">
+                        <button class="btn btn-success btn-copy" type="button" data-target="#uid">
+                            <i class="fa-solid fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <hr/>
+
+            <div class="form-group">
+                <h5 class="text-primary text-bold">Get UID FB và info</h5>
+
+                <label>
+                    Link FB cần lấy Info
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="need_page_id">
+                        <label class="custom-control-label" for="need_page_id">Lấy cả UID Page</label>
+                    </div>
+                </label>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" id="link" placeholder="vd: https://www.facebook.com/4">
+                    <div class="input-group-append">
+                        <button class="btn btn-success btn-copy" type="button" data-target="#link">
+                            <i class="fa-solid fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Id Page</label>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" id="page_id"
+                           placeholder="Hệ thống sẽ tự động hiển thị sau khi nhập Link FB">
+                    <div class="input-group-append">
+                        <button class="btn btn-success btn-copy" type="button" data-target="#page_id">
+                            <i class="fa-solid fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Tên</label>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" id="name"
+                           placeholder="Hệ thống sẽ tự động hiển thị sau khi nhập Link FB">
+                    <div class="input-group-append">
+                        <button class="btn btn-success btn-copy" type="button" data-target="#name">
+                            <i class="fa-solid fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card has-shadow mb-3">
+        <div class="card-header bg-primary">
+            <h5 class="text-white text-bold mb-0">Get Link/UID Tiktok</h5>
+        </div>
+        <div class="card-body">
+            <div class="form-group">
+                <h5 class="text-success text-bold">Get Link từ Link Rút gọn</h5>
+
+                <label>Link rút gọn</label>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" id="tiktok_post_link"
+                           placeholder="vd: https://vt.tiktok.com/ZSeeBLy6x/">
+                    <div class="input-group-append">
+                        <button class="btn btn-success btn-copy" type="button" data-target="#tiktok_post_link">
+                            <i class="fa-solid fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    var type = 'tool';
+</script>

@@ -1,0 +1,513 @@
+<% layout("panel/layout") %>
+
+<style>
+    .form-group.check-password {
+        display: none;
+        position: absolute;
+        z-index: 9999;
+        background: #ffff;
+        width: 100%;
+        top: calc(1.5em + 1.3rem + 2px);
+        padding-top: 12px;
+        padding-left: 20px;
+        box-shadow: 1px 2px 9px -1px rgba(168, 164, 164, 0.75);
+        -webkit-box-shadow: 1px 2px 9px -1px rgba(168, 164, 164, 0.75);
+    }
+
+    .form-group.re-check-password {
+        font-size: 15px;
+        display: none;
+        color: #ec4343;
+        margin: 1rem 0 1rem 0.5rem;
+    }
+
+    .form-group.check-password .title {
+        font-size: 14px;
+        margin-bottom: 6px;
+    }
+
+    .form-group.check-password .check-password-item {
+        padding: 4px 8px;
+        line-height: 24px;
+        display: flex;
+        align-items: center;
+        font-size: 15px;
+    }
+
+    .form-group.check-password.active {
+        display: block;
+    }
+
+    .form-group.re-check-password.active {
+        display: block;
+    }
+
+    .invalid:before, .valid:before {
+        content: "";
+        margin-right: 12px;
+        width: 16px;
+        height: 16px;
+        display: block;
+        border-radius: 50px;
+    }
+
+    .invalid:before {
+        content: "";
+        border: 1px solid #CCCCCC;
+    }
+
+    .valid:before {
+        content: "";
+        background-image: url("/assets/images/svg/checked.svg");
+        border: 1px solid #3f87f5;
+    }
+</style>
+
+<div class="kt-grid kt-grid--desktop kt-grid--ver kt-grid--ver-desktop kt-app">
+
+    <div class="kt-grid__item kt-app__toggle kt-app__aside" id="kt_user_profile_aside" style="opacity: 1;">
+        <div class="kt-portlet ">
+            <div class="kt-portlet__head  kt-portlet__head--noborder">
+                <div class="kt-portlet__head-label">
+                    <h3 class="kt-portlet__head-title"></h3>
+                </div>
+            </div>
+            <div class="kt-portlet__body kt-portlet__body--fit-y">
+                <!--begin::Widget -->
+                <div class="kt-widget kt-widget--user-profile-1">
+                    <div class="kt-widget__head">
+                        <div class="kt-widget__media">
+                            <img src="<%= user_info.avatar %>" alt="image">
+                        </div>
+                        <div class="kt-widget__content">
+                            <div class="kt-widget__section">
+                                <a href="#" class="kt-widget__username">
+                                    <%= user_info.fullname || user_info.username %>
+                                    <img class="icon-tick" src="/assets/images/tick.svg" alt=""/>
+                                </a>
+                                <span class="kt-widget__subtitle">
+                                    <% if (account.is_admin) { %>
+                                        Quản trị viên
+                                    <% } else { %>
+                                        <%= functions.typeUser(user_info.ugroup) %>
+                                    <% } %>
+                                </span>
+                            </div>
+                            <% if(user_info.facebook) { %>
+                                <div class="kt-widget__action">
+                                    <a href="<%= user_info.facebook %>" target="_blank" class="btn btn-info btn-sm"><i
+                                                class="fab fa-facebook-square"></i> Facebook</a>
+                                </div>
+                            <% } %>
+                        </div>
+                    </div>
+                    <div class="kt-widget__body">
+                        <div class="kt-widget__content">
+                            <div class="kt-widget__info">
+                                <span class="kt-widget__label">Email:</span>
+                                <a href="javascript:void(0)" class="kt-widget__data"><%= user_info.email %></a>
+                            </div>
+                            <div class="kt-widget__info">
+                                <span class="kt-widget__label">Điện Thoại:</span>
+                                <a href="javascript:void(0)" class="kt-widget__data"><%= user_info.phone %></a>
+                            </div>
+                            <div class="kt-widget__info">
+                                <span class="kt-widget__label">Số Dư:</span>
+                                <a href="javascript:void(0)"
+                                   class="kt-widget__data"><%= functions.number_format(user_info.price) %>
+                                    VNĐ</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--end::Widget -->
+            </div>
+        </div>
+    </div>
+
+    <div class="kt-grid__item kt-grid__item--fluid kt-app__content">
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="kt-portlet">
+                    <div class="kt-portlet__head">
+                        <div class="kt-portlet__head-label">
+                            <h3 class="kt-portlet__head-title">Cập nhật thông tin tài khoản
+                            </h3>
+                        </div>
+                    </div>
+
+                    <form class="form-json" method="POST" action="<%= '/profile/' %>">
+                        <div class="kt-portlet__body">
+                            <div class="kt-section kt-section--first">
+                                <div class="kt-section__body">
+                                    <div class="form-group row">
+                                        <label class="col-xl-3 col-lg-3 col-form-label">Họ tên</label>
+                                        <div class="col-lg-9 col-xl-6">
+                                            <input class="form-control" name="fullname"
+                                                   value="<%= user_info.fullname %>" required
+                                                   minlength="2" maxlength="100">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-xl-3 col-lg-3 col-form-label" for="username">Tài Khoản</label>
+                                        <div class="col-lg-9 col-xl-6">
+                                            <input class="form-control" name="username"
+                                                   value="<%= user_info.username %>" disabled>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-xl-3 col-lg-3 col-form-label">Link ảnh đại diện</label>
+                                        <div class="col-lg-9 col-xl-6">
+                                            <input type="url" class="form-control" name="avatar"
+                                                   value="<%= !user_info.avatar.match(/^\/assets/) ? user_info.avatar : '' %>">
+                                            <div class="alert alert-warning">
+                                                Website hỗ trợ get link ảnh: <a href="https://linkanh.xyz/"
+                                                                                target="_blank">Tại Đây</a>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-xl-3 col-lg-3 col-form-label" for="email">Email
+                                            <% if (user_info.email_verified) { %>
+                                                <i class="fas fa-check kt-font-success" data-toggle="tooltip"
+                                                   title="Đã xác nhận"></i>
+                                            <% } %>
+                                        </label>
+                                        <div class="col-lg-9 col-xl-6">
+                                            <div class="input-group mb-3">
+                                                <input type="email" name="email" id="email" class="form-control"
+                                                       placeholder="Email"
+                                                       value="<%= user_info.email %>" <%= user_info.email_verified ? 'readonly' : '' %>>
+                                                <div class="input-group-append">
+                                                    <% if (user_info.email_verified) { %>
+                                                        <button class="btn btn-success" id="btn_change_mail"
+                                                                type="button">Thay đổi
+                                                        </button>
+                                                    <% } else { %>
+                                                        <button class="btn btn-success" id="btn_confirm_mail"
+                                                                type="button">Xác nhận
+                                                        </button>
+                                                    <% } %>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-xl-3 col-lg-3 col-form-label">Số Điện Thoại</label>
+                                        <div class="col-lg-9 col-xl-6">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend"><span class="input-group-text"><i
+                                                                class="fas fa-phone"></i></span></div>
+                                                <input type="number" id="phone" name="phone" class="form-control"
+                                                       value="<%= user_info.phone %>"
+                                                       placeholder="Số Điện Thoại" minlength="8" maxlength="11"
+                                                       required>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-xl-3 col-lg-3 col-form-label">Link Facebook</label>
+                                        <div class="col-lg-9 col-xl-6">
+                                            <input class="form-control" type="url" id="url" name="facebook"
+                                                   value="<%= user_info.facebook %>">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-xl-3 col-lg-3 col-form-label">Mật Khẩu Cũ</label>
+                                        <div class="col-lg-9 col-xl-6">
+                                            <input class="form-control" type="text" name="old_password">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-xl-3 col-lg-3 col-form-label">Mật Khẩu Mới</label>
+                                        <div class="col-lg-9 col-xl-6">
+                                            <input class="form-control" type="text" name="new_password"
+                                                   id="new_password">
+                                            <div class="form-group check-password">
+                                                <div class="title">Yêu cầu về mật khẩu:</div>
+                                                <div id="length_password" class="invalid check-password-item">
+                                                    Dài tối thiểu 8 ký tự.
+                                                </div>
+
+                                                <div id="character_password" class="invalid check-password-item">
+                                                    Bao gồm chữ, số và ký tự đặc biệt.
+                                                </div>
+                                                <div id="likeUser_password" class="invalid check-password-item">
+                                                    Không chứa tên đăng nhập.
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-xl-3 col-lg-3 col-form-label">Xác Nhận Mật Khẩu</label>
+                                        <div class="col-lg-9 col-xl-6">
+                                            <input class="form-control" type="text" name="confirm_password"
+                                                   id="re_new_password">
+
+                                            <div class="form-group re-check-password">
+                                                Xác Nhận Mật Khẩu chưa khớp!
+                                            </div>
+
+                                            <div class="alert alert-danger mt-2">
+                                                Vui lòng chọn mật khẩu tối thiểu 8 ký tự, bao gồm chữ cái,
+                                                chữ số và kí tự đặc biệt, không được chứa tên đăng nhập
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-xl-3 col-lg-3 col-form-label">Cảnh báo số dư chuẩn bị
+                                            hết</label>
+                                        <div class="col-lg-9 col-xl-6">
+                                            <input class="form-control" type="number" name="min_balance_warning" min="0"
+                                                   maxlength="9"
+                                                   value="<%= user_info.data.min_balance_warning %>">
+
+                                            <div class="alert alert-primary mt-2">
+                                                - Hệ thống sẽ quét 2 giờ 1 lần và gửi tin nhắn cảnh báo về telegram khi
+                                                số dư của bạn nhỏ hơn mốc đã điền bên trên.<br/>
+                                                - Hệ thống sẽ không cảnh báo nếu bạn điền 0
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row telegram-configs">
+                                        <label class="col-xl-3 col-lg-3 col-form-label">Hạn chế thông báo từ web
+                                            con</label>
+                                        <div class="col-lg-9 col-xl-6">
+                                            <h6 class="mt-2">Chỉ thông báo hoàn tiền ở tài khoản mua (nếu bạn có website
+                                                con, khách đó mua bị hoàn chỉ họ nhận được thông báo, còn bạn sẽ không
+                                                nhận được để hạn chế spam)</h6>
+                                            <div class="d-flex align-items-center switch-wrapper">
+                                                <label>Tắt</label>
+                                                <div class="switch m-r-10">
+                                                    <input type="checkbox" id="less_notify"
+                                                            <%= user_info.less_notify ? 'checked' : '' %>>
+                                                    <label for="less_notify"></label>
+                                                </div>
+                                                <label>Bật</label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-xl-3 col-lg-3 col-form-label">Trạng thái Telegram:</label>
+                                        <div class="col-lg-9 col-xl-6 pt-2">
+                                            <% if (user_info.telegram_id) { %>
+                                                <span>
+                                <i class="fas fa-check-circle kt-font-success"></i>
+                                Đã liên kết
+                              </span>
+                                            <% } else { %>
+                                                <span class="text-danger fa fa-times pr-1"></span>Chưa liên kết
+                                                <i class="text-primary">(Liên kết telegram nhận thưởng 5000 vnđ.)</i>
+                                                <p>Nhấn vào <a href="https://t.me/HackLike17Bot" target="_blank">Đây</a>
+                                                    để xem hướng dẫn</p>
+                                            <% } %>
+                                            <p class="pt-2">Đổi ngôn ngữ tiếng việt cho Telegram Click: <a
+                                                        href="https://t.me/setlanguage/abcxyz" target="_blank">Tại
+                                                    đây</a></p>
+                                            <p>Video hướng dẫn liên kết telegram với tài khoản: <a
+                                                        href="https://youtu.be/siJbk7s6OKU?si=fM6vSQp6C2M0XNgG"
+                                                        target="_blank">Tại đây</a></p>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-xl-3 col-lg-3 col-form-label">Chức năng Telegram</label>
+                                        <div class="col-lg-9 col-xl-6">
+                                            <ol style="color: black;padding-left: 10px">
+                                                <li>Cảnh báo đăng nhập, đổi mật khẩu v.v để bảo mật nick an toàn</li>
+                                                <li>Nhận mã OTP khi đăng nhập vào hệ thống</li>
+                                                <li>Thông báo tin tức cập nhật mới quan trọng của website (tăng giảm
+                                                    giá, khuyến mại, gói mới, gói hot v.v)
+                                                </li>
+                                                <li>Thông báo nạp tiền thành công, hết tiền để nạp tiền cho khách hàng
+                                                    sử dụng v.v
+                                                </li>
+                                                <li>Thông báo dịch vụ bị hoàn tiền và uid hết hạn.</li>
+                                            </ol>
+                                        </div>
+                                    </div>
+
+                                    <% if (user_info.telegram_id) { %>
+                                        <div class="card mb-4">
+                                            <div class="card-header bg-success text-white">Cấu hình Telegram</div>
+                                            <div class="card-body telegram-configs">
+
+                                                <h6>Nhận thông báo từ Telegram</h6>
+                                                <div class="d-flex align-items-center switch-wrapper mb-3">
+                                                    <label>Tắt</label>
+                                                    <div class="switch m-r-10">
+                                                        <input type="checkbox" id="receive_telegram_msg"
+                                                                <%= user_info.receive_telegram_msg ? 'checked' : '' %>>
+                                                        <label for="receive_telegram_msg"></label>
+                                                    </div>
+                                                    <label>Bật</label>
+                                                </div>
+
+                                                <h6 class="text-danger">Bảo Mật 2 Lớp ( Mã OTP gửi về Telegram)</h6>
+                                                <div class="d-flex align-items-center switch-wrapper mb-3">
+                                                    <label>Tắt</label>
+                                                    <div class="switch m-r-10">
+                                                        <input type="checkbox" id="telegram_otp"
+                                                                <%= user_info.telegram_otp ? 'checked' : '' %>>
+                                                        <label for="telegram_otp"></label>
+                                                    </div>
+                                                    <label>Bật</label>
+                                                </div>
+
+                                                <h6>Nhận thông báo hoàn tiền/UID sắp hết hạn</h6>
+                                                <div class="d-flex align-items-center switch-wrapper">
+                                                    <label>Tắt</label>
+                                                    <div class="switch m-r-10">
+                                                        <input type="checkbox" id="telegram_option1"
+                                                                <%= user_info.telegram_option1 ? 'checked' : '' %>>
+                                                        <label for="telegram_option1"></label>
+                                                    </div>
+                                                    <label>Bật</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <% } %>
+
+                                    <div class="card">
+                                        <div class="card-header bg-primary text-white">Cấu hình Email</div>
+                                        <div class="card-body telegram-configs">
+
+                                            <h6>Nhận thông báo khuyến mãi</h6>
+                                            <div class="d-flex align-items-center switch-wrapper mb-3">
+                                                <label>Tắt</label>
+                                                <div class="switch m-r-10">
+                                                    <input type="checkbox" id="receive_promotion_mail"
+                                                            <%= user_info.data.receive_promotion_mail ? 'checked' : '' %>>
+                                                    <label for="receive_promotion_mail"></label>
+                                                </div>
+                                                <label>Bật</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="kt-portlet__foot">
+                            <div class="kt-form__actions">
+                                <div class="row">
+                                    <div class="col-lg-3 col-xl-3">
+                                    </div>
+                                    <div class="col-lg-9 col-xl-9">
+                                        <button type="submit" class="btn btn-success">Lưu Thông Tin</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('../components/otp_modal') %>
+
+<!--begin::Modal-->
+<div class="modal fade" id="modalMailOTP" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Xác thực OTP</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="email_otp_form">
+                    <div class="form-group">
+                        <label>Nhập mã OTP được gửi tới Email</label>
+                        <input class="form-control" id="mail_otp" placeholder="XXXXXX" maxlength="6" type="tel"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Nhập Email mới của bạn</label>
+                        <input class="form-control" name="new_email" type="email"/>
+                    </div>
+
+                    <div class="form-group">
+                        <button class="btn btn-success">Xác nhận</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!--end::Modal-->
+
+<script>
+    const username = '<%= user_info.username %>'
+
+    // check password
+    $(document).on("focus", "#new_password", function () {
+        // $(this).prop('type', 'text');
+        $('.check-password').addClass('active');
+        $('.re-check-password').removeClass('active');
+    });
+
+    $(document).on("blur", "#new_password", function () {
+        $('.check-password').removeClass('active');
+        // $('#new_password').prop('type', 'password')
+    });
+
+    $(document).on("keyup", "#new_password", function () {
+        let passwordRegister = $('#new_password').val().toLowerCase();
+
+        if (passwordRegister.match(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?/~`\\|\-='"])/)) {
+            $('#character_password').removeClass('invalid');
+            $('#character_password').addClass('valid');
+        } else {
+            $('#character_password').removeClass('valid');
+            $('#character_password').addClass('invalid');
+        }
+
+        if (passwordRegister.length >= 8) {
+            $('#length_password').removeClass('invalid');
+            $('#length_password').addClass('valid');
+        } else {
+            $('#length_password').removeClass('valid');
+            $('#length_password').addClass('invalid');
+        }
+
+        if (passwordRegister.includes(username)) {
+            $('#likeUser_password').removeClass('valid');
+            $('#likeUser_password').addClass('invalid');
+        } else {
+            $('#likeUser_password').removeClass('invalid');
+            $('#likeUser_password').addClass('valid');
+        }
+    });
+
+    // check re-enter the password
+    $(document).on("focus", "#re_new_password", function () {
+        // $(this).prop('type', 'text');
+        $('.re-check-password').removeClass('active');
+    });
+
+    $(document).on("blur", "#re_new_password", function () {
+        // $(this).prop('type', 'password');
+        let password = $('#new_password').val();
+        let rePassword = $('#re_new_password').val();
+
+        if (!(password == rePassword)) {
+            $('.re-check-password').addClass('active');
+        }
+    });
+</script>
+

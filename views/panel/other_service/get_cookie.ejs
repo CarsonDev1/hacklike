@@ -1,0 +1,108 @@
+<% layout("panel/layout") %>
+
+<%- include('../widget.ejs') %>
+
+<div class="content-container">
+    <ul class="nav nav-tabs nav-tabs-line nav-tabs-line-danger nav-tabs-line-2x"
+        role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" data-toggle="tab" href="#kt_add" role="tab" aria-selected="true">
+                <i class="fas fa-cart-plus" aria-hidden="true"></i>Mua Dịch Vụ
+            </a>
+        </li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane active" id="kt_add" role="tabpanel">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="card form-group">
+
+                        <div class="card-body">
+                            <form id="formGetCookie" action="/other_service/<%= site.type %>">
+                                <div class="form-group">
+                                    <label for="phone">Đăng nhập tài khoản facebook:</label>
+                                    <input class="form-control" name="fb_info"
+                                           placeholder="username|password|private_key hoặc mã bảo mật 2 lớp"
+                                           autocomplete="off"
+                                           required>
+                                    <div class="text-danger">username|password|private_key hoặc mã bảo mật 2 lớp</div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>IP riêng( bắt buộc phải mua proxy)</label>
+                                    <select class="form-control" name="proxy_id">
+                                        <% proxies.forEach(row => { %>
+                                            <option value="<%= row.order_id %>"><%= row.note %></option>
+                                        <% }) %>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <button id="submit" class="btn btn-success text-bold" type="submit">Thực thi
+                                    </button>
+                                </div>
+                            </form>
+
+                            <div id="area_result" style="display: none">
+                                <div class="form-group">
+                                    <label>Kết quả</label>
+                                    <textarea class="form-control" id="cookie_output" rows="7"></textarea>
+
+                                    <button class="btn btn-success mt-1" data-clipboard="true"
+                                            data-clipboard-target="#cookie_output"><i class="fa fa-clipboard"></i>
+                                    </button>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="card form-group">
+                                        <div class="card-header bg-primary text-white area-note">
+                                            Lưu ý:
+                                        </div>
+                                        <div class="card-body">
+                                            <ul>
+                                                <li>
+                                                    <p class="font-bold">Bắt buộc bật xác thực bảo mật 2 lớp. thử login
+                                                        tk/mk xem đã đúng không
+                                                        rồi hãy sd get nhé</p>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <script>
+                                    var type = "<%= site.type %>";
+
+                                    $("#formGetCookie").submit(function (e) {
+                                        e.preventDefault();
+                                        var url = $(this).attr("action");
+                                        $("#submit").attr("disabled", true);
+                                        $("#submit").addClass("kt-spinner");
+                                        $("#submit").addClass("kt-spinner--left");
+                                        $("#submit").addClass("kt-spinner--md");
+                                        $("#submit").addClass("kt-spinner--light");
+                                        swalLoading();
+
+                                        $.ajax({
+                                            type: "POST",
+                                            url: url,
+                                            data: $(this).serialize(),
+                                            success: function (data) {
+                                                $("#submit").removeAttr("disabled");
+                                                $("#submit").removeClass("kt-spinner");
+                                                $("#submit").removeClass("kt-spinner--left");
+                                                $("#submit").removeClass("kt-spinner--md");
+                                                $("#submit").removeClass("kt-spinner--light");
+                                                if (data.status === 1) {
+                                                    swalSuccess(data.msg);
+                                                    var xData = data.data;
+                                                    $('#cookie_output').val([xData.cookie, xData.userAgent, xData.userAgent].join('|'));
+                                                    $('#area_result').show();
+                                                } else {
+                                                    $('#area_result').hide();
+                                                    swalError(data.msg);
+                                                }
+                                            }
+                                        });
+                                    });
+                                </script>
+

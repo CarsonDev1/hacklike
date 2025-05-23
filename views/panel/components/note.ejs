@@ -1,0 +1,36 @@
+<% if (typeof note !== "undefined" && note && note.embed_video) { %>
+    <div class="card form-group">
+        <div class="card-header bg-primary text-white">
+            Video hướng dẫn
+        </div>
+        <div class="card-body embed-container">
+            <iframe
+                    width="560"
+                    height="315"
+                    src="https://www.youtube.com/embed/<%= note.embed_video %>"
+                    title="YouTube video player"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowfullscreen
+            ></iframe>
+        </div>
+    </div>
+<% } %>
+
+<div class="card form-group">
+    <div class="card-header bg-primary text-white area-note">
+        Lưu ý:
+    </div>
+    <div class="card-body">
+        <% if (typeof note !== "undefined" && note) { %>
+            <% if (note.content_header && note.show_header) { %>
+                <%- note.content_header %>
+            <% } %>
+
+            <% if (note.content) { %>
+                <%- note.content %>
+            <% } %>
+        <% } %>
+    </div>
+</div>
+
+<%- include('note_popup.ejs') %>

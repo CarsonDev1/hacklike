@@ -1,0 +1,1260 @@
+<% layout("panel/layout") %>
+
+<link href="/assets/tools/text.css" rel="stylesheet" type="text/css"/>
+
+<%- include('../widget.ejs') %>
+
+<div class="card card-body">
+    <div class="container pt-10" id="app" style="display: none">
+        <div class="el-tabs el-tabs--left">
+            <div class="el-tabs__header is-left">
+                <div class="el-tabs__nav-wrap is-left">
+                    <div class="el-tabs__nav-scroll">
+                        <div role="tablist" class="el-tabs__nav is-left" style="transform: translateY(0px);">
+                            <div id="tab-cookie" aria-controls="pane-cookie" role="tab" aria-selected="true"
+                                 tabindex="0"
+                                 class="el-tabs__item is-left is-active">Cookie
+                            </div>
+                            <div id="tab-sub_count" aria-controls="pane-sub_count" role="tab" tabindex="-1"
+                                 class="el-tabs__item is-left">Tính Sub
+                            </div>
+                            <div id="tab-cut_text" aria-controls="pane-cut_text" role="tab" tabindex="-1"
+                                 class="el-tabs__item is-left">Cắt Chuỗi
+                            </div>
+                            <div id="tab-filter_merge_lines" aria-controls="pane-filter_merge_lines" role="tab"
+                                 tabindex="-1" class="el-tabs__item is-left">Ghép dòng
+                            </div>
+                            <div id="tab-duplicate_text" aria-controls="pane-duplicate_text" role="tab" tabindex="-1"
+                                 class="el-tabs__item is-left">Trùng lặp
+                            </div>
+                            <div id="tab-join_text" aria-controls="pane-join_text" role="tab" tabindex="-1"
+                                 class="el-tabs__item is-left">Join chữ
+                            </div>
+                            <div id="tab-swap_keywords" aria-controls="pane-swap_keywords" role="tab" tabindex="-1"
+                                 class="el-tabs__item is-left">Đảo từ
+                            </div>
+                            <div id="tab-merge_text" aria-controls="pane-merge_text" role="tab" tabindex="-1"
+                                 class="el-tabs__item is-left">Ghép Chuỗi
+                            </div>
+                            <div id="tab-filter_split_lines" aria-controls="pane-filter_split_lines" role="tab"
+                                 tabindex="-1" class="el-tabs__item is-left">Chia cắt dòng
+                            </div>
+                            <div id="tab-map_text" aria-controls="pane-map_text" role="tab" tabindex="-1"
+                                 class="el-tabs__item is-left">Lọc Chuỗi
+                            </div>
+                            <div id="tab-text_text" aria-controls="pane-text_text" role="tab" tabindex="-1"
+                                 class="el-tabs__item is-left">Lọc Chữ
+                            </div>
+                            <div id="tab-extract_image" aria-controls="pane-extract_image" role="tab" tabindex="-1"
+                                 class="el-tabs__item is-left">Ảnh html
+                            </div>
+                            <div id="tab-extract_link" aria-controls="pane-extract_link" role="tab" tabindex="-1"
+                                 class="el-tabs__item is-left">Link html
+                            </div>
+                            <div id="tab-filter_merge_file" aria-controls="pane-filter_merge_file" role="tab"
+                                 tabindex="-1" class="el-tabs__item is-left">Ghép file
+                            </div>
+                            <div id="tab-filter_json_to_one_line" aria-controls="pane-filter_json_to_one_line"
+                                 role="tab" tabindex="-1" class="el-tabs__item is-left">JSON
+                            </div>
+                            <div id="tab-filter_extract_tag" aria-controls="pane-filter_extract_tag" role="tab"
+                                 tabindex="-1" class="el-tabs__item is-left">Lọc tag
+                            </div>
+                            <div id="tab-account" aria-controls="pane-account" role="tab" tabindex="-1"
+                                 class="el-tabs__item is-left">Account
+                            </div>
+                            <div id="tab-filter_text" aria-controls="pane-filter_text" role="tab" tabindex="-1"
+                                 class="el-tabs__item is-left">Loại text
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="el-tabs__content">
+                <div role="tabpanel" id="pane-cookie" aria-labelledby="tab-cookie" class="el-tab-pane">
+                    <div>
+                        <form class="el-form">
+                            <cb_duplicate :is_duplicate="is_duplicate" @on-click="toggle_is_duplicate"></cb_duplicate>
+
+                            <div class="el-form-item">
+                                <label class="el-form-item__label" style="width: 200px;">Đổi cookie từ</label>
+                                <div class="el-form-item__content" style="margin-left: 200px;">
+                                    <div role="radiogroup" class="el-radio-group">
+                                        <label role="radio" tabindex="0"
+                                               class="el-radio-button el-radio-button--mini is-active">
+                                            <input type="radio" tabindex="-1" class="el-radio-button__orig-radio"
+                                                   value="5" v-model="cookie_type">
+                                            <span class="el-radio-button__inner">
+                                                Lấy uid từ cookie
+                                            </span>
+                                        </label>
+                                        <label role="radio" tabindex="-1" class="el-radio-button el-radio-button--mini">
+                                            <input type="radio" tabindex="-1" class="el-radio-button__orig-radio"
+                                                   value="6" v-model="cookie_type">
+                                            <span class="el-radio-button__inner">
+                                                Sắp xếp cookie theo uid
+                                            </span>
+                                        </label>
+                                        <label role="radio" tabindex="-1" class="el-radio-button el-radio-button--mini">
+                                            <input type="radio" tabindex="-1" class="el-radio-button__orig-radio"
+                                                   value="7" v-model="cookie_type">
+                                            <span class="el-radio-button__inner">
+                                                Sắp xếp uid
+                                            </span>
+                                        </label>
+                                        <label role="radio" tabindex="-1" class="el-radio-button el-radio-button--mini">
+                                            <input type="radio" tabindex="-1" class="el-radio-button__orig-radio"
+                                                   value="8" v-model="cookie_type">
+                                            <span class="el-radio-button__inner">
+                                                Lấy cookie theo uid
+                                            </span>
+                                        </label>
+                                        <label role="radio" tabindex="-1" class="el-radio-button el-radio-button--mini">
+                                            <input type="radio" tabindex="-1" class="el-radio-button__orig-radio"
+                                                   value="9" v-model="cookie_type">
+                                            <span class="el-radio-button__inner">
+                                                Bỏ cookie trong acc
+                                            </span>
+                                        </label>
+                                        <label role="radio" tabindex="-1" class="el-radio-button el-radio-button--mini">
+                                            <input type="radio" tabindex="-1" class="el-radio-button__orig-radio"
+                                                   value="10" v-model="cookie_type">
+                                            <span class="el-radio-button__inner">
+                                                Tách Token
+                                            </span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="el-form-item" v-if="['5', '6', '7'].includes(cookie_type)">
+                                <div class="el-form-item__content" style="margin-left: 200px;">
+                                    <div role="radiogroup" class="el-radio-group">
+                                        <label role="radio" tabindex="0"
+                                               class="el-radio-button el-radio-button--mini is-active">
+                                            <input type="radio" tabindex="-1" class="el-radio-button__orig-radio"
+                                                   value="1" v-model="cookie_sort">
+                                            <span class="el-radio-button__inner">
+                                                A -&gt; Z
+                                            </span>
+                                        </label>
+                                        <label role="radio" tabindex="-1" class="el-radio-button el-radio-button--mini">
+                                            <input type="radio" tabindex="-1" class="el-radio-button__orig-radio"
+                                                   value="2" v-model="cookie_sort">
+                                            <span class="el-radio-button__inner">
+                                                Z -&gt; A
+                                            </span>
+                                        </label>
+                                        <label role="radio" tabindex="-1" class="el-radio-button el-radio-button--mini"
+                                               v-if="cookie_type == '5'">
+                                            <input type="radio" tabindex="-1" class="el-radio-button__orig-radio"
+                                                   value="3" v-model="cookie_sort">
+                                            <span class="el-radio-button__inner">
+                                                Không sắp xếp
+                                            </span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="el-form-item">
+                                <label class="el-form-item__label" style="width: 200px;">Nội dung</label>
+                                <div class="el-form-item__content" style="margin-left: 200px;">
+                                    <div class="el-textarea">
+                                        <textarea autocomplete="off" rows="5" class="el-textarea__inner"
+                                                  style="min-height: 33px;" v-model="cookie_input"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="el-form-item" v-if="cookie_type == 10">
+                                <label class="el-form-item__label" style="width: 200px;">Xuất</label>
+                                <div class="el-form-item__content" style="margin-left: 200px;">
+                                    <div role="radiogroup" class="el-radio-group">
+                                        <label role="radio" tabindex="0"
+                                               class="el-radio-button el-radio-button--mini is-active">
+                                            <input type="radio" tabindex="-1" class="el-radio-button__orig-radio"
+                                                   value="1" v-model="cookie_output_type">
+                                            <span class="el-radio-button__inner">UID
+                                            </span>
+                                        </label> <label role="radio" tabindex="-1"
+                                                        class="el-radio-button el-radio-button--mini">
+                                            <input type="radio" tabindex="-1" class="el-radio-button__orig-radio"
+                                                   value="2" v-model="cookie_output_type">
+                                            <span class="el-radio-button__inner">Token
+                                            </span>
+                                        </label> <label role="radio" tabindex="-1"
+                                                        class="el-radio-button el-radio-button--mini">
+                                            <input type="radio" tabindex="-1" class="el-radio-button__orig-radio"
+                                                   value="3" v-model="cookie_output_type">
+                                            <span class="el-radio-button__inner">UID|Token
+                                            </span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="el-form-item">
+                                <div class="el-form-item__content" style="margin-left: 200px;">
+                                    <button type="button" class="el-button el-button--primary" @click="filter_cookie()">
+                                        <span>
+                                            Trigger
+                                        </span>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div>
+                        <form class="el-form">
+                            <div class="el-form-item">
+                                <div class="el-form-item__content" style="margin-left: 200px;">
+                                    <div class="el-textarea">
+                                        <textarea autocomplete="off" rows="5" class="el-textarea__inner"
+                                                  style="min-height: 33px;" v-model="cookie_output"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div role="tabpanel" aria-hidden="true" id="pane-sub_count" aria-labelledby="tab-sub_count"
+                     class="el-tab-pane" style="display: none;">
+                    <div>
+                        <form class="el-form">
+                            <div class="el-form-item">
+                                <label class="el-form-item__label" style="width: 200px;">Nội dung sub input</label>
+                                <div class="el-form-item__content" style="margin-left: 200px;">
+                                    <div class="el-textarea">
+                                        <textarea autocomplete="off" rows="5" class="el-textarea__inner"
+                                                  style="min-height: 33px;" v-model="sub_input_1"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="el-form-item">
+                                <label class="el-form-item__label" style="width: 200px;">Nội dung sub chạy</label>
+                                <div class="el-form-item__content" style="margin-left: 200px;">
+                                    <div class="el-textarea">
+                                        <textarea autocomplete="off" rows="5" class="el-textarea__inner"
+                                                  style="min-height: 33px;" v-model="sub_input_2"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="el-form-item">
+                                <div class="el-form-item__content" style="margin-left: 200px;">
+                                    <button type="button" class="el-button el-button--primary" @click="filter_sub()">
+                                        <span>
+                                            Trigger
+                                        </span>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div>
+                        <form class="el-form">
+                            <div class="el-form-item">
+                                <div class="el-form-item__content" style="margin-left: 200px;">
+                                    <div class="el-textarea">
+                                        <textarea autocomplete="off" rows="5" class="el-textarea__inner"
+                                                  style="min-height: 33px;" v-model="sub_output"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div role="tabpanel" aria-hidden="true" id="pane-cut_text" aria-labelledby="tab-cut_text"
+                     class="el-tab-pane" style="display: none;">
+                    <div>
+                        <form class="el-form">
+                            <cb_duplicate :is_duplicate="is_duplicate" @on-click="toggle_is_duplicate"></cb_duplicate>
+
+                            <div class="el-form-item">
+                                <label class="el-form-item__label" style="width: 200px;">Nội dung</label>
+                                <div class="el-form-item__content" style="margin-left: 200px;">
+                                    <div class="el-textarea">
+                                        <textarea autocomplete="off" rows="5" class="el-textarea__inner"
+                                                  style="min-height: 33px;" v-model="cut_input"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="el-form-item">
+                                <label class="el-form-item__label" style="width: 200px;">Ngăn cách bởi ký tự</label>
+                                <div class="el-form-item__content" style="margin-left: 200px;">
+                                    <div class="el-input">
+                                        <input type="text" autocomplete="off" class="el-input__inner"
+                                               v-model="cut_seperate">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="el-form-item">
+                                <label class="el-form-item__label" style="width: 200px;">Loại cắt</label>
+                                <div class="el-form-item__content" style="margin-left: 200px;">
+                                    <div role="radiogroup" class="el-radio-group">
+                                        <label role="radio" tabindex="0"
+                                               class="el-radio-button is-active">
+                                            <input type="radio" tabindex="-1" class="el-radio-button__orig-radio"
+                                                   value="1" v-model="cut_mode">
+                                            <span class="el-radio-button__inner">
+                                                Cắt từ x tới y
+                                            </span>
+                                        </label>
+                                        <label role="radio" tabindex="-1" class="el-radio-button">
+                                            <input type="radio" tabindex="-1" class="el-radio-button__orig-radio"
+                                                   value="2" v-model="cut_mode">
+                                            <span class="el-radio-button__inner">
+                                                Căt cụm x,y,z
+                                            </span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="el-form-item">
+                                <label class="el-form-item__label" style="width: 200px;">Bắt đầu cắt</label>
+                                <div class="el-form-item__content" style="margin-left: 200px;">
+                                    <div class="el-input">
+                                        <input type="text" autocomplete="off" class="el-input__inner"
+                                               v-model="cut_start">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="el-form-item">
+                                <label class="el-form-item__label" style="width: 200px;">Đến cụm</label>
+                                <div class="el-form-item__content" style="margin-left: 200px;">
+                                    <div class="el-input">
+                                        <input type="text" autocomplete="off" class="el-input__inner" v-model="cut_end">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="el-form-item">
+                                <div class="el-form-item__content" style="margin-left: 200px;">
+                                    <button type="button" class="el-button el-button--primary" @click="cut_text()">
+                                        <span>
+                                            Trigger
+                                        </span>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div>
+                        <form class="el-form">
+                            <div class="el-form-item">
+                                <div class="el-form-item__content" style="margin-left: 200px;">
+                                    <div class="el-textarea">
+                                        <textarea autocomplete="off" rows="5" class="el-textarea__inner"
+                                                  style="min-height: 33px;" v-model="cut_output"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div role="tabpanel" aria-hidden="true" id="pane-filter_merge_lines"
+                     aria-labelledby="tab-filter_merge_lines" class="el-tab-pane" style="display: none;">
+                    <div>
+                        <form class="el-form">
+                            <cb_duplicate :is_duplicate="is_duplicate" @on-click="toggle_is_duplicate"></cb_duplicate>
+
+                            <div class="el-form-item">
+                                <label class="el-form-item__label" style="width: 200px;">Mode</label>
+                                <div class="el-form-item__content" style="margin-left: 200px;">
+                                    <div>
+                                        <div class="el-input el-input--suffix">
+                                            <select class="el-input__inner" v-model="filter_merge_lines_mode">
+                                                <option value="all">Tất các dòng</option>
+                                                <option value="continue">Liên tiếp</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="el-form-item">
+                                <label class="el-form-item__label" style="width: 200px;">Nội dung</label>
+                                <div class="el-form-item__content" style="margin-left: 200px;">
+                                    <div class="el-textarea">
+                                        <textarea autocomplete="off" rows="5" class="el-textarea__inner"
+                                                  style="min-height: 33px;"
+                                                  v-model="filter_merge_lines_input"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="el-form-item">
+                                <label class="el-form-item__label" style="width: 200px;">Ngăn cách bởi ký tự</label>
+                                <div class="el-form-item__content" style="margin-left: 200px;">
+                                    <div class="el-input">
+                                        <input type="text" autocomplete="off" class="el-input__inner"
+                                               v-model="filter_merge_lines_seperate">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="el-form-item">
+                                <div class="el-form-item__content" style="margin-left: 200px;">
+                                    <button type="button" class="el-button el-button--primary"
+                                            @click="filter_merge_lines()">
+                                        <span>
+                                            Trigger
+                                        </span>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div>
+                        <form class="el-form">
+                            <div class="el-form-item">
+                                <div class="el-form-item__content" style="margin-left: 200px;">
+                                    <div class="el-textarea">
+                                        <textarea autocomplete="off" rows="5" class="el-textarea__inner"
+                                                  style="min-height: 33px;"
+                                                  v-model="filter_merge_lines_output"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div role="tabpanel" aria-hidden="true" id="pane-duplicate_text" aria-labelledby="tab-duplicate_text"
+                     class="el-tab-pane" style="display: none;">
+                    <div>
+                        <form class="el-form">
+                            <cb_duplicate :is_duplicate="is_duplicate" @on-click="toggle_is_duplicate"></cb_duplicate>
+
+                            <div class="el-form-item">
+                                <label class="el-form-item__label" style="width: 200px;">Nội dung A</label>
+                                <div class="el-form-item__content" style="margin-left: 200px;">
+                                    <div class="el-textarea">
+                                        <textarea autocomplete="off" rows="5" class="el-textarea__inner"
+                                                  style="min-height: 33px;" v-model="duplicate_one_input"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="el-form-item">
+                                <label class="el-form-item__label" style="width: 200px;">Nội dung B</label>
+                                <div class="el-form-item__content" style="margin-left: 200px;">
+                                    <div class="el-textarea">
+                                        <textarea autocomplete="off" rows="5" class="el-textarea__inner"
+                                                  style="min-height: 33px;" v-model="duplicate_two_input"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="el-form-item">
+                                <label class="el-form-item__label" style="width: 200px;">Thực
+                                    thi</label>
+                                <div class="el-form-item__content" style="margin-left: 200px;">
+                                    <div role="radiogroup" class="el-radio-group">
+                                        <label role="radio" tabindex="0"
+                                               class="el-radio-button el-radio-button--mini is-active">
+                                            <input type="radio" tabindex="-1" class="el-radio-button__orig-radio"
+                                                   value="0" v-model="duplicate_type">
+                                            <span class="el-radio-button__inner">
+                                                Bỏ dòng trùng
+                                            </span>
+                                        </label>
+                                        <label role="radio" tabindex="-1" class="el-radio-button el-radio-button--mini">
+                                            <input type="radio" tabindex="-1" class="el-radio-button__orig-radio"
+                                                   value="1" v-model="duplicate_type">
+                                            <span class="el-radio-button__inner">
+                                                Giữ dòng trùng
+                                            </span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="el-form-item">
+                                <div class="el-form-item__content" style="margin-left: 200px;">
+                                    <button type="button" class="el-button el-button--primary"
+                                            @click="duplicate_text()">
+                                        <span>
+                                            Trigger
+                                        </span>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div>
+                        <form class="el-form">
+                            <div class="el-form-item">
+                                <div class="el-form-item__content" style="margin-left: 200px;">
+                                    <div class="el-textarea">
+                                        <textarea autocomplete="off" rows="5" class="el-textarea__inner"
+                                                  style="min-height: 33px;" v-model="duplicate_output"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div role="tabpanel" aria-hidden="true" id="pane-join_text" aria-labelledby="tab-join_text"
+                     class="el-tab-pane" style="display: none;">
+                    <div>
+                        <form class="el-form">
+                            <div class="el-form-item">
+                                <label class="el-form-item__label" style="width: 200px;">Nội dung A</label>
+                                <div class="el-form-item__content" style="margin-left: 200px;">
+                                    <div class="el-textarea">
+                                        <textarea autocomplete="off" rows="5" class="el-textarea__inner"
+                                                  style="min-height: 33px;" v-model="join_text_one_input"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="el-form-item">
+                                <label class="el-form-item__label" style="width: 200px;">Nội dung B</label>
+                                <div class="el-form-item__content" style="margin-left: 200px;">
+                                    <div class="el-textarea">
+                                        <textarea autocomplete="off" rows="5" class="el-textarea__inner"
+                                                  style="min-height: 33px;" v-model="join_text_two_input"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="el-form-item">
+                                <label class="el-form-item__label" style="width: 200px;">Sub Per Token</label>
+                                <div class="el-form-item__content" style="margin-left: 200px;">
+                                    <div class="el-input">
+                                        <input type="text" autocomplete="off" class="el-input__inner"
+                                               v-model="join_text_sub_per_token">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="el-form-item">
+                                <div class="el-form-item__content" style="margin-left: 200px;">
+                                    <button type="button" class="el-button el-button--primary" @click="join_text()">
+                                        <span>Trigger</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div>
+                        <form class="el-form">
+                            <div class="el-form-item">
+                                <div class="el-form-item__content" style="margin-left: 200px;">
+                                    <div class="el-textarea">
+                                        <textarea autocomplete="off" rows="5" class="el-textarea__inner"
+                                                  style="min-height: 33px;" v-model="join_text_output"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div role="tabpanel" aria-hidden="true" id="pane-swap_keywords" aria-labelledby="tab-swap_keywords"
+                     class="el-tab-pane" style="display: none;">
+                    <div>
+                        <form class="el-form">
+                            <cb_duplicate :is_duplicate="is_duplicate" @on-click="toggle_is_duplicate"></cb_duplicate>
+
+                            <div class="el-form-item">
+                                <label class="el-form-item__label" style="width: 200px;">Các 'cụm từ' (mỗi cụm trên một
+                                    dòng)</label>
+                                <div class="el-form-item__content" style="margin-left: 200px;">
+                                    <div class="el-textarea">
+                                        <textarea autocomplete="off" rows="5" class="el-textarea__inner"
+                                                  style="min-height: 33px;" v-model="swap_input"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="el-form-item">
+                                <div class="el-form-item__content" style="margin-left: 200px;">
+                                    <button type="button" class="el-button el-button--primary" @click="swap_keywords()">
+                                        <span>
+                                            Trigger
+                                        </span>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div>
+                        <form class="el-form">
+                            <div class="el-form-item">
+                                <div class="el-form-item__content" style="margin-left: 200px;">
+                                    <div class="el-textarea">
+                                        <textarea autocomplete="off" rows="5" class="el-textarea__inner"
+                                                  style="min-height: 33px;" v-model="swap_output"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div role="tabpanel" aria-hidden="true" id="pane-merge_text" aria-labelledby="tab-merge_text"
+                     class="el-tab-pane" style="display: none;">
+                    <div>
+                        <form class="el-form">
+                            <cb_duplicate :is_duplicate="is_duplicate" @on-click="toggle_is_duplicate"></cb_duplicate>
+
+                            <div class="el-form-item">
+                                <label class="el-form-item__label" style="width: 200px;">Nội dung</label>
+                                <div class="el-form-item__content" style="margin-left: 200px;">
+                                    <div class="el-textarea">
+                                        <textarea autocomplete="off" rows="5" class="el-textarea__inner"
+                                                  style="min-height: 33px;" v-model="merge_input"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="el-form-item">
+                                <label class="el-form-item__label" style="width: 200px;">Chuỗi ghép vào đầu dòng</label>
+                                <div class="el-form-item__content" style="margin-left: 200px;">
+                                    <div class="el-input">
+                                        <input type="text" autocomplete="off" class="el-input__inner"
+                                               v-model="merge_start_text">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="el-form-item">
+                                <label class="el-form-item__label" style="width: 200px;">Chuỗi
+                                    ghép vào cuối dòng</label>
+                                <div class="el-form-item__content" style="margin-left: 200px;">
+                                    <div class="el-input">
+                                        <input type="text" autocomplete="off" class="el-input__inner"
+                                               v-model="merge_end_text">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="el-form-item">
+                                <div class="el-form-item__content" style="margin-left: 200px;">
+                                    <button type="button" class="el-button el-button--primary" @click="merge_text()">
+                                        <span>
+                                            Trigger
+                                        </span>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div>
+                        <form class="el-form">
+                            <div class="el-form-item">
+                                <div class="el-form-item__content" style="margin-left: 200px;">
+                                    <div class="el-textarea">
+                                        <textarea autocomplete="off" rows="5" class="el-textarea__inner"
+                                                  style="min-height: 33px;" v-model="merge_output"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div role="tabpanel" aria-hidden="true" id="pane-filter_split_lines"
+                     aria-labelledby="tab-filter_split_lines" class="el-tab-pane" style="display: none;">
+                    <div>
+                        <form class="el-form">
+                            <cb_duplicate :is_duplicate="is_duplicate" @on-click="toggle_is_duplicate"></cb_duplicate>
+
+                            <div class="el-form-item">
+                                <label class="el-form-item__label" style="width: 200px;">Nội dung</label>
+                                <div class="el-form-item__content" style="margin-left: 200px;">
+                                    <div class="el-textarea">
+                                        <textarea autocomplete="off" rows="5" class="el-textarea__inner"
+                                                  style="min-height: 33px;"
+                                                  v-model="filter_split_lines_input"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="el-form-item">
+                                <label class="el-form-item__label" style="width: 200px;">Ngăn cách bởi ký tự</label>
+                                <div class="el-form-item__content" style="margin-left: 200px;">
+                                    <div class="el-input">
+                                        <input type="text" autocomplete="off" class="el-input__inner"
+                                               v-model="filter_split_lines_input">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="el-form-item">
+                                <div class="el-form-item__content" style="margin-left: 200px;">
+                                    <button type="button" class="el-button el-button--primary"
+                                            @click="filter_split_lines()">
+                                        <span>
+                                            Trigger
+                                        </span>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div>
+                        <form class="el-form">
+                            <div class="el-form-item">
+                                <div class="el-form-item__content" style="margin-left: 200px;">
+                                    <div class="el-textarea">
+                                        <textarea autocomplete="off" rows="5" class="el-textarea__inner"
+                                                  style="min-height: 33px;"
+                                                  v-model="filter_split_lines_output"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div role="tabpanel" aria-hidden="true" id="pane-map_text" aria-labelledby="tab-map_text"
+                     class="el-tab-pane" style="display: none;">
+                    <div>
+                        <form class="el-form">
+                            <cb_duplicate :is_duplicate="is_duplicate" @on-click="toggle_is_duplicate"></cb_duplicate>
+
+                            <div class="el-form-item">
+                                <label class="el-form-item__label" style="width: 200px;">Nội dung</label>
+                                <div class="el-form-item__content" style="margin-left: 200px;">
+                                    <div class="el-textarea">
+                                        <textarea autocomplete="off" rows="5" class="el-textarea__inner"
+                                                  style="min-height: 33px;" v-model="map_input"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="el-form-item">
+                                <label class="el-form-item__label" style="width: 200px;">Lấy dòng chứa một trong các từ
+                                    (Mỗi từ trên 1 dòng)</label>
+                                <div class="el-form-item__content" style="margin-left: 200px;">
+                                    <div class="el-textarea">
+                                        <textarea autocomplete="off" rows="5" class="el-textarea__inner"
+                                                  style="min-height: 33px;" v-model="map_have_text"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="el-form-item">
+                                <label class="el-form-item__label" style="width: 200px;">Lấy dòng không chứa tất cả các
+                                    từ (Mỗi từ trên một dòng)</label>
+                                <div class="el-form-item__content" style="margin-left: 200px;">
+                                    <div class="el-textarea">
+                                        <textarea autocomplete="off" rows="5" class="el-textarea__inner"
+                                                  style="min-height: 33px;" v-model="map_havenot_text"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="el-form-item">
+                                <div class="el-form-item__content" style="margin-left: 200px;">
+                                    <button type="button" class="el-button el-button--primary" @click="map_text()">
+                                        <span>
+                                            Trigger
+                                        </span>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div>
+                        <form class="el-form">
+                            <div class="el-form-item">
+                                <div class="el-form-item__content" style="margin-left: 200px;">
+                                    <div class="el-textarea">
+                                        <textarea autocomplete="off" rows="5" class="el-textarea__inner"
+                                                  style="min-height: 33px;" v-model="map_output"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div role="tabpanel" aria-hidden="true" id="pane-text_text" aria-labelledby="tab-text_text"
+                     class="el-tab-pane" style="display: none;">
+                    <div>
+                        <form class="el-form">
+                            <cb_duplicate :is_duplicate="is_duplicate" @on-click="toggle_is_duplicate"></cb_duplicate>
+
+                            <div class="el-form-item">
+                                <label class="el-form-item__label" style="width: 200px;">Nội dung</label>
+                                <div class="el-form-item__content" style="margin-left: 200px;">
+                                    <div class="el-textarea">
+                                        <textarea autocomplete="off" rows="5" class="el-textarea__inner"
+                                                  style="min-height: 33px;" v-model="text_input"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="el-form-item">
+                                <label class="el-form-item__label" style="width: 200px;">Từ từ</label>
+                                <div class="el-form-item__content" style="margin-left: 200px;">
+                                    <div class="el-input">
+                                        <input type="text" autocomplete="off" class="el-input__inner"
+                                               v-model="text_start_text">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="el-form-item">
+                                <label class="el-form-item__label" style="width: 200px;">Đến từ</label>
+                                <div class="el-form-item__content" style="margin-left: 200px;">
+                                    <div class="el-input">
+                                        <input type="text" autocomplete="off" class="el-input__inner"
+                                               v-model="text_start_text">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="el-form-item">
+                                <label class="el-form-item__label" style="width: 200px;">Đổi cookie từ</label>
+                                <div class="el-form-item__content" style="margin-left: 200px;">
+                                    <div role="radiogroup" class="el-radio-group">
+                                        <label role="radio" tabindex="0"
+                                               class="el-radio-button el-radio-button--mini is-active">
+                                            <input type="radio" tabindex="-1" class="el-radio-button__orig-radio"
+                                                   value="0" v-model="text_type">
+                                            <span class="el-radio-button__inner">
+                                                Loại bỏ
+                                            </span>
+                                        </label>
+                                        <label role="radio" tabindex="-1" class="el-radio-button el-radio-button--mini">
+                                            <input type="radio" tabindex="-1" class="el-radio-button__orig-radio"
+                                                   value="1" v-model="text_type">
+                                            <span class="el-radio-button__inner">
+                                                Giữ lại
+                                            </span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="el-form-item">
+                                <div class="el-form-item__content" style="margin-left: 200px;">
+                                    <button type="button" class="el-button el-button--primary" @click="text_text()">
+                                        <span>
+                                            Trigger
+                                        </span>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div>
+                        <form class="el-form">
+                            <div class="el-form-item">
+                                <div class="el-form-item__content" style="margin-left: 200px;">
+                                    <div class="el-textarea">
+                                        <textarea autocomplete="off" rows="5" class="el-textarea__inner"
+                                                  style="min-height: 33px;" v-model="text_output"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div role="tabpanel" aria-hidden="true" id="pane-extract_image" aria-labelledby="tab-extract_image"
+                     class="el-tab-pane" style="display: none;">
+                    <div>
+                        <form class="el-form">
+                            <cb_duplicate :is_duplicate="is_duplicate" @on-click="toggle_is_duplicate"></cb_duplicate>
+
+                            <div class="el-form-item">
+                                <label class="el-form-item__label" style="width: 200px;">Link website lấy ảnh</label>
+                                <div class="el-form-item__content" style="margin-left: 200px;">
+                                    <div class="el-input">
+                                        <input type="text" autocomplete="off" class="el-input__inner"
+                                               v-model="extract_image_base_url">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="el-form-item">
+                                <label class="el-form-item__label" style="width: 200px;">Nội dung</label>
+                                <div class="el-form-item__content" style="margin-left: 200px;">
+                                    <div class="el-textarea">
+                                        <textarea autocomplete="off" rows="5" class="el-textarea__inner"
+                                                  style="min-height: 33px;" v-model="extract_image_input"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="el-form-item">
+                                <div class="el-form-item__content" style="margin-left: 200px;">
+                                    <button type="button" class="el-button el-button--primary" @click="extract_image()">
+                                        <span>
+                                            Trigger
+                                        </span>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div>
+                        <form class="el-form">
+                            <div class="el-form-item">
+                                <div class="el-form-item__content" style="margin-left: 200px;">
+                                    <div class="el-textarea">
+                                        <textarea autocomplete="off" rows="5" class="el-textarea__inner"
+                                                  style="min-height: 33px;" v-model="extract_image_output"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div v-html="extract_image_output_html"></div>
+                </div>
+
+                <div role="tabpanel" aria-hidden="true" id="pane-extract_link" aria-labelledby="tab-extract_link"
+                     class="el-tab-pane" style="display: none;">
+                    <div>
+                        <form class="el-form">
+                            <cb_duplicate :is_duplicate="is_duplicate" @on-click="toggle_is_duplicate"></cb_duplicate>
+
+                            <div class="el-form-item">
+                                <label class="el-form-item__label" style="width: 200px;">Link website lấy ảnh</label>
+                                <div class="el-form-item__content" style="margin-left: 200px;">
+                                    <div class="el-input">
+                                        <input type="text" autocomplete="off" class="el-input__inner"
+                                               v-model="extract_link_base_url">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="el-form-item">
+                                <label class="el-form-item__label" style="width: 200px;">Nội dung</label>
+                                <div class="el-form-item__content" style="margin-left: 200px;">
+                                    <div class="el-textarea">
+                                        <textarea autocomplete="off" rows="5" class="el-textarea__inner"
+                                                  style="min-height: 33px;" v-model="extract_link_input"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="el-form-item">
+                                <div class="el-form-item__content" style="margin-left: 200px;">
+                                    <button type="button" class="el-button el-button--primary" @click="extract_link()">
+                                        <span>
+                                            Trigger
+                                        </span>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div>
+                        <form class="el-form">
+                            <div class="el-form-item">
+                                <div class="el-form-item__content" style="margin-left: 200px;">
+                                    <div class="el-textarea">
+                                        <textarea autocomplete="off" rows="5" class="el-textarea__inner"
+                                                  style="min-height: 33px;" v-model="extract_link_output"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div style="color: green;" v-html="extract_link_output_html"></div>
+                </div>
+
+                <div role="tabpanel" aria-hidden="true" id="pane-filter_merge_file"
+                     aria-labelledby="tab-filter_merge_file"
+                     class="el-tab-pane" style="display: none;">
+                    <div>
+                        <form class="el-form">
+                            <cb_duplicate :is_duplicate="is_duplicate" @on-click="toggle_is_duplicate"></cb_duplicate>
+
+                            <div class="el-form-item">
+                                <label class="el-form-item__label" style="width: 200px;">Nội dung 1</label>
+                                <div class="el-form-item__content" style="margin-left: 200px;">
+                                    <div class="el-textarea">
+                                        <textarea autocomplete="off" rows="5" class="el-textarea__inner"
+                                                  style="min-height: 33px;"
+                                                  v-model="filter_merge_file_input1"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="el-form-item">
+                                <label class="el-form-item__label" style="width: 200px;">Nội dung 2</label>
+                                <div class="el-form-item__content" style="margin-left: 200px;">
+                                    <div class="el-textarea">
+                                        <textarea autocomplete="off" rows="5" class="el-textarea__inner"
+                                                  style="min-height: 33px;"
+                                                  v-model="filter_merge_file_input2"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="el-form-item">
+                                <label class="el-form-item__label" style="width: 200px;">Nội dung ngăn cách 2
+                                    dòng</label>
+                                <div class="el-form-item__content" style="margin-left: 200px;">
+                                    <div class="el-input">
+                                        <input type="text" autocomplete="off" class="el-input__inner"
+                                               v-model="filter_merge_file_seperate_text">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="el-form-item">
+                                <div class="el-form-item__content" style="margin-left: 200px;">
+                                    <button type="button" class="el-button el-button--primary"
+                                            @click="filter_merge_file()">
+                                        <span>
+                                            Trigger
+                                        </span>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div>
+                        <form class="el-form">
+                            <div class="el-form-item">
+                                <div class="el-form-item__content" style="margin-left: 200px;">
+                                    <div class="el-textarea">
+                                        <textarea autocomplete="off" rows="5" class="el-textarea__inner"
+                                                  style="min-height: 33px;"
+                                                  v-model="filter_merge_file_output"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div role="tabpanel" aria-hidden="true" id="pane-filter_json_to_one_line"
+                     aria-labelledby="tab-filter_json_to_one_line" class="el-tab-pane" style="display: none;">
+                    <div>
+                        <form class="el-form">
+                            <cb_duplicate :is_duplicate="is_duplicate" @on-click="toggle_is_duplicate"></cb_duplicate>
+
+                            <div class="el-form-item">
+                                <label class="el-form-item__label" style="width: 200px;">Nội dung</label>
+                                <div class="el-form-item__content" style="margin-left: 200px;">
+                                    <div class="el-textarea">
+                                        <textarea autocomplete="off" rows="5" class="el-textarea__inner"
+                                                  style="min-height: 33px;"
+                                                  v-model="filter_json_to_one_line_input"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="el-form-item">
+                                <div class="el-form-item__content" style="margin-left: 200px;">
+                                    <button type="button" class="el-button el-button--primary"
+                                            @click="filter_json_to_one_line()">
+                                        <span>
+                                            Trigger
+                                        </span>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div>
+                        <form class="el-form">
+                            <div class="el-form-item">
+                                <div class="el-form-item__content" style="margin-left: 200px;">
+                                    <div class="el-textarea">
+                                        <textarea autocomplete="off" rows="5" class="el-textarea__inner"
+                                                  style="min-height: 33px;"
+                                                  v-model="filter_json_to_one_line_output"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div role="tabpanel" aria-hidden="true" id="pane-filter_extract_tag"
+                     aria-labelledby="tab-filter_extract_tag" class="el-tab-pane" style="display: none;">
+                    <div>
+                        <form class="el-form">
+                            <cb_duplicate :is_duplicate="is_duplicate" @on-click="toggle_is_duplicate"></cb_duplicate>
+
+                            <div class="el-form-item">
+                                <label class="el-form-item__label" style="width: 200px;">Nội dung</label>
+                                <div class="el-form-item__content" style="margin-left: 200px;">
+                                    <div class="el-textarea">
+                                        <textarea autocomplete="off" rows="5" class="el-textarea__inner"
+                                                  style="min-height: 33px;" v-model="extract_tag_input"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="el-form-item">
+                                <label class="el-form-item__label" style="width: 200px;">Từ ký tự</label>
+                                <div class="el-form-item__content" style="margin-left: 200px;">
+                                    <div class="el-input">
+                                        <input type="text" autocomplete="off" class="el-input__inner"
+                                               v-model="extract_tag_start">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="el-form-item">
+                                <label class="el-form-item__label" style="width: 200px;">Tới ký tự</label>
+                                <div class="el-form-item__content" style="margin-left: 200px;">
+                                    <div class="el-input">
+                                        <input type="text" autocomplete="off" class="el-input__inner"
+                                               v-model="extract_tag_end">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="el-form-item">
+                                <div class="el-form-item__content" style="margin-left: 200px;">
+                                    <button type="button" class="el-button el-button--primary"
+                                            @click="filter_extract_tag()">
+                                        <span>
+                                            Trigger
+                                        </span>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div>
+                        <form class="el-form">
+                            <div class="el-form-item">
+                                <div class="el-form-item__content" style="margin-left: 200px;">
+                                    <div class="el-textarea">
+                                        <textarea autocomplete="off" rows="5" class="el-textarea__inner"
+                                                  style="min-height: 33px;" v-model="extract_tag_output"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div role="tabpanel" aria-hidden="true" id="pane-account" aria-labelledby="tab-account"
+                     class="el-tab-pane"
+                     style="display: none;">
+                    <div>
+                        <form class="el-form">
+                            <cb_duplicate :is_duplicate="is_duplicate" @on-click="toggle_is_duplicate"></cb_duplicate>
+
+                            <div class="el-form-item">
+                                <label class="el-form-item__label" style="width: 200px;">Nội dung</label>
+                                <div class="el-form-item__content" style="margin-left: 200px;">
+                                    <div class="el-textarea">
+                                        <textarea autocomplete="off" rows="5" class="el-textarea__inner"
+                                                  style="min-height: 33px;" v-model="account_input"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="el-form-item">
+                                <label class="el-form-item__label" style="width: 200px;">Ngăn cách bởi ký tự</label>
+                                <div class="el-form-item__content" style="margin-left: 200px;">
+                                    <div class="el-input">
+                                        <input type="text" autocomplete="off" class="el-input__inner"
+                                               v-model="account_seperate">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="el-form-item">
+                                <div class="el-form-item__content" style="margin-left: 200px;">
+                                    <button type="button" class="el-button el-button--primary"
+                                            @click="filter_account()">
+                                        <span>
+                                            Trigger
+                                        </span>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div>
+                        <form class="el-form">
+                            <div class="el-form-item">
+                                <div class="el-form-item__content" style="margin-left: 200px;">
+                                    <div class="el-textarea">
+                                        <textarea autocomplete="off" rows="5" class="el-textarea__inner"
+                                                  style="min-height: 33px;" v-model="account_output"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div role="tabpanel" aria-hidden="true" id="pane-filter_text" aria-labelledby="tab-filter_text"
+                     class="el-tab-pane" style="display: none;">
+                    <div>
+                        <form class="el-form">
+                            <cb_duplicate :is_duplicate="is_duplicate" @on-click="toggle_is_duplicate"></cb_duplicate>
+
+                            <div class="el-form-item">
+                                <label class="el-form-item__label" style="width: 200px;">Nội dung</label>
+                                <div class="el-form-item__content" style="margin-left: 200px;">
+                                    <div class="el-textarea">
+                                        <textarea autocomplete="off" rows="5" class="el-textarea__inner"
+                                                  style="min-height: 33px;" v-model="filter_text_input"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="el-form-item">
+                                <label class="el-form-item__label" style="width: 200px;">Cut nội dung có length
+                                    = </label>
+                                <div class="el-form-item__content" style="margin-left: 200px;">
+                                    <div class="el-input-number">
+                                        <span role="button" class="el-input-number__decrease">
+                                            <i class="el-icon-minus"></i></span>
+                                        <span role="button" class="el-input-number__increase">
+                                            <i class="el-icon-plus"></i></span>
+                                        <div class="el-input">
+
+                                            <input type="text" autocomplete="off" max="Infinity" min="-Infinity"
+                                                   class="el-input__inner" role="spinbutton" aria-valuemax="Infinity"
+                                                   aria-valuemin="-Infinity" aria-valuenow="5" aria-disabled="false"
+                                                   v-model="filter_text_max_char_length">
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="el-form-item">
+                                <label class="el-form-item__label" style="width: 200px;">Xoá nội dung chứa</label>
+                                <div class="el-form-item__content" style="margin-left: 200px;">
+                                    <div class="el-input">
+                                        <input type="text" autocomplete="off" placeholder="Để rỗng để k xoá"
+                                               class="el-input__inner" v-model="filter_text_word_separation">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="el-form-item">
+                                <div class="el-form-item__content" style="margin-left: 200px;">
+                                    <button type="button" class="el-button el-button--primary" @click="filter_text()">
+                                        <span>
+                                            Trigger
+                                        </span>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div>
+                        <form class="el-form">
+                            <div class="el-form-item">
+                                <div class="el-form-item__content" style="margin-left: 200px;">
+                                    <div class="el-textarea">
+                                        <textarea autocomplete="off" rows="5" class="el-textarea__inner"
+                                                  style="min-height: 33px;" v-model="filter_text_output"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/assets/plugins/vue/vue.js"></script>
+
+<script type="text/x-template" id="cb_duplicate_template">
+    <div class="cb-dupplicate">
+        <div class="el-form-item">
+            <label class="el-form-item__label" style="width: 200px;" @click="$emit('on-click')">Loại bỏ trùng
+                lặp?</label>
+            <div class="el-form-item__content" style="margin-left: 200px;">
+                <div role="switch" aria-checked="false" class="el-switch"
+                     v-bind:class="{'is-checked': is_duplicate}">
+                    <input type="checkbox" class="el-switch__input" v-model="is_duplicate">
+                    <span class="el-switch__core" style="width: 40px;" @click="$emit('on-click')"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script>
+    Vue.component("cb_duplicate", {
+        template: `#cb_duplicate_template`,
+        props: {
+            is_duplicate: Boolean
+        },
+        data() {
+            return {};
+        },
+        methods: {}
+    });
+</script>
+
+<script src="/assets/tools/text.js"></script>

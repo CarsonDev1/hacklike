@@ -1,0 +1,153 @@
+<% layout("panel/layout") %>
+
+<%- include('../widget.ejs') %>
+
+<div class="content-container">
+    <ul class="nav nav-tabs nav-tabs-line nav-tabs-line-danger nav-tabs-line-2x"
+        role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" data-toggle="tab" href="#kt_add" role="tab" aria-selected="true">
+                <i class="fas fa-cart-plus" aria-hidden="true"></i>Mua Dịch Vụ
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#kt_history" role="tab" aria-selected="false">
+                <i class="fas fa-calendar-alt" aria-hidden="true"></i>Lịch Sử
+            </a>
+        </li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane active" id="kt_add" role="tabpanel">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="card form-group">
+
+                        <div class="card-body">
+                            <form id="formUserAction" action="/twitter/<%= site.type %>">
+                                <div class="form-group">
+                                    <label>Link bài viết</label>
+                                    <input type="text" class="form-control" name="link"
+                                           placeholder="https://x.com/profile/status/uid" autocomplete="off"
+                                           data-obj="twitter" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Chọn server</label>
+
+                                    <div class="servers">
+                                        <div class="radio radio-server">
+                                            <label><input type="radio" name="server" value="server_1">Server 1
+                                            </label>
+                                        </div>
+
+                                        <div class="radio radio-server">
+                                            <label><input type="radio" name="server" value="server_2">Server 2
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="list_comment">
+                                        Danh Sách Bình Luận (<span id="comment_count" class="text-bold">0</span>)
+                                    </label>
+                                    <textarea class="form-control" name="list_comment" id="list_comment" rows="10"
+                                              required
+                                              placeholder="Mỗi dòng 1 bình luận."></textarea>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="price">Giá Tiền Mỗi Tương Tác</label>
+                                    <input type="number" class="form-control" name="price" id="price" readonly/>
+                                </div>
+
+                                <%- include('../components/discount_widget.ejs') %>
+
+                                <div class="form-group">
+                                    <label for="total">Tổng Giá</label>
+                                    <input type="text" class="form-control" name="total" id="total" disabled/>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="note">Ghi chú</label>
+                                    <textarea class="form-control" name="note" id="note" rows="1"></textarea>
+                                </div>
+
+                                <div class="form-group">
+                                    <button id="submit" class="btn btn-success text-bold" type="submit">Mua</button>
+                                    -<span style="color:red">Đọc kĩ lưu ý Nếu bạn mua lỗi</span>
+                                </div>
+
+                                <div class="form-group">
+                                    <button class="btn btn-danger text-bold btn-view-history" type="button"
+                                            data-target="#kt_history">
+                                        <i class="fa fa-calendar" aria-hidden="true"></i> Quản Lý ID
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <%- include('../components/note.ejs') %>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane" id="kt_history" role="tabpanel">
+            <%- include('../components/status_filter.ejs') %>
+
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover" id="datatable-ajax"></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var type = "<%= site.type %>";
+
+    var serverUsingCount = [];
+
+    function calculatorPrice() {
+        if (serverUsingCount.includes(selectedServer)) {
+            $('#count').trigger('change');
+        } else {
+            $('#list_comment').trigger('keyup');
+        }
+    }
+
+    function selfOnChangeServer() {
+        // Set default
+        // let min = 10;
+        // let max = 10000;
+        // if (serverUsingCount.includes(selectedServer)) {
+        //   min = selectedPrice.min;
+        //   max = selectedPrice.max;
+        // }
+
+        // $('#count').attr('min', min).attr('max', max).val(min);
+
+        calculatorPrice();
+    }
+
+    $("#list_comment").keyup(function () {
+        var comments = $(this).val().trim();
+        var count = comments.split("\n").filter(function (x) {
+            return x.trim().length > 0
+        }).length;
+        $('#comment_count').html(count.toString());
+        if (serverUsingCount.includes(selectedServer)) return;
+
+        var price = $("#price").attr('data-price');
+        if (count > 0) {
+            var total = Number(count) * Number(price);
+            total = applyDiscountAndCurrency(total);
+            total = getOrderTotal(total);
+
+            $("#total").val(formatMoney(total, ' VNĐ'));
+        } else {
+            $("#total").val(`0 VNĐ`);
+        }
+    });
+</script>
+

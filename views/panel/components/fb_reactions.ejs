@@ -1,0 +1,11 @@
+<label class="font-bold">Chọn loại cảm xúc:</label>
+<div class="fb-reaction m-t-10">
+    <% ['like', 'love', 'care', 'wow', 'haha', 'sad', 'angry'].forEach(item => { %>
+        <div class="checkbox" data-reaction="<%= item %>">
+            <label>
+                <img src="/assets/images/fb-reaction/<%= item %>.png" alt="icon <%= item %>" class="img-responsive">
+                <input name="reaction" value="<%= item %>" type="radio" <%= item === 'like' ? 'checked' : '' %>>
+            </label>
+        </div>
+    <% }) %>
+</div>

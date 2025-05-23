@@ -1,0 +1,144 @@
+<% layout("panel/layout") %>
+
+<%- include('../widget.ejs') %>
+
+<div class="content-container">
+    <ul class="nav nav-tabs nav-tabs-line nav-tabs-line-danger nav-tabs-line-2x"
+        role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" data-toggle="tab" href="#kt_add" role="tab" aria-selected="true">
+                <i class="fas fa-cart-plus" aria-hidden="true"></i>Mua Dịch Vụ
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#kt_list" role="tab" aria-selected="false">
+                <i class="fas fa-shopping-bag" aria-hidden="true"></i>Danh Sách VIP
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#kt_history" role="tab" aria-selected="false">
+                <i class="fas fa-calendar-alt" aria-hidden="true"></i>Lịch Sử
+            </a>
+        </li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane active" id="kt_add" role="tabpanel">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="card form-group">
+
+                        <div class="card-body">
+                            <form id="formUserAction" action="/instagram/<%= site.type %>">
+                                <div class="form-group">
+                                    <label>Link profile</label>
+                                    <input type="url" id="url" class="form-control" name="link"
+                                           placeholder="https://www.instagram.com/123" autocomplete="off" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Chọn server</label>
+
+                                    <div class="servers">
+                                        <div class="radio radio-server">
+                                            <label><input type="radio" name="server" value="server_1" checked>Server 1
+                                            </label>
+                                        </div>
+                                        <div class="radio radio-server">
+                                            <label><input type="radio" name="server" value="server_2">Server 2
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <label>Số lượng like cần mua</label>
+                                        <input type="number" class="form-control change-price" name="vip_package"
+                                               required/>
+                                    </div>
+
+                                    <div class="form-group col-md-6">
+                                        <label for="month">Thời Gian</label>
+                                        <select class="form-control change-price" name="days" id="days">
+                                            <% [30, 60, 90].forEach(day => { %>
+                                                <option value="<%= day %>"><%= day %> Ngày</option>
+                                            <% }) %>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Tùy chọn số bài mỗi ngày</label>
+                                    <input type="number" class="form-control change-price" name="max_post" min="2"
+                                           value="5"
+                                           max="50" required/>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Ghi chú</label>
+                                    <textarea class="form-control" name="note" rows="1"></textarea>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="alert alert-danger text-center">
+                                        Tổng tiền của gói vip sẽ = (Giá tiền mỗi like) x (Số lượng like cần mua) x (Số
+                                        lượng bài
+                                        trong ngày) x (Số ngày đăng ký vip)
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="price">Giá Tiền Mỗi Tương Tác</label>
+                                    <input type="number" class="form-control change-price" name="price" id="price"/>
+                                </div>
+
+                                <%- include('../components/discount_widget.ejs') %>
+
+                                <div class="form-group">
+                                    <label for="total">Tổng Giá</label>
+                                    <input type="text" class="form-control" name="total" id="total" disabled/>
+                                </div>
+
+                                <div class="form-group">
+                                    <button id="submit" class="btn btn-success text-bold" type="submit">Mua</button>
+                                    -<span style="color:red">Đọc kĩ lưu ý Nếu bạn mua lỗi</span>
+                                </div>
+
+                                <div class="form-group">
+                                    <button class="btn btn-danger text-bold btn-view-history" type="button"
+                                            data-target="#kt_list">
+                                        <i class="fa fa-calendar" aria-hidden="true"></i> Quản Lý ID
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <%- include('../components/note.ejs') %>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane" id="kt_list" role="tabpanel">
+
+            <%- include('../components/vip_status_filter.ejs') %>
+
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover" id="datatable-vips"></table>
+            </div>
+        </div>
+        <div class="tab-pane" id="kt_history" role="tabpanel">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover" id="datatable-ajax"></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('../components/modal_posts.ejs') %>
+
+<%- include('../components/modal_add_post.ejs') %>
+
+<script>
+    var type = "<%= site.type %>";
+</script>

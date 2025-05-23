@@ -1,0 +1,123 @@
+<% layout("panel/layout") %>
+
+<link rel="stylesheet" type="text/css" href="/assets/css/qua-tet.css"/>
+
+<div class="card card-body">
+    <div class="main-content">
+        <h3 class="bold cl-warning el-text-item" style="font-weight: 900;">Kính chào Quý Khách!</h3>
+        <p>
+            Chỉ còn gần 30 ngày nữa là kết thúc năm 2024 (Dương lịch).
+            <br>
+            Hãy nhìn lại thành quả 1 năm của bạn nhé:
+        </p>
+        <table class="ml-4 el-text-item">
+            <tr>
+                <td class="content-desktop"></td>
+                <td><i class="fa-solid fa-fan mr-1 cl-green"></i> Số phiên nạp tiền:</td>
+                <td class="text-cl"><%= userData.tet_count_payment || '0' %> lần</td>
+            </tr>
+            <tr>
+                <td class="content-desktop"></td>
+                <td><i class="fa-solid fa-wallet mr-1 cl-green"></i> Tổng đơn hàng:</td>
+                <td class="text-cl"><%= userData.tet_total_order || '0' %> đơn</td>
+            </tr>
+            <tr>
+                <td class="content-desktop"></td>
+                <td><i class="fa-solid fa-dollar-sign mr-1 cl-green"></i> Bạn đã sử dụng:</td>
+                <td class="text-cl"><%= userData.tet_total_spent || '0' %> vnđ</td>
+            </tr>
+        </table>
+        <div class="el-text-item">
+            <% if (userData.can_receive_tet_gif) { %>
+                <% if (userData.receive_gift == 'Không') { %>
+                    <div class="el-text-item cl-red text-gift-rejected"> Bạn đã từ chối nhận quà.</div>
+                <% } else { %>
+                    <% if (!userData.receive_gift) { %>
+                        Với doanh số đạt chỉ tiêu của bạn. Chúng tôi xin gửi tặng bạn một phần Quà Tết
+                        <span><i class="fa-solid fa-gift highlight mr-1 ml-1"></i></span><br>
+                        Hãy điền thông tin dưới để nhận quà nhé.<br/>
+                        Hết ngày 04/1/2025 nếu không nhận được thông tin của bạn chúng tôi hiểu rằng bạn bỏ qua sự kiện
+                        này.
+                    <% } else { %>
+                        <div class="el-text-item cl-green">
+                            Cảm ơn sự ủng hộ của bạn. Chúng tôi xin gửi tặng bạn một phần Quà Tết
+                            <span><i class="fa-solid fa-gift highlight mr-1 ml-1"></i></span><br>
+
+                            Bạn đã điền thông tin nhận quà. Nếu có thay đổi, hãy liên hệ admin để cập nhật nhé!<br/>
+                            Phần quà sẽ được gửi sau ngày 05/01/2025.
+                        </div>
+                    <% } %>
+
+                    <form class="form-json" data-reload="1" style="margin-top: 15px;">
+                        <div class="el-form-item">
+                            <label class="el-form-item__label">Tên người nhận: </label>
+                            <div class="el-form-item__content">
+                                <div class="el-input">
+                                    <input type="text" autocomplete="off" class="el-input__inner" name="name"
+                                           placeholder="Tên người nhận" required
+                                            <%= userData.receive_gift ? 'readonly' : '' %>
+                                           value="<%= userData.tet_gift_name || '' %>">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="el-form-item">
+                            <label class="el-form-item__label">Số điện thoại: </label>
+                            <div class="el-form-item__content">
+                                <div class="el-input">
+                                    <input type="number" autocomplete="off" class="el-input__inner" name="phone"
+                                           placeholder="Số diện thoại nhận hàng" required
+                                            <%= userData.receive_gift ? 'readonly' : '' %>
+                                           value="<%= userData.tet_gift_phone || '' %>">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="el-form-item">
+                            <label class="el-form-item__label">Địa chỉ nhận quà:</label>
+                            <div class="el-form-item__content">
+                                <div class="el-textarea">
+                        <textarea autocomplete="off" rows="5" class="el-textarea__inner" name="address"
+                                  placeholder="Thông tin người nhận và địa chỉ" required
+                                  <%= userData.tet_gift_address ? 'readonly' : '' %>
+                        ><%= userData.tet_gift_address || '' %></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <% if (!userData.receive_gift) { %>
+                            <div class="form-group info">
+                                <button class="btn btn-success text-bold mr-3" type="submit">
+                                    Gửi Thông Tin
+                                </button>
+
+                                <button class="btn btn-danger text-bold" type="button" id="btn_reject_gift">
+                                    Từ Chối Nhận Quà
+                                </button>
+                            </div>
+                        <% } %>
+                    </form>
+                <% } %>
+        </div>
+
+        <% } else { %>
+            <div class="el-text-item">
+                <p>Chi tiêu hiện tại: <%= userData.tet_total_spent || 0 %> vnđ,
+                    hãy cố gắng chi tiêu thêm <%= userData.tet_spent_needed || 0 %> vnđ để có thể nhận Quà Tết nhé!<br/>
+                    Dữ liệu cập nhật lúc 23h mỗi ngày.<br/>
+                    <span class="cl-red">Sự kiện sẽ kết thúc vào 24h ngày 31/12/2024</span>
+                </p>
+            </div>
+        <% } %>
+
+        <h3 class="el-text-item" style="font-weight: 900;text-align: center;margin-top: 40px">Cảm ơn bạn đã lựa chọn và
+            tin tưởng HackLike17!</h3>
+    </div>
+
+    <div class="qua-tet-bg-footer"></div>
+    <img class="qua-tet-icon-footer" src="/assets/images/tet_icon1.png" alt="">
+    <img class="qua-tet-image-left" src="/assets/images/tet_banner_right.png" alt="">
+</div>
+
+<script>
+    var type = "tet_gift";
+</script>
+

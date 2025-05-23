@@ -1,0 +1,297 @@
+<% layout("panel/layout") %>
+
+<style>
+  #vue_app {
+      position: relative;
+  }
+  #vue_app .loading {
+      position: absolute;
+      top: 0;
+      right: 0;
+      left: 0;
+      z-index: 100;
+      background-color: #eeeeee75;
+      text-align: center;
+      height: 100%;
+      padding-top: 40%;
+  }
+  .loading i {
+      font-size: 50px;
+  }
+  #vue_app .btn {
+      font-weight: 700;
+  }
+  .widget-control .pull-right > * {
+      display: inline-block;
+  }
+  .widget-control .pull-right select {
+      max-width: 250px;
+  }
+  .t-widget h6 * {
+      font-weight: bolder;
+  }
+  .t-widget .mw-65 {
+      max-width: 65%;
+  }
+  .t-widget .has-border {
+      border: 1px solid #ebedf2;
+      border-radius: 0.25rem;
+  }
+  .t-filter button {
+      font-weight: bolder;
+  }
+  .custom-select:first-child {
+      width: 185px;
+      max-width: 100%;
+  }
+  .type-container .select2-container {
+      width: 240px !important;
+      max-width: 100%;
+  }
+  .select2-selection {
+      background-color: #f5f7fa !important;
+  }
+  @media (max-width: 575px) {
+      .custom-select,
+      .type-container .select2-container {
+          width: 100% !important;
+      }
+  }
+</style>
+
+<div class="row">
+    <div class="col-md-8">
+        <div id="vue_app" style="display: none">
+
+            <template v-if="loading">
+                <div class="loading">
+                    <i class="fas fa-circle-notch fa-spin"></i>
+                </div>
+            </template>
+
+            <div class="card card-body">
+                <div class="row t-summary">
+                    <div class="col-md-4 col-12 form-group">
+                        <div class="card bg-warning-3 h-100">
+                            <div class="card-body py-2">
+                                <div class="row align-items-center">
+                                    <div class="col-auto pr-0">
+                                        <i class="fas fa-question-circle text-info cl-warning fa-2x"></i>
+                                    </div>
+                                    <div class="col text-right pl-0">
+                                        <h6 class="bold mb-0 cl-warning">Chờ xử lý</h6>
+                                        <h3 class="bold green mb-0">
+                                            <span>{{ summary['status_0'] || 0 }}</span>
+                                        </h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-12 form-group">
+                        <div class="card bg-violet-3 h-100">
+                            <div class="card-body py-2">
+                                <div class="row align-items-center">
+                                    <div class="col-auto pr-0">
+                                        <i class="fas fa-running text-primary cl-blue fa-2x"></i>
+                                    </div>
+                                    <div class="col text-right pl-0">
+                                        <h6 class="bold mb-0 cl-blue">Đang xử lý</h6>
+                                        <h3 class="bold green mb-0">
+                                            <span>{{ summary['status_1'] || 0 }}</span>
+                                        </h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-12 form-group">
+                        <div class="card bg-green-3 h-100">
+                            <div class="card-body py-2">
+                                <div class="row align-items-center">
+                                    <div class="col-auto pr-0">
+                                        <i class="fas fa-check-circle text-success cl-green fa-2x"></i>
+                                    </div>
+                                    <div class="col text-right pl-0">
+                                        <h6 class="bold mb-0 cl-green">Đã xử lý</h6>
+                                        <h3 class="bold green mb-0">
+                                            <span>{{ summary['status_2'] || 0 }}</span>
+                                        </h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row align-items-center form-group t-filter">
+                    <div class="col-sm-auto col-12 form-group">
+                        <select class="form-control custom-select input-gray" v-model="status" @change="onChangeFilter()">
+                            <option value="all">Trạng thái - Tất cả</option>
+                            <option value="0">Chờ xử lý</option>
+                            <option value="1">Đang xử lý</option>
+                            <option value="2">Đã xử lý</option>
+                        </select>
+                    </div>
+
+                    <!--              <div class="col-sm-auto col-12 form-group type-container">-->
+                    <!--                <select class="form-control input-gray" id="type">-->
+                    <!--                  <option value="all">Loại - Tất cả</option>-->
+                    <!--                  <template v-for="parent in services">-->
+                    <!--                    <optgroup v-bind:label="parent.name">-->
+                    <!--                      <option v-for="key in Object.keys(parent.child)" v-bind:value="key">{{ parent.child[key] }}</option>-->
+                    <!--                    </optgroup>-->
+                    <!--                  </template>-->
+
+                    <!--                  <option value="other">Khác</option>-->
+                    <!--                </select>-->
+                    <!--              </div>-->
+
+                    <div class="col-sm-auto col-12 form-group">
+                        <button type="button" class="btn btn-md btn-md-none btn-block text-white font-14 bg-warning bold" @click="reloadData()">
+                            <i class="fas fa-sync-alt"></i>
+                        </button>
+                    </div>
+
+                    <div class="col-sm-auto col-12 form-group">
+                        <a class="btn btn-md btn-md-none btn-block text-white font-14 bg-green bold" href="<%= '/tickets/new' %>">
+                            <i class="fas fa-plus-circle mr-1">
+                            </i> Tạo góp ý mới </a>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="pull-right col-sm-auto pl-0 pr-0">
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" placeholder="Tìm UID, tên ticket" v-model="keyword">
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-secondary" type="button" @click="onChangeFilter()">
+                                        <i class="fa-solid fa-magnifying-glass"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <template v-for="item in tickets">
+                            <a v-bind:href="'/tickets/view?id=' + item.id" class="card bg-gray my-4 t-widget">
+                                <div class="card-body p-2">
+                                    <div class="row">
+
+                                        <div class="col-auto">
+                                            <div class="profile-img" style="background-image: url('/assets/images/admin.png')"></div>
+                                        </div>
+
+                                        <div class="col">
+                                            <div class="row mb-2">
+                                                <div class="col">
+                                                    <h6>
+                                                        <span class="cl-red font-bold mr-1">#{{ item.id }}:</span>
+                                                        <span class="font-bold cl-blue">{{ item.title }}</span>
+                                                    </h6>
+                                                </div>
+                                                <div class="col-auto">
+                            <span class="float-right d-flex align-items-center hand cl-gray-2 font-13">
+                              Chi tiết <i class="fa-solid fa-angle-right pl-1"></i>
+                            </span>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <div class="row">
+                                                    <div class="col-auto mw-65">
+                                                        <span class="badge mr-2 has-border bg-warning-3 cl-warning" v-if="item.status === 0"> Chờ xử lý</span>
+                                                        <span class="badge mr-2 has-border bg-violet-3 cl-blue" v-else-if="item.status === 1"> Đang xử lý</span>
+                                                        <span class="badge mr-2 has-border bg-green-3 cl-green" v-else> Đã xử lý</span>
+
+                                                        <!--                                <span class="badge text-white mr-2 badge-success">{{ serviceMap[item.type] || 'Chung' }}</span>-->
+                                                    </div>
+                                                    <div class="col text-right">
+                                <span class="cl-gray-2 d-flex float-right">
+                                  <i class="fa-solid fa-clock font-bold px-1 pt-1"></i>
+                                  {{ getTimePasses(item.createdAt) }}
+                                </span>
+                                                        <!--                                <span class="bg-green-3 cl-green font-bold px-2 float-right mr-2">-->
+                                                        <!--                                  <i class="far fa-comment-dots pr-1"></i>0</span>-->
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </template>
+
+                        <div class="text-center" v-if="tickets.length == 0">
+                            <h5 class="text-warning">Không có kết quả nào!</h5>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 text-center" v-if="paging.has_more">
+                        <button class="btn btn-primary" @click="loadMoreData()">Xem Thêm</button>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <%- include('../components/note.ejs') %>
+    </div>
+</div>
+
+<script src="/assets/plugins/vue/vue.js"></script>
+
+<script>
+  var tApi = '/tickets';
+
+  $(document).ready(function () {
+    $('#vue_app').show();
+    app = new Vue({
+      el: '#vue_app',
+      data: {
+        services: [],
+        // serviceMap: {},
+        summary: {},
+        tickets: [],
+
+        status: 'all',
+        type: 'all',
+        keyword: '',
+        loading: false,
+        paging: {
+          index: 99999999,
+          has_more: true
+        }
+      },
+      methods: {
+        onChangeFilter() {
+          this.paging = {
+            index: 99999999,
+            has_more: false
+          };
+          this.tickets = [];
+          this.loadMoreData();
+        },
+        reloadData: function () {
+          this.toggleLoading(true);
+        },
+        loadMoreData: function() {
+          this.toggleLoading(true);
+        },
+        toggleLoading: function(value) {
+          this.loading = value;
+        },
+        getTimePasses: getTimePasses
+      },
+      mounted() {
+        this.loadMoreData();
+      }
+    });
+  });
+</script>

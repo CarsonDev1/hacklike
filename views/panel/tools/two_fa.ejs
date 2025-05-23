@@ -1,0 +1,46 @@
+<% layout("panel/layout") %>
+
+<style>
+    .key2fa label {
+        font-weight: 500 !important;
+    }
+    .faotp {
+        cursor: pointer;
+        color: #886cff;
+        font-weight: 500;
+    }
+    .time2fa {
+        color: tomato;
+    }
+</style>
+
+<div class="card card-body">
+    <div class="d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Lấy Code từ KEY 2FA</h5>
+    </div>
+
+    <form id="form_secret" class="mt-4" onsubmit="return false;">
+        <div class="form-group">
+            <label for="SECRET2FA">KEY 2FA</label>
+            <textarea
+                    id="SECRET2FA"
+                    name="SECRET2FA"
+                    rows="6"
+                    class="form-control"
+                    placeholder="Nhập Full KEY 2FA ở đây ... &#x0a5NQV HJNP QCNP JJIY ... &#x0aL2WA M4BZ RBM2 YVJP ..."
+            ></textarea>
+
+            <span class="form-text text-muted">Có thể nhập Full định dạng ID | Pass | 2FA. Mỗi dòng sẽ lấy 1 code.</span>
+        </div>
+
+        <button type="submit" class="btn btn-primary">LẤY CODE</button>
+    </form>
+
+    <hr>
+
+    <div id="toggle-2fa-list"></div>
+</div>
+
+<script src="https://unpkg.com/@otplib/preset-browser@^12.0.0/buffer.js"></script>
+<script src="https://unpkg.com/@otplib/preset-browser@^12.0.0/index.js"></script>
+<script src="/assets/tools/two_fa.js"></script>

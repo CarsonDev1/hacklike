@@ -1,0 +1,13 @@
+<% if (process.env.NODE_ENV === 'production') { %>
+    <div class="translate-wrapper">
+        <div id="button_translate"></div>
+    </div>
+
+    <script>
+        function googleTranslate() {
+            new google.translate['TranslateElement']({pageLanguage: 'vi'}, 'button_translate');
+        }
+    </script>
+
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslate"></script>
+<% } %>

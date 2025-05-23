@@ -1,0 +1,561 @@
+<% layout("panel/layout") %>
+
+<link href="/assets/plugins/bootstrap-datetimepicker/datetimepicker.min.css" rel="stylesheet" type="text/css"/>
+
+<style>
+    .payment-widget {
+        text-align: center;
+        padding-top: 20px;
+        padding-bottom: 20px;
+        border: 1px solid #ddd;
+        cursor: pointer;
+    }
+
+    .payment-widget .icon {
+        font-size: 20px;
+    }
+
+    .payment-widget .text {
+        font-size: 18px;
+    }
+
+    .payment-widget.active {
+        border-color: green;
+        color: green;
+    }
+
+    .content-toggle:not(.show) {
+        display: none;
+    }
+
+    .text-intro-payment {
+        font-size: 19px;
+        text-transform: uppercase;
+        font-weight: 600;
+        color: #2a2a2a;
+    }
+
+    body.dark_mode .text-intro-payment {
+        color: #d1c5c5;
+    }
+
+    .payment-content {
+        font-weight: bold;
+        font-size: 20px;
+    }
+
+    .list-banks {
+        margin-top: 20px;
+    }
+
+    .nav-item img {
+        max-height: 35px;
+    }
+
+    .list-banks .nav-link {
+        padding: 7px 10px !important;
+        border-radius: 0;
+    }
+
+    .list-banks + .tab-content .tab-pane {
+        text-align: center;
+    }
+
+    .qr-code {
+        width: 450px;
+        max-width: 100%;
+        height: auto;
+    }
+
+    .btn-copy {
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+    .btn-copy:hover {
+        font-size: 110%;
+    }
+
+    .offer-intro {
+        font-size: 17px;
+        margin-bottom: 10px;
+    }
+
+    .momo-qr img {
+        margin: 0 auto;
+    }
+
+    .alert-card i.fa {
+        color: chartreuse;
+    }
+
+    .table-payment-info {
+        width: unset;
+        margin: 0 auto 15px auto;
+    }
+
+    .table-payment-info td {
+        text-align: left;
+        font-size: 19px;
+        border: none;
+        padding-top: 0.3rem;
+        padding-bottom: 0.3rem;
+    }
+
+    .table-payment-info td .fa {
+        color: #0abb87;
+    }
+
+    @media only screen and (max-width: 576px) {
+        .payment-widget {
+            margin-bottom: 5px;
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+
+        .payment-widget .icon {
+            font-size: 17px;
+        }
+
+        .payment-widget .text {
+            font-size: 14px;
+        }
+    }
+
+    @media only screen and (max-width: 500px) {
+        .offer-intro {
+            font-size: 15px;
+        }
+
+        .text-intro-payment {
+            font-size: 17px;
+        }
+
+        .payment-content {
+            font-size: 18px;
+        }
+
+        .table-payment-info td {
+            font-size: 15px;
+        }
+    }
+
+    .crypto-payment-title {
+        font-size: 15px;
+        font-weight: 600;
+        margin-bottom: 14px;
+    }
+</style>
+
+<div class="row d-flex justify-content-center">
+
+    <div class="col-xl-12 col-md-12">
+        <div class="kt-portlet">
+            <div class="kt-portlet__body">
+                <div class="row">
+                    <div class="col-lg-3 col-sm-3 col-6">
+                        <div class="payment-widget active" data-target="banking">
+                            <i class="icon fas fa-university"></i>
+                            <div class="text">Banking</div>
+                        </div>
+
+                    </div>
+
+                    <div class="col-lg-3 col-sm-3 col-6">
+                        <div class="payment-widget" data-target="crypto">
+                            <i class="icon fa-solid fa-usd"></i>
+                            <div class="text">Crypto USDT</div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-sm-3 col-6">
+                        <div class="payment-widget" data-target="phone_card">
+                            <i class="icon far fa-credit-card"></i>
+                            <div class="text">Thẻ cào</div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-sm-3 col-6">
+                        <div class="payment-widget" data-target="gift_code">
+                            <i class="icon fa-solid fa-gift"></i>
+                            <div class="text">Gift Code</div>
+                        </div>
+                    </div>
+                </div>
+
+                <% let transferContent = 'hacklike17 username'; %>
+
+                <div class="card mt-3">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-7 mb-2 content-toggle show item-banking">
+                                <div class="card card-body">
+                                    <div class="text-center">
+                                        <div class="text-intro-payment">Nội dung chuyển tiền</div>
+
+                                        <div class="payment-content alert alert-success">
+                                            <span id="payment-message"><%= transferContent %></span>
+                                            <span class="btn-copy fa fa-copy" data-target="#payment-message"></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="has-border-top">
+                                        <ul class="nav nav-tabs list-banks">
+                                            <li class="nav-item">
+                                                <a class="nav-link active"
+                                                   data-toggle="tab" href="#content_tab_1">
+                                                    <img src="/assets/images/banks/vcb.png" alt=""/>
+                                                </a>
+                                            </li>
+                                        </ul>
+
+                                        <%
+                                        const generateImage = (code, number, owner) => {
+                                            return encodeURI(`https://img.vietqr.io/image/${code.toUpperCase()}-${number}-print.png?accountName=${owner}&addInfo=hacklike17 ${user.username}`);
+                                        }
+                                        %>
+
+                                        <!-- Tab panes -->
+                                        <div class="tab-content">
+                                            <div class="tab-pane container active" id="content_tab_1">
+                                                <div>
+                                                    <img src="/assets/images/banks/vcb.png" alt=""
+                                                         style="height: 60px;margin-bottom: 20px"/>
+                                                </div>
+
+                                                <%- include('../components/table_payment', {
+                                                key: 'vcb',
+                                                account_name: 'Nguyễn Văn Hoà',
+                                                account_number: '0371003299999',
+                                                }) %>
+
+                                                <div><b>Hạn chế nạp tiền VCB 22h-3h sáng, VÌ VCB hay bảo trì sao
+                                                        kê cộng vào ngày mới</b></div>
+                                                <img class="qr-code"
+                                                     src="<%= generateImage('vcb', '0371003299999', 'NGUYEN VAN HOA') %>"
+                                                     alt=""/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-7 mb-2 content-toggle item-crypto">
+                                <ul class="nav nav-tabs">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" data-toggle="tab" href="#crypto_mus">
+                                            <img src="/assets/images/banks/cryptomus.png" alt="">
+                                        </a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a class="nav-link" data-toggle="tab" href="#crypto_binance">
+                                            <img src="/assets/images/banks/binance.png?v=1" alt="">
+                                        </a>
+                                    </li>
+                                </ul>
+
+                                <div class="tab-content">
+                                    <div class="tab-pane container active" id="crypto_mus">
+                                        <div>
+                                            <div class="crypto-payment-title">Nạp tiền qua gateway Cryptomus</div>
+
+                                            <div class="input-group mb-3">
+                                                <input type="number" min="0" class="form-control usdt-amount"
+                                                       placeholder="Số USDT muốn nạp" data-platform="cryptomus">
+                                                <div class="input-group-append">
+                                                    <button class="btn btn-primary btn-create-payment-ticket"
+                                                            type="button" data-platform="cryptomus">Tạo phiếu nạp
+                                                    </button>
+                                                </div>
+                                            </div>
+
+                                            <div class="payment-link-container" style="display: none"
+                                                 data-platform="cryptomus"></div>
+                                        </div>
+                                    </div>
+
+                                    <div class="tab-pane container fade" id="crypto_binance">
+                                        <div class="text-center">
+
+                                            <div class="text-center mb-5">
+                                                <div class="text-intro-payment">Nội dung chuyển tiền</div>
+
+                                                <div class="payment-content alert alert-success">
+                                                    <span id="payment-message"><%= transferContent %></span>
+                                                    <span class="btn-copy fa fa-copy"
+                                                          data-target="#payment-message"></span>
+                                                </div>
+                                            </div>
+
+                                            <img class="qr-img" alt="" src="/assets/images/banks/binance_qr.png?v=1"
+                                                 style="width: 300px"/>
+
+                                            <div class="mt-3">
+                                                <h5>Binance ID: 318976497</h5>
+                                                <h5>Email: Hoahenry1803@gmail.com</h5>
+
+                                                <h5>Nội Dung:
+                                                    <span id="binance_content"
+                                                          class="text-success"><%= 'hacklike17 ' + user.username %></span>
+                                                    <span class="btn-copy fa fa-copy"
+                                                          data-target="#binance_content"></span>
+                                                </h5>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-5 mb-2 content-toggle item-crypto" style="">
+                                <div class="card card-body">
+                                    <h5 class="text-success">Ghi Chú</h5>
+
+                                    <p>- Bạn chịu phí sàn</p>
+                                    <p>- Chỉ chấp nhận USDT</p>
+                                    <p>- Tỉ giá 1 USDT = <%= functions.number_format(USD_RATE) %>VNĐ</p>
+                                </div>
+                            </div>
+
+                            <div class="col-md-5 mb-2 content-toggle show item-banking">
+                                <div class="card card-body">
+                                    <h5 class="text-success">Ghi Chú</h5>
+
+                                    <p>- Copy thông tin bên cạnh và chuyển tiền đúng nội dung, Hoặc chụp quét mã QR
+                                        website cung cấp. Nạp tối thiểu 20.000
+                                        vnđ</p>
+
+                                    <p>- Hệ thống auto nạp tiền: <b style="color: red;">VIETCOMBANK,ACB, MOMO</b></p>
+                                    <p>- Vui lòng <b style="color: red;">KHÔNG NẠP VCB</b> TỪ 22H-3H SÁNG, Tiền nạp giờ
+                                        này sẽ xử lí vào ngày hôm sau</p>
+                                    <p>- Vui lòng chuyển khoản đúng nội dung. Hệ thống cộng tự động sau vài phút. <br>-
+                                        Nếu nội dung
+                                        sai bạn sẽ bị trừ phí 10% không quá 20.000 vnđ</p>
+                                    <p>- Điều kiện lên đại lý: <b style="color: red;">1 giao dịch nạp 2 triệu hoặc tổng
+                                            nạp 5
+                                            triệu</b></p>
+                                    <p>- Điều kiện lên NPP: <b style="color: red;">1 giao dịch nạp 50 triệu hoặc tổng
+                                            nạp 250
+                                            triệu</b></p>
+
+                                    <hr/>
+
+                                    <h5 class="text-primary">Thống kê</h5>
+
+                                    <div class="chart-area">
+                                        <div class="widget-date-range">
+                                            <div class="form-inline">
+
+                                                <div class="form-group">
+                                                    <span class="far fa-calendar-alt"></span>
+                                                    <input class="form-control" type="text" id="time_from"
+                                                           autocomplete="off"/>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <span>Đến</span>
+                                                    <input class="form-control" type="text" id="time_to"
+                                                           autocomplete="off"/>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <button class="btn btn-success" id="btn_view_payment">Xem</button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="chart-area" style="min-height: 400px;">
+                                            <div id="chart"></div>
+                                        </div>
+
+                                        <div>
+                                            <h5>Tổng nạp: <span id="value_in" class="text-success">0</span><span
+                                                        class="tomato">₫</span></h5>
+                                            <h5>Tổng chi: <span id="value_out" class="text-danger">0</span><span
+                                                        class="tomato">₫</span></h5>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12 mb-2 content-toggle item-phone_card">
+                                <form id="card_form" action="<%= '/phone_card/add' %>" method="POST">
+                                    <div class="alert alert-success alert-card" style="font-size: 110%">
+                                        <h4 class="text-bold">Lưu ý</h4>
+                                        <p>
+                                            <i class="fa fa-check"></i>
+                                            1. Nạp đúng Seri, Mã thẻ cào. Nếu sai thẻ sẽ bị từ chối nạp lại lần 2, bạn
+                                            hãy nạp vào sim sử dụng.
+                                        </p>
+                                        <p>
+                                            <i class="fa fa-check"></i>
+                                            2. Hãy chọn đúng mệnh giá : Nếu thẻ 100k, chọn nhầm mệnh giá 50k thì hệ
+                                            thống ghi nhận thẻ 50k.
+                                            Nếu thẻ 100k chọn nhầm mệnh giá 200k thì sẽ nhận 100k.
+
+                                        </p>
+                                        <p>
+                                            <i class="fa fa-check"></i>
+                                            3. Hệ thống chỉ là nơi trung gian, tiền sẽ được nhà mạng duyệt thẻ và trừ
+                                            phí vì vậy
+                                            admin sẽ không giải quyết tranh chấp khi xảy ra vấn đề thẻ sai hoặc đúng.
+                                        </p>
+                                        <p>
+                                            <i class="fa fa-check"></i>
+                                            4. Thẻ nạp sẽ được duyệt và cộng tiền thường là sau vài phút
+                                        </p>
+                                    </div>
+
+                                    <hr/>
+
+                                    <div class="form-group">
+                                        <label>Loại thẻ</label>
+                                        <select class="form-control" name="card_type" required>
+                                            <option value="VTT">Viettel (CK -<%= config.sdt_sub_percent %>%)</option>
+                                            <option value="VNP">Vinaphone (CK -<%= config.sdt_sub_percent %>%)</option>
+                                            <option value="VMS">Mobifone (CK -<%= config.sdt_sub_percent %>%)</option>
+                                            <option value="ZING">Zing (CK -<%= config.sdt_sub_percent %>%)</option>
+                                            <!-- <option value="GATE">Gate (CK -<%= config.sdt_sub_percent %>%)</option>
+                      <option value="VCOIN">Vcoin (CK -<%= config.sdt_sub_percent %>%)</option> -->
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Seri thẻ cào</label>
+                                        <input class="form-control" name="card_serial" minlength="5" maxlength="100"
+                                               required
+                                               placeholder="Seri thẻ cào" value="">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Mã thẻ cào</label>
+                                        <input class="form-control" name="card_code" minlength="5" maxlength="100"
+                                               required
+                                               placeholder="Mã thẻ cào" value="">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Mệnh giá thẻ</label>
+                                        <select class="form-control" name="card_value">
+                                            <% var values = [10, 20, 50, 100, 200, 500, 1000];
+                                            values.forEach(value => { %>
+                                                <option value="<%= value %>"><%= value * 1000 %> VND</option>
+                                            <% }) %>
+                                        </select>
+                                        <div class="text-bold mt-1 text-success">Số tiền bạn nhận được: <span
+                                                    id="text_real_receive"
+                                                    class="text-danger">0</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Ghi chú</label>
+                                        <textarea class="form-control" name="note" rows="1"></textarea>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <button class="btn btn-success" type="submit">Hoàn tất</button>
+                                    </div>
+                                </form>
+
+                                <hr/>
+
+                                <h5 class="text-success"><i
+                                            class="header-icon lnr-license icon-gradient bg-plum-plate"> </i>
+                                    Danh sách thẻ</h5>
+
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-hover" id="datatable-phone-cards"></table>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12 mb-2 content-toggle item-gift_code">
+                                <div class="row">
+                                    <div class="col-sm-7 mb-2">
+                                        <div class="card card-body has-shadow" style="min-height: 130px">
+                                            <div class="offer-intro">
+                                                Bạn có mã quà tặng? hãy nhập vào bên dưới và nhấn "Áp dụng"
+                                            </div>
+
+                                            <div class="widget-offer">
+                                                <div class="input-group mb-3">
+                                                    <input id="offer" type="text" class="form-control"
+                                                           placeholder="Mã quà tặng">
+                                                    <div class="input-group-append">
+                                                        <button class="btn btn-success btn-apply-offer" type="button">Áp
+                                                            dụng
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-5">
+                                        <div class="card card-body has-shadow offer-note" style="min-height: 130px">
+                                            <h5 class="text-danger">Lưu ý</h5>
+                                            <ul style="padding-left: 25px">
+                                                <li>Mỗi mã quà tặng chỉ được áp dụng 1 lần duy nhất.</li>
+                                                <li>Nhập sai quá 10 lần sẽ bị cấm nhập mã quà tặng trong 24h.</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="kt-portlet">
+            <div class="kt-portlet__head">
+                <div class="kt-portlet__head-label">
+                    <h3 class="kt-portlet__head-title">
+                        <%= site.title %>
+                    </h3>
+                </div>
+            </div>
+
+            <div class="kt-portlet__body">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover" id="datatable-payment"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('components/note_popup.ejs') %>
+
+<script src="/assets/plugins/highchart/highcharts.min.js" type="text/javascript"></script>
+<script src="/assets/plugins/qrcode/qrcode.min.js"></script>
+<script src="/assets/js/datatable-payments.js"></script>
+
+<script>
+    var charge = 1 - parseInt(<%= config.sdt_sub_percent %>) / 100;
+
+    $(document).ready(function () {
+        if ($('#momo_qr_1').length) {
+            ['momo_qr_1'].forEach(function (elementId) {
+                new QRCode(document.getElementById(elementId), {
+                    text: `2|99|${$('#my_momo').text()}|||0|0||${$('#payment-message').text()}|transfer_p2p`,
+                    width: 300,
+                    height: 300,
+                    colorDark: "#000000",
+                    colorLight: "#ffffff",
+                    correctLevel: 2
+                });
+            })
+        }
+
+        if (!$('.list-banks .nav-link.active').length) {
+            $('.list-banks .nav-link').first().trigger('click');
+        }
+    });
+</script>

@@ -1,0 +1,208 @@
+<% layout("panel/layout") %>
+
+<%- include('../widget.ejs') %>
+
+<div class="content-container">
+    <ul class="nav nav-tabs nav-tabs-line nav-tabs-line-danger nav-tabs-line-2x"
+        role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" data-toggle="tab" href="#kt_add" role="tab" aria-selected="true">
+                <i class="fas fa-cart-plus" aria-hidden="true"></i>Mua Dịch Vụ
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#kt_list" role="tab" aria-selected="false">
+                <i class="fas fa-list-alt" aria-hidden="true"></i><span
+                        style="color:red">Danh Sách VIP</span>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#kt_history" role="tab" aria-selected="false">
+                <i class="fas fa-calendar-alt" aria-hidden="true"></i><span style="color:red">Lịch Sử</span>
+            </a>
+        </li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane active" id="kt_add" role="tabpanel">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="card form-group">
+
+                        <div class="card-body">
+                            <form id="formUserAction" action="<%= `/vipfacebook/${site.type}` %>">
+                                <div class="form-group">
+                                    <label for="link">ID hoặc link tài khoản cần chạy</label>
+                                    <input type="text" class="form-control" id="link" name="uid"
+                                           placeholder="id hoặc link tài khoản cần chạy vip" autocomplete="off"
+                                           required>
+
+                                    <%- include('../components/div_uid_error') %>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="name">Tên tài khoản</label>
+                                    <input type="text" class="form-control" id="name" name="name"
+                                           placeholder="Tên tài khoản cần chạy vip"
+                                           autocomplete="off" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Chọn server</label>
+
+                                    <div class="servers">
+                                        <div class="radio radio-server">
+                                            <label><input type="radio" name="server" value="server_1" checked>Server 1
+                                            </label>
+                                        </div>
+
+                                        <div class="radio radio-server">
+                                            <label><input type="radio" name="server" value="server_2">Server 2
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-12 server-section server_1-visible">
+                                        <div class="form-group">
+                                            <label for="comments">Nội dung bài Share (tuỳ chọn)</label>
+                                            <textarea class="form-control" placeholder="Mỗi Nội dung một hàng"
+                                                      name="comments"
+                                                      rows="5"></textarea>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-12 server-section server_2-visible">
+                                        <div class="form-group">
+                                            <label>Số bài mỗi ngày</label>
+                                            <select class="form-control change-price" name="max_post" id="max_post">
+                                                <% for (let multiple = 1; multiple <= 10; multiple++) { %>
+                                                    <option value="<%= multiple * 4 %>" data-multiple="<%= multiple %>">
+                                                        <%= multiple * 4 %> bài (giá x<%= multiple %>)
+                                                    </option>
+                                                <% } %>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="vip_package">Chọn Gói VIP</label>
+                                            <select class="form-control change-price" name="vip_package"
+                                                    id="vip_package">
+                                                <% [10, 20, 30, 50, 80, 100, 200].forEach(value => { %>
+                                                    <option value="<%= value %>"><%= value %></option>
+                                                <% }) %>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="days">Thời Gian</label>
+                                            <select class="form-control change-price" name="days" id="days">
+                                                <option value="30" selected>1 Tháng</option>
+                                                <option value="60">2 Tháng</option>
+                                                <option value="90">3 Tháng</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="single_price">Giá Tiền Mỗi Tương Tác</label>
+                                    <input type="hidden" class="form-control" name="price" id="price"/>
+                                    <input type="text" class="form-control" id="single_price" disabled/>
+                                </div>
+
+                                <%- include('../components/discount_widget.ejs') %>
+
+                                <div class="form-group">
+                                    <label for="total">Tổng Giá</label>
+                                    <input type="text" class="form-control" name="total" id="total" disabled/>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="note">Ghi chú</label>
+                                    <textarea class="form-control" name="note" id="note" rows="1"></textarea>
+                                </div>
+
+                                <div class="form-group">
+                                    <button id="submit" class="btn btn-success text-bold mr-2" type="submit">Mua
+                                    </button>
+                                    <span style="color:red">Đọc kĩ lưu ý trước khi mua</span>
+                                </div>
+
+                                <div class="form-group">
+                                    <button class="btn btn-danger text-bold btn-view-history" type="button"
+                                            data-target="#kt_list">
+                                        <i class="fa fa-calendar" aria-hidden="true"></i> Quản Lý ID
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <%- include('../components/note.ejs') %>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane" id="kt_list" role="tabpanel">
+
+            <%- include('../components/vip_status_filter.ejs') %>
+
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover" id="datatable-vips"></table>
+            </div>
+        </div>
+        <div class="tab-pane" id="kt_history" role="tabpanel">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover" id="datatable-ajax"></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--begin::Modal-->
+<div class="modal fade" id="modalUpdate" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <form id="formUpdate" action="<%= `/vipfacebook/${site.type}/update` %>" method="post">
+            <input type="hidden" name="id">
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Sửa</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="comments">Nội dung bài Share (tuỳ chọn)</label>
+                        <textarea class="form-control" placeholder="Mỗi Nội dung một hàng" name="comments"
+                                  rows="5"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="note">Ghi chú</label>
+                        <textarea class="form-control" name="note" rows="1"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                    <button type="submit" class="btn btn-primary">Cập Nhật</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<%- include('../components/modal_add_post.ejs') %>
+
+<script>
+    let type = "<%= site.type %>";
+</script>
+

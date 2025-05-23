@@ -1,0 +1,162 @@
+<div class="col-md-12">
+    <div class="form-group form-inline">
+        <label>Tương tác với:</label>
+        <select class="form-control custom-select select-light" name="reaction_with">
+            <option value="FRIEND">Chỉ story của bạn bè</option>
+            <option value="NEWFEED">Tất cả story trên newfeed</option>
+        </select>
+    </div>
+</div>
+
+<div class="col-md-12 reaction-with-wrapper wrapper-gender">
+    <div class="form-group form-inline">
+        <label class="mr-2">Giới tính:</label>
+
+        <% let temp = Math.random().toString(36).substr(2, 5) %>
+        <div class="radio custom-radio">
+            <input id="gender_all_<%= temp %>" name="gender" type="radio" value="all" checked>
+            <label for="gender_all_<%= temp %>">Tất cả</label>
+        </div>
+
+        <div class="radio custom-radio">
+            <input id="gender_male_<%= temp %>" name="gender" type="radio" value="nam">
+            <label for="gender_male_<%= temp %>">Chỉ nam</label>
+        </div>
+
+        <div class="radio custom-radio">
+            <input id="gender_female_<%= temp %>" name="gender" type="radio" value="nu">
+            <label for="gender_female_<%= temp %>">Chỉ nữ</label>
+        </div>
+    </div>
+</div>
+
+<div class="col-md-12">
+    <div class="form-group form-inline">
+        <label>Story/phút:</label>
+
+        <select class="form-control custom-select select-light" name="per_minute">
+            <option value="1">Tương tác 1 story mỗi 1 đến 15 phút</option>
+            <option value="2">Tương tác 2 story mỗi 1 đến 15 phút</option>
+            <option value="3">Tương tác 3 story mỗi 1 đến 15 phút</option>
+            <option value="4">Tương tác 4 story mỗi 1 đến 15 phút</option>
+            <option value="5">Tương tác 5 story mỗi 1 đến 15 phút</option>
+            <option value="10">Tương tác 10 story mỗi 1 đến 15 phút</option>
+        </select>
+    </div>
+</div>
+
+<div class="col-md-12">
+    <div class="form-group form-inline">
+        <label>Tương tác/Story:</label>
+
+        <select class="form-control custom-select select-light" name="reaction_count">
+            <option value="1">1 lần</option>
+            <option value="2" selected>2 lần</option>
+            <option value="3">3 lần</option>
+            <option value="4">4 lần</option>
+            <option value="5">5 lần</option>
+        </select>
+    </div>
+</div>
+
+<div class="col-md-12">
+    <h5>Like ngẫu nhiên cảm xúc:</h5>
+</div>
+
+<div class="col-md-12 area-reaction">
+    <div class="form-group">
+        <%- include('../../components/fb_reactions_multi') %>
+
+        <div>
+            <label for="max_reaction">Tối đa cảm xúc 1 ngày</label>
+            <input type="number" name="max_reaction" class="form-control" value="2000" min="10" max="9999" required>
+        </div>
+    </div>
+</div>
+
+<div class="col-md-12">
+    <hr>
+    <h5>Bình luận Story:</h5>
+    <div class="d-flex align-items-center switch-wrapper">
+        <label>Tắt</label>
+        <div class="switch m-r-10">
+            <input type="checkbox" id="comment_on_<%= temp %>" name="comment_on">
+            <label for="comment_on_<%= temp %>"></label>
+        </div>
+        <label>Bật</label>
+    </div>
+</div>
+
+<div class="col-md-12 area-comment" style="display: none">
+    <div class="form-group comment-content-wrapper">
+        <label class="d-block">Nội dung bình luận</label>
+
+        <span class="badge badge-primary">{icon}</span>
+        <span class="badge badge-primary">{name}</span>
+        <span class="badge badge-primary">{dongho}</span>
+        <span class="badge badge-danger">Dấu | nội dung mới</span>
+
+        <textarea class="form-control" name="comments" rows="8"
+                  placeholder="Nhập nội dung muốn bot tự động bình luận Story mới nhất của bạn bè"></textarea>
+
+        <h6 class="mb-0 mt-2 text-black">Nhập: {icon1}{icon2}->{icon10} = random emoij</h6>
+        <h6 class="mb-0 mt-2 text-black">Nhập: {name} = tên facebook chủ post</h6>
+        <h6 class="mb-0 mt-2 text-black">Nhập: {dongho} = lấy thời gian hiện tại</h6>
+        <h6 class="mb-0 mt-2 text-black">
+            Lưu ý: Nếu bạn muốn chạy nhiều nội dung khác nhau thì mỗi nội dung cách nhau dấu
+            <span class="text-danger">|</span> Ví dụ: <span
+                    class="text-danger">nội dung cmt 1|nội dung cmt 2|{sticker}</span>
+        </h6>
+    </div>
+
+    <div class="form-inline">
+        <label>Tối đa 1 ngày:&nbsp;&nbsp;</label>
+        <input class="form-control" name="max_comment" value="100" style="max-width: 65px">
+        <label>&nbsp;&nbsp;Bình luận</label>
+    </div>
+</div>
+
+<div class="col-md-12">
+    <hr>
+    <div class="form-inline form-group">
+        <div class="form-group">
+            <label>Thời gian chạy tương tác: Từ &nbsp;&nbsp;</label>
+            <select class="form-control" name="reaction_from" required>
+                <% for (let i = 0; i < 24; i++ ) { %>
+                    <option value="<%= i %>" <%= i == 7 ? 'selected' : '' %>><%= i %></option>
+                <% } %>
+            </select>
+        </div>
+        <div class="form-group">
+            <label> &nbsp;&nbsp;Giờ &nbsp;&nbsp;&nbsp;&nbsp;Đến &nbsp;&nbsp;</label>
+            <select class="form-control" name="reaction_to" required>
+                <% for (let i = 0; i < 24; i++ ) { %>
+                    <option value="<%= i %>" <%= i == 22 ? 'selected' : '' %>><%= i %></option>
+                <% } %>
+            </select>
+            <label>&nbsp;&nbsp;Giờ</label>
+        </div>
+    </div>
+</div>
+
+<div class="col-md-12">
+    <div class="form-group">
+        <label>Black List ID:</label>
+
+        <textarea rows="2" type="text" class="form-control" name="black_list_id"
+                  placeholder="Nhập list ID bạn muốn BOT không chạy tương tác, ngăn cách nhau bởi dấu , (Vd : 100047535830919,100047535830919)"></textarea>
+    </div>
+</div>
+
+<div class="col-md-12 proxy-container">
+    <div class="form-group">
+        <label>IP riêng (bắt buộc phải mua proxy)</label>
+        <select class="form-control" name="proxy_id">
+            <% if (typeof proxies !== "undefined") { %>
+                <% proxies.forEach(row => { %>
+                    <option value="<%= row.order_id %>"><%= row.note %></option>
+                <% }) %>
+            <% } %>
+        </select>
+    </div>
+</div>

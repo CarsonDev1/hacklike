@@ -1,0 +1,249 @@
+<% let temp = Math.random().toString(36).substr(2, 5) %>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="form-group">
+            <label for="cookie">Cookie</label>
+            <textarea type="text" class="form-control" name="cookie" placeholder="Vui lòng nhập cookie"
+                      autocomplete="off" rows="6" required></textarea>
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <div class="form-group form-inline">
+            <label>Tương tác với:</label>
+            <select class="form-control custom-select select-light" name="reaction_with">
+                <option value="FRIEND">Chỉ bài viết của bạn bè</option>
+                <option value="NEWFEED">Tất cả bài viết trên newfeed</option>
+                <option value="FRIEND_GROUP">Chỉ bài viết bạn bè và nhóm</option>
+                <option value="LISTUIDPROFILE">Theo list ID profile</option>
+                <option value="LISTUIDNHOM">Theo list ID nhóm</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="col-md-12 reaction-with-wrapper wrapper-gender">
+        <div class="form-group form-inline">
+            <label class="mr-2">Giới tính:</label>
+
+            <div class="radio custom-radio">
+                <input id="gender_all<%= temp %>" name="gender" type="radio" value="all" checked>
+                <label for="gender_all<%= temp %>">Tất cả</label>
+            </div>
+
+            <div class="radio custom-radio">
+                <input id="gender_male<%= temp %>" name="gender" type="radio" value="nam">
+                <label for="gender_male<%= temp %>">Chỉ nam</label>
+            </div>
+
+            <div class="radio custom-radio">
+                <input id="gender_female<%= temp %>" name="gender" type="radio" value="nu">
+                <label for="gender_female<%= temp %>">Chỉ nữ</label>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-12 reaction-with-wrapper wrapper-list-ids" style="display: none">
+        <div class="form-group">
+            <label class="mr-1">List ID:</label>
+
+            <textarea class="form-control" rows="3" name="list_ids"
+                      placeholder="Nhập list ID bạn muốn chạy BOT tương tác, ngăn cách nhau bởi dấu , (Vd : 100047535830919,100047535830919)"></textarea>
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <div class="form-group form-inline">
+            <label>Bài viết/phút:</label>
+
+            <select class="form-control custom-select select-light" name="per_minute">
+                <option value="1">Tương tác 1 bài viết mỗi 1 đến 15 phút</option>
+                <option value="2">Tương tác 2 bài viết mỗi 1 đến 15 phút</option>
+                <option value="3">Tương tác 3 bài viết mỗi 1 đến 15 phút</option>
+                <option value="4">Tương tác 4 bài viết mỗi 1 đến 15 phút</option>
+                <option value="5">Tương tác 5 bài viết mỗi 1 đến 15 phút</option>
+                <option value="10">Tương tác 10 bài viết mỗi 1 đến 15 phút</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <h5>Like ngẫu nhiên cảm xúc:</h5>
+        <div class="d-flex align-items-center switch-wrapper">
+            <label>Tắt</label>
+            <div class="switch m-r-10">
+                <input type="checkbox" id="reaction_on<%= temp %>" name="reaction_on" checked>
+                <label for="reaction_on<%= temp %>"></label>
+            </div>
+            <label>Bật</label>
+        </div>
+    </div>
+
+    <div class="col-md-12 area-reaction">
+        <div class="form-group">
+            <%- include('../../components/fb_reactions_multi') %>
+
+            <div>
+                <label for="max_reaction">Tối đa cảm xúc 1 ngày</label>
+                <input type="number" name="max_reaction" class="form-control" value="200" min="10" max="9999" required>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <hr>
+        <h5>Bình luận bài viết:</h5>
+        <div class="d-flex align-items-center switch-wrapper">
+            <label>Tắt</label>
+            <div class="switch m-r-10">
+                <input type="checkbox" id="comment_on<%= temp %>" name="comment_on">
+                <label for="comment_on<%= temp %>"></label>
+            </div>
+            <label>Bật</label>
+        </div>
+    </div>
+
+    <div class="col-md-12 area-comment" style="display: none">
+        <div class="form-group comment-content-wrapper">
+            <label for="comments" class="d-block">Nội dung bình luận</label>
+
+            <div class="d-flex align-items-center switch-wrapper">
+                <div class="switch m-r-10">
+                    <input type="checkbox" id="new_comment_api<%= temp %>" name="new_api">
+                    <label for="new_comment_api<%= temp %>"></label>
+                </div>
+                <label class="text-danger">Sử dụng API cmt new (nếu nick bạn không chạy được API cũ(có lịch sử mà không
+                    có cmt)
+                    hãy tích vào đây)</label>
+            </div>
+
+            <span class="badge badge-primary">{sticker}</span>
+            <span class="badge badge-primary">{icon}</span>
+            <span class="badge badge-primary">{name}</span>
+            <span class="badge badge-primary">{tag}</span>
+            <span class="badge badge-primary">{dongho}</span>
+            <span class="badge badge-primary">{anhrandom}</span>
+            <span class="badge badge-primary">{xinchao}</span>
+            <span class="badge badge-primary">{anhtuychinh}</span>
+            <span class="badge badge-danger">Dấu | nội dung mới</span>
+
+            <textarea class="form-control" name="comments" rows="8"
+                      placeholder="nội dung cmt 1|nội dung cmt 2|{sticker}"></textarea>
+
+            <h6 class="mb-0 mt-2 text-black">Nhập: {sticker} = Để sử dụng sticker (nếu bạn không dùng
+                'Sticker tùy chỉnh' chúng tôi sẽ để nó random các sticker có trên hệ thống)</h6>
+            <h6 class="mb-0 mt-2 text-black">Nhập: {icon1}{icon2}-&gt;{icon10} = random emoij</h6>
+            <h6 class="mb-0 mt-2 text-black">Nhập: {name} = tên facebook chủ post</h6>
+            <h6 class="mb-0 mt-2 text-black">Nhập: {tag} = tag chủ post vào comment</h6>
+            <h6 class="mb-0 mt-2 text-black">Nhập: {dongho} = lấy thời gian hiện tại</h6>
+            <h6 class="mb-0 mt-2 text-black">Nhập: {anhrandom} nếu muốn random ảnh con HEO,CHUỘT kèm tên chủ bài
+                viết</h6>
+            <h6 class="mb-0 mt-2 text-black">Nhập: {xinchao} nếu muốn random ảnh con HEO,CHUỘT kèm Xin Chào! tên chủ
+                bài
+                viết</h6>
+            <h6 class="mb-0 mt-2 text-black">Nhập: {anhtuychinh} comment bằng ảnh của bạn ở mục Ảnh tùy chỉnh</h6>
+            <h6 class="mb-0 mt-2 text-black">Lưu ý: Nếu bạn muốn chạy nhiều nội dung khác nhau thì mỗi nội dung cách
+                nhau dấu
+                <span class="text-danger"> | </span> Ví dụ: <span
+                        class="text-danger"> nội dung cmt 1|nội dung cmt 2|{sticker} </span>
+            </h6>
+        </div>
+
+        <div class="form-inline form-group">
+            <label>Tối đa 1 ngày:&nbsp;&nbsp;</label>
+            <input class="form-control" name="max_comment" value="100" style="max-width: 65px">
+            <label>&nbsp;&nbsp;Bình luận</label>
+        </div>
+
+        <div class="form-group">
+            <label class="c-pointer">
+                <input type="checkbox" name="s_check">
+                Sticker tùy chỉnh
+            </label>
+
+            <div class="sticker-wrapper form-group" style="display: none">
+                <small class="text-intro">Nhấn vào sticker bên dưới để chọn sticker tương ứng</small>
+                <div class="area-stickers custom-scroll"></div>
+                <input type="hidden" name="sticker_json">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="c-pointer">
+                <input type="checkbox" name="ca_check">
+                Ảnh tùy chỉnh
+            </label>
+
+            <div class="image-wrapper form-group" style="display: none">
+                <small class="text-intro">
+                    <span class="text-danger">Nếu chạy comment ảnh vui lòng không được chọn Sticker</span>
+                </small>
+                <div class="alert alert-warning">
+                    Website hỗ trợ get link ảnh: <a href="https://linkanh.xyz/" target="_blank">Tại Đây</a>
+                </div>
+                <input type="url" name="commentanh" class="form-control">
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <hr>
+        <div class="form-inline form-group">
+            <div class="form-group">
+                <label>Thời gian chạy tương tác: Từ &nbsp;&nbsp;</label>
+                <select class="form-control" name="reaction_from" required>
+                    <% for (let i = 0; i < 24; i++ ) { %>
+                        <option value="<%= i %>" <%= i == 7 ? 'selected' : '' %>><%= i %></option>
+                    <% } %>
+                </select>
+            </div>
+            <div class="form-group">
+                <label> &nbsp;&nbsp;Giờ &nbsp;&nbsp;&nbsp;&nbsp;Đến &nbsp;&nbsp;</label>
+                <select class="form-control" name="reaction_to" required>
+                    <% for (let i = 0; i < 24; i++ ) { %>
+                        <option value="<%= i %>" <%= i == 22 ? 'selected' : '' %>><%= i %></option>
+                    <% } %>
+                </select>
+                <label>&nbsp;&nbsp;Giờ</label>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <div class="form-group">
+            <label>Black List Từ Khóa:</label>
+
+            <textarea rows="3" type="text" class="form-control" name="black_list_keyword"
+                      placeholder="Nhập list từ khóa có chứa trong bài viết mà bạn không muốn BOT chạy tương tác, ngăn cách nhau bởi dấu , (Vd : buồn, đám tang, chia buồn)"></textarea>
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <div class="form-group">
+            <label>Black List ID:</label>
+
+            <textarea rows="2" type="text" class="form-control" name="black_list_id"
+                      placeholder="Nhập list ID bạn muốn BOT không chạy tương tác, ngăn cách nhau bởi dấu , (Vd : 100047535830919,100047535830919)"></textarea>
+        </div>
+    </div>
+
+    <div class="col-md-12 proxy-container">
+        <div class="form-group">
+            <label>IP riêng (bắt buộc phải mua proxy)</label>
+            <select class="form-control" name="proxy_id">
+                <% if (typeof proxies !== "undefined") { %>
+                    <% proxies.forEach(row => { %>
+                        <option value="<%= row.order_id %>"><%= row.note %></option>
+                    <% }) %>
+                <% } %>
+            </select>
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <div class="form-group">
+            <label for="note">Ghi chú</label>
+            <textarea class="form-control" name="note" rows="1"></textarea>
+        </div>
+    </div>
+</div>

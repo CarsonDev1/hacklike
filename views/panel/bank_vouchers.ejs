@@ -1,0 +1,101 @@
+<% layout("panel/layout") %>
+
+<%- include('./widget.ejs') %>
+
+<div class="content-container">
+    <ul class="nav nav-tabs nav-tabs-line nav-tabs-line-danger nav-tabs-line-2x"
+        role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" data-toggle="tab" href="#kt_add" role="tab" aria-selected="true">
+                <i class="fas fa-cart-plus" aria-hidden="true"></i>Mua Dịch Vụ
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#kt_history" role="tab" aria-selected="false">
+                <i class="fas fa-calendar-alt" aria-hidden="true"></i>Lịch Sử
+            </a>
+        </li>
+    </ul>
+
+    <div class="tab-content">
+        <div class="tab-pane active" id="kt_add" role="tabpanel">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="card form-group">
+
+                        <div class="card-body">
+                            <form id="formUserAction" action="<%= '/bank_vouchers' %>">
+                                <div class="form-group">
+                                    <label>Chọn Ngân hàng</label>
+                                    <select class="form-control" name="bank_id"></select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Chọn dịch vụ</label>
+
+                                    <div class="servers" id="servers"></div>
+                                </div>
+
+                                <div class="alert alert-primary MBBank_only" style="display: none">
+                                    Đối với ngân hàng MbBank, hệ thống sẽ không trả mã,
+                                    mà bạn cần cung cấp thông tin "Họ và Tên Chủ Tài Khoản" và "SDT Mbank".<br/>
+                                    Hệ thống sẽ tự áp mã cho tài khoản MbBank của bạn
+                                </div>
+
+                                <div class="MBBank_only">
+                                    <div class="form-group">
+                                        <label>Họ và Tên Chủ Tài Khoản</label>
+                                        <input type="text" class="form-control" name="account_name"/>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>SDT Mbank</label>
+                                        <input type="number" class="form-control" name="phone"/>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Số lượng</label>
+                                    <input type="number" class="form-control" name="count" id="count" value="1"/>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Tổng Giá</label>
+                                    <input type="text" class="form-control" name="total" id="total" disabled/>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Ghi chú</label>
+                                    <input type="text" class="form-control" id="note" name="note" placeholder=""/>
+                                </div>
+
+                                <div class="form-group">
+                                    <button id="submit" class="btn btn-success text-bold" type="submit">Mua</button>
+                                    -<span style="color:red">Đọc kĩ lưu ý trước khi mua</span>
+                                </div>
+
+                                <div class="form-group">
+                                    <button class="btn btn-danger text-bold btn-view-history" type="button"
+                                            data-target="#kt_history">
+                                        <i class="fa fa-calendar" aria-hidden="true"></i> Quản Lý ID
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <%- include('./components/note.ejs') %>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane" id="kt_history" role="tabpanel">
+            <table class="table table-bordered table-hover" id="datatable-ajax"></table>
+        </div>
+    </div>
+</div>
+
+<script>
+    let type = 'bank_voucher';
+</script>
+<script src="/assets/js/js_bank_voucher.js?v=<%= version %>"></script>

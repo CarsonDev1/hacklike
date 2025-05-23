@@ -1,0 +1,128 @@
+<% layout("panel/layout") %>
+
+<%- include('../widget.ejs') %>
+
+<div class="content-container">
+    <ul class="nav nav-tabs nav-tabs-line nav-tabs-line-danger nav-tabs-line-2x"
+        role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" data-toggle="tab" href="#kt_add" role="tab" aria-selected="true">
+                <i class="fas fa-cart-plus" aria-hidden="true"></i>Mua Dịch Vụ
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#kt_history" role="tab" aria-selected="false">
+                <i class="fas fa-calendar-alt" aria-hidden="true"></i>Lịch Sử
+            </a>
+        </li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane active" id="kt_add" role="tabpanel">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="card form-group">
+
+                        <div class="card-body">
+                            <form id="formUserAction" action="/view/<%= site.type %>">
+                                <div class="form-group">
+                                    <label for="link">UID hoặc Link profile cần chạy</label>
+                                    <input type="text" class="form-control" id="link" name="uid"
+                                           placeholder="tạm bảo trì"
+                                           autocomplete="off" readonly>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="name">Tên cá nhân</label>
+                                    <input type="text" class="form-control" id="name" name="name"
+                                           placeholder="Tên cá nhân"
+                                           autocomplete="off" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="count">
+                                        Số lượng mắt: 50 - 5000
+                                    </label>
+                                    <input type="number" class="form-control" name="count" id="count" min="50"
+                                           value="50"
+                                           max="5000"/>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="days">Thời gian</label>
+                                    <select class="form-control" id="days" name="days">
+                                        <!-- <option value="15">15</option> -->
+                                        <option selected value="30">1 Tháng</option>
+                                        <!-- <option value="60">60</option>
+                                        <option value="90">90</option> -->
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="minutes">Số phút mắt</label>
+                                    <input class="form-control" name="minutes" id="minutes" value="30" min="30"
+                                           max="600"
+                                           onchange="$('#count').trigger('change')"/>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="order_count">Số bài mua/1 tháng</label>
+                                    <input class="form-control" name="order_count" id="order_count" value="5" min="1"
+                                           max="100"
+                                           onchange="$('#count').trigger('change')"/>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="price">Giá Tiền cho 1 mắt/1 phút</label>
+                                    <% var userPrice = functions.getUserPrice(price, user.ugroup) %>
+                                    <input type="number" class="form-control" name="price" id="price" min="0"
+                                           value="<%= userPrice %>" disabled/>
+                                </div>
+
+                                <%- include('../components/discount_widget.ejs') %>
+
+                                <div class="form-group">
+                                    <label for="price">Tổng Giá: (số mắt) x (số phút 1 bài) x (giá tiền)+5000
+                                        vnđ</label>
+                                    <input type="text" class="form-control" name="total" id="total"
+                                           value="<%= functions.number_format(Number(userPrice) * 50 * 30 * 5 + 5000) %> VNĐ"
+                                           disabled/>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="note">Ghi chú (không ghi cũng được)</label>
+                                    <textarea class="form-control" name="note" id="note" rows="1"
+                                              maxlength="255"></textarea>
+                                </div>
+
+                                <div class="form-group">
+                                    <button id="submit" class="btn btn-success text-bold" type="submit">Mua</button>
+                                </div>
+
+                                <div class="form-group">
+                                    <button class="btn btn-danger text-bold btn-view-history" type="button"
+                                            data-target="#kt_history">
+                                        <i class="fa fa-calendar" aria-hidden="true"></i> Quản Lý ID
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <%- include('../components/note.ejs') %>
+                </div>
+            </div>
+
+        </div>
+        <div class="tab-pane" id="kt_history" role="tabpanel">
+            <%- include('../components/status_filter.ejs') %>
+
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover" id="datatable-ajax"></table>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var type = "<%= site.type %>";
+</script>

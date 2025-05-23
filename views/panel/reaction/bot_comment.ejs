@@ -1,0 +1,143 @@
+<% layout("panel/layout") %>
+
+<%- include('../widget.ejs') %>
+
+<div class="content-container">
+    <ul class="nav nav-tabs nav-tabs-line nav-tabs-line-danger nav-tabs-line-2x"
+        role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" data-toggle="tab" href="#kt_add" role="tab" aria-selected="true">
+                <i class="fas fa-cart-plus" aria-hidden="true"></i>Mua Dịch Vụ
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#kt_list" role="tab" aria-selected="false">
+                <i class="fas fa-shopping-bag" aria-hidden="true"></i>Danh Sách VIP
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#kt_history" role="tab" aria-selected="false">
+                <i class="fas fa-calendar-alt" aria-hidden="true"></i>Lịch Sử
+            </a>
+        </li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane active" id="kt_add" role="tabpanel">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="card form-group">
+
+                        <div class="card-body">
+                            <form id="formUserAction" action="/reaction/<%= site.type %>">
+
+                                <%- include('components/comment') %>
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label>Thời Gian</label>
+                                            <select class="form-control" name="days" id="days"
+                                                    onchange="calculatorPrice()">
+                                                <option value="10">10 ngày</option>
+                                                <option value="30" selected>30 ngày</option>
+                                                <option value="60">60 ngày</option>
+                                                <option value="90">90 ngày</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-12">
+                                        <%- include('../components/discount_widget') %>
+                                    </div>
+
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="total">Giá Tiền Mỗi Ngày</label>
+                                            <% var userPrice = functions.getUserPrice(price, user.ugroup) %>
+                                            <input type="text" class="form-control" id="vip_price_text"
+                                                   value="<%= functions.number_format(userPrice) %>" disabled/>
+                                            <input type="hidden" id="price" name="price" value="<%= userPrice %>"
+                                                   data-price="<%= userPrice %>">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="total">Tổng Giá</label>
+                                            <input type="text" class="form-control" name="total" id="total"
+                                                   value="<%= functions.number_format(userPrice * 30) %> VNĐ" disabled/>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <button id="submit" class="btn btn-success text-bold" type="submit">Mua</button>
+                                </div>
+
+                                <div class="form-group">
+                                    <button class="btn btn-danger text-bold btn-view-history" type="button"
+                                            data-target="#kt_list">
+                                        <i class="fa fa-calendar" aria-hidden="true"></i> Quản Lý ID
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <%- include('../components/note') %>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane" id="kt_list" role="tabpanel">
+            <%- include('../components/bot_status_filter') %>
+
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover" id="datatable-list"></table>
+            </div>
+        </div>
+        <div class="tab-pane" id="kt_history" role="tabpanel">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover" id="datatable-ajax"></table>
+            </div>
+        </div>
+    </div>
+
+    <!--begin::Modal-->
+    <div class="modal fade" id="modalUpdate" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-xl" role="document">
+            <form action="<%= `/reaction/${site.type}/update` %>" method="post" class="form-json">
+                <input type="hidden" name="order_id" class="form-control" value=""/>
+
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Sửa</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+
+                        <%- include('components/comment') %>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                        <button type="submit" class="btn btn-primary">Cập Nhật</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <%- include('../components/modal_stickers') %>
+
+    <%- include('../components/modal_posts') %>
+
+</div>
+<script src="/assets/js/stickers.js"></script>
+<script>
+    var type = "<%= site.type %>";
+</script>

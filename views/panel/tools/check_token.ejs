@@ -1,0 +1,148 @@
+<% layout("panel/layout") %>
+
+<style>
+    #thread_count {
+        text-align: center;
+        width: 80px;
+    }
+
+    #loading {
+        display: none;
+        font-size: 22px;
+        color: brown;
+    }
+</style>
+
+<%- include('../widget.ejs') %>
+
+<div class="card card-body">
+    <div class="alert alert-primary alert-dismissible fade show" role="alert">
+        Tất cả thao tác sẽ được thực hiện tại trình duyệt này, chúng tôi sẽ không lưu thông tin Token của bạn!
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+    <div class="form-group">
+        <label>Token Facebook</label>
+        <textarea class="form-control" id="tokens" rows="10"
+                  placeholder="Hãy dán token vào đây, mỗi hàng 1 token"></textarea>
+    </div>
+
+    <div class="form-inline">
+        <label class="mr-1">
+            Số luồng
+            <span class="fa fa-question question-badge" data-toggle="collapse" data-target="#explain"></span>
+        </label>
+        <input type="number" class="form-control mr-1" id="thread_count" value="10">
+        <button class="btn btn-success mr-1" id="btn_start">Tiến hành</button>
+        <button class="btn btn-danger mr-1" id="btn_reset">Reset</button>
+
+        <div id="loading"><span class="fa fa-spinner fa-spin"></span></div>
+
+    </div>
+
+    <div class="collapse" id="explain">
+        <div class="alert alert-primary alert-dismissible fade show mt-2" role="alert">
+            Các token sẽ được check đồng thời theo số luồng đã định trước. Nếu luồng thấp sẽ check chậm nhưng an toàn
+            hơn,
+            số luồng cao check sẽ nhanh hơn nhưng rủi ro hơn
+        </div>
+    </div>
+
+    <hr/>
+
+    <div class="form-group row" id="area_result">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label>
+                    <span class="badge badge-success p-2">Token Live</span>
+                    <span class="badge badge-success p-2" id="live_count">0</span>
+                </label>
+                <textarea class="form-control" id="live_tokens" rows="10"></textarea>
+
+                <button class="btn btn-primary mt-1 btn-copy" data-target="#live_tokens">Copy</button>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-group">
+                <label>
+                    <span class="badge badge-danger p-2">Token Die</span>
+                    <span class="badge badge-danger p-2" id="die_count">0</span>
+                </label>
+                <textarea class="form-control" id="die_tokens" rows="10"></textarea>
+
+                <button class="btn btn-primary mt-1 btn-copy" data-target="#die_tokens">Copy</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/assets/plugins/jquery/ajaxq.js"></script>
+<script>
+    $('#btn_start').click(function () {
+        resetForm();
+
+        var tokens = $('#tokens').val().trim();
+        tokens = tokens.split('\n').map(row => row.trim()).filter(row => row.length);
+        if (!tokens.length) return toastr.error('Vui lòng nhập Tokens!');
+
+        var thread_count = parseInt($('#thread_count').val());
+        if (!(thread_count > 0)) thread_count = 10; //set default parameters
+
+        loading(true);
+        toastr.info('Checking...');
+        tokens = uniqueArray(tokens);
+        tokens.forEach(function (token, index) {
+            $.ajaxq('queue_' + (index % thread_count), {
+                url: 'https://graph.facebook.com/me?access_token=' + token,
+                type: 'get',
+                success: function () {
+                    tokenStatus(token, true)
+                },
+                error: function (error) {
+                    if (error && !error.responseText) return tokenStatus(token, true);
+                    tokenStatus(token, false)
+                },
+            });
+        });
+
+        // Check complete
+        var interval = setInterval(function () {
+            if ($.ajaxq.isRunning()) return;
+
+            clearInterval(interval);
+            loading(false);
+            toastr.success('Done!');
+        }, 300);
+    });
+
+    function tokenStatus(token, live = false) {
+        var key = live ? 'live' : 'die';
+        var currentValue = $('#' + key + '_tokens').val();
+        currentValue += token + "\n";
+        $('#' + key + '_tokens').val(currentValue);
+
+        $('#' + key + '_count').html(countLine(currentValue).toString());
+    }
+
+    $('#btn_reset').click(function () {
+        $('#tokens').val('');
+        $('#thread_count').val(10);
+        resetForm();
+        toastr.success('Done!');
+    });
+
+    function resetForm() {
+        $('#live_tokens').val('');
+        $('#die_tokens').val('');
+
+        $('#live_count').html('0');
+        $('#die_count').html('0');
+    }
+
+    function loading(show = false) {
+        $('#loading')[show ? 'show' : 'hide']();
+    }
+</script>

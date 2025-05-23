@@ -1,0 +1,166 @@
+<% layout("panel/layout") %>
+
+<%- include('../widget.ejs') %>
+
+<div class="content-container">
+    <ul class="nav nav-tabs nav-tabs-line nav-tabs-line-danger nav-tabs-line-2x"
+        role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" data-toggle="tab" href="#kt_add" role="tab" aria-selected="true">
+                <i class="fas fa-cart-plus" aria-hidden="true"></i>Mua Dịch Vụ
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#kt_list" role="tab" aria-selected="false">
+                <i class="fas fa-shopping-bag" aria-hidden="true"></i>Danh Sách VIP
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#kt_history" role="tab" aria-selected="false">
+                <i class="fas fa-calendar-alt" aria-hidden="true"></i>Lịch Sử
+            </a>
+        </li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane active" id="kt_add" role="tabpanel">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="card form-group">
+
+                        <div class="card-body">
+                            <form id="formUserAction" action="/vipfacebook/<%= site.type %>">
+                                <div class="form-group">
+                                    <label>ID hoặc link tài khoản cần tăng sub</label>
+                                    <input type="text" class="form-control" id="link" name="uid"
+                                           placeholder="https://www.facebook.com/username" autocomplete="off" required>
+
+                                    <%- include('../components/div_uid_error') %>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="name">Tên facebook cá nhân</label>
+                                    <input type="text" class="form-control" id="name" name="name"
+                                           placeholder="Tên trang cá nhân chạy VIP"
+                                           autocomplete="off" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Chọn server</label>
+
+                                    <div class="servers">
+                                        <div class="radio radio-server">
+                                            <label><input type="radio" name="server" value="server_1">Server 1
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Số lượng xem video</label>
+                                    <input type="number" class="form-control change-price" name="vip_package" min="500"
+                                           max="500000" value="500"/>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Tốc độ</label>
+                                    <select class="form-control change-price" name="speed">
+                                        <option value="0" selected data-m="1">Bình thường</option>
+                                        <option value="1" data-m="2">Nhanh (Giá x2)</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Loại View</label>
+                                    <select name="video_type" data-placeholder="Loại" class="form-control change-price">
+                                        <option value="1" selected data-m="1">Xem 3 giây (Video tối thiểu 6 giây)
+                                        </option>
+                                        <option value="2" data-m="1">Xem 10 giây (Video tối thiểu 13 giây)</option>
+                                        <option value="3" data-m="1">Xem 15 giây (Video tối thiểu 18 giây)</option>
+                                        <option value="4" data-m="1.3">Xem 30 giây (Giá x1.3) (Video tối thiểu 33
+                                            giây)
+                                        </option>
+                                        <option value="5" data-m="1.5">Xem 1 phút (Giá x1.5) (Video tối thiểu 63 giây)
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Tối đa video trong 1 ngày</label>
+                                    <select class="form-control change-price" name="max_post">
+                                        <option value="6" data-m="1">6 video (Giá x 1)</option>
+                                        <option value="10" data-m="1.3">10 video (Giá x 1.3)</option>
+                                        <option value="20" data-m="1.5">20 video (Giá x 1.5)</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Thời Gian</label>
+                                    <select class="form-control change-price" name="days">
+                                        <option value="7">7 Ngày</option>
+                                        <option value="15">15 Ngày</option>
+                                        <option value="30">1 Tháng</option>
+                                        <option value="60">2 Tháng</option>
+                                        <option value="90">3 Tháng</option>
+                                        <option value="120">4 Tháng</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="price">Giá Tiền Mỗi Tương Tác</label>
+                                    <% var userPrice = functions.getUserPrice(price, user.ugroup) %>
+                                    <input type="number" class="form-control" name="price" id="price" min="0"
+                                           value="<%= userPrice %>" disabled/>
+                                </div>
+
+                                <%- include('../components/discount_widget.ejs') %>
+
+                                <div class="form-group">
+                                    <label for="total">Tổng Giá</label>
+                                    <input type="text" class="form-control" name="total" id="total"
+                                           value="0 VNĐ" disabled/>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="note">Ghi chú</label>
+                                    <textarea class="form-control" name="note" id="note" rows="1"></textarea>
+                                </div>
+
+                                <div class="form-group">
+                                    <button id="submit" class="btn btn-success text-bold" type="submit">Mua</button>
+                                </div>
+
+                                <div class="form-group">
+                                    <button class="btn btn-danger text-bold btn-view-history" type="button"
+                                            data-target="#kt_list">
+                                        <i class="fa fa-calendar" aria-hidden="true"></i> Quản Lý ID
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <%- include('../components/note.ejs') %>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane" id="kt_list" role="tabpanel">
+            <%- include('../components/vip_status_filter.ejs') %>
+
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover" id="datatable-vips"></table>
+            </div>
+        </div>
+        <div class="tab-pane" id="kt_history" role="tabpanel">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover" id="datatable-ajax"></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var type = "<%= site.type %>";
+</script>
