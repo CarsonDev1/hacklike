@@ -72,7 +72,7 @@ app.all('*', (req, res) => {
 });
 
 app.listen(PORT, () => {
-	console.log(`Server started: http://localhost:5001 mode: ` + 'PRODUCTION');
+	console.log(`Server started: http://localhost:${PORT} mode: ` + NODE_ENV.toUpperCase());
 });
 
 // Handle error (reason, promise)
