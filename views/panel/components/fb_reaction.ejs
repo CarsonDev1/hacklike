@@ -1,0 +1,51 @@
+<label class="fbc-label font-bold block mb-2">Chọn loại cảm xúc:</label>
+<div class="fbc-reaction-selector flex flex-wrap gap-4">
+    <% ['like', 'love', 'care', 'wow', 'haha', 'sad', 'angry'].forEach(item => { %>
+        <div class="fbc-reaction-item" data-reaction="<%= item %>">
+            <label class="fbc-reaction-label cursor-pointer flex flex-col items-center <%= item === 'like' ? 'selected' : '' %>">
+                <img src="/assets/images/fb-reaction/<%= item %>.png" alt="icon <%= item %>" class="fbc-reaction-icon w-10 aspect-square object-contain">
+                <input 
+                    name="reaction" 
+                    value="<%= item %>" 
+                    type="radio" 
+                    class="fbc-reaction-input mt-2 w-4 h-4 accent-blue-500" 
+                    <%= item === 'like' ? 'checked' : '' %>
+                >
+            </label>
+        </div>
+    <% }) %>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.fbc-reaction-label').forEach(label => {
+        label.addEventListener('click', function() {
+            document.querySelectorAll('.fbc-reaction-label').forEach(l => {
+                l.classList.remove('selected');
+            });
+            
+            this.classList.add('selected');
+            
+            const radio = this.querySelector('input[type="radio"]');
+            if (radio) {
+                radio.checked = true;
+            }
+        });
+    });
+
+    document.querySelectorAll('input[name="reaction"]').forEach(radio => {
+        radio.addEventListener('change', function() {
+            if (this.checked) {
+                document.querySelectorAll('.fbc-reaction-label').forEach(l => {
+                    l.classList.remove('selected');
+                });
+                
+                const parentLabel = this.closest('.fbc-reaction-label');
+                if (parentLabel) {
+                    parentLabel.classList.add('selected');
+                }
+            }
+        });
+    });
+});
+</script>
