@@ -463,7 +463,18 @@ body.mobile.user-page .modal-footer {
 		cursor: pointer;
 	}
 }
-
+@media (min-width: 1126px) {
+	.header-hidden-pc {
+		display: none;
+	}
+	.kt-header-pc-hidden {
+		display: none !important;
+	}
+	.toggle-sidebar-pc {
+		display: block;
+		cursor: pointer;
+	}
+}
 @media (min-width: 1127px) {
 	.toggle-sidebar-mobile {
 		display: none;
